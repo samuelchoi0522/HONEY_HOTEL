@@ -1,7 +1,61 @@
-# SWE1-Group-Project
+# HONEY HOTEL
 
-Samuel Choi
-Kirby Dyson
-Eugene Pak
-Candor Miller
-Aiden Grajo
+## Group Members
+
+- Samuel Choi
+-- Project Manager  
+- Eugene Pak
+-- Quality Assurance Engineer
+- Kirby Dyson
+-- Design Engineer
+- Candor Miller
+-- Requirements Engineer
+- Aiden Grajo
+-- Project Librarian
+
+## Tech
+
+Honey Hotel uses a number of open source projects to work properly:
+
+- [React] - Frontend web development
+- [Maven] - Build tool
+- [Spring] - Application Framework
+- [JUnit] - Unit testing library
+- [Java] - Backend development
+- [PostgreSQL] - SQL Database
+
+And of course Honey Hotel itself is open source with a [public repository][dill]
+ on GitHub.
+
+## Installation
+
+Honey Hotel requires [Java](https://www.java.com/en/) v22+ to run.
+
+Install the dependencies and devDependencies and start the server on port :8080.
+
+```sh
+cd HONEY_HOTEL
+mvn clean install
+mvn spring-boot:run
+```
+
+Install the dependncies and devDependencies and start the client. on port :3000.
+```sh
+cd HONEY_HOTEL
+cd frontend
+npm install
+npm run build
+npm start
+```
+
+
+
+[//]: #
+   [dill]: <https://github.com/samuelchoi0522/HONEY_HOTEL>
+   [git-repo-url]: <https://github.com/samuelchoi0522/HONEY_HOTEL.git>
+   [React]: <https://react.dev/>
+   [Maven]: <https://maven.apache.org/>
+   [Spring]: <https://spring.io/>
+   [JUnit]: <https://junit.org/junit5/>
+   [Java]: <https://www.java.com/en/>
+   [PostgreSQL]: <https://www.postgresql.org/>
