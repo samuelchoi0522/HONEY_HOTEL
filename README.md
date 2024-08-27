@@ -35,6 +35,7 @@ Install the dependencies and devDependencies and start the server on port :8080.
 
 ```sh
 cd HONEY_HOTEL
+cd backend
 mvn clean install
 mvn spring-boot:run
 ```
