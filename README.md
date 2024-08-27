@@ -18,7 +18,7 @@
 Honey Hotel uses a number of open-source projects to work properly:
 
 - [React] - Frontend web development
-- [Maven] - Build tool
+- [Maven] - Java Build tool
 - [Spring] - Application Framework
 - [JUnit] - Unit testing library
 - [Java] - Backend development
