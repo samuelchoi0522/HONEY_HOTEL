@@ -15,7 +15,7 @@
 
 ## Tech
 
-Honey Hotel uses a number of open source projects to work properly:
+Honey Hotel uses a number of open-source projects to work properly:
 
 - [React] - Frontend web development
 - [Maven] - Build tool
@@ -24,7 +24,7 @@ Honey Hotel uses a number of open source projects to work properly:
 - [Java] - Backend development
 - [PostgreSQL] - SQL Database
 
-And of course Honey Hotel itself is open source with a [public repository][dill]
+And of course, Honey Hotel is accessible with a [public repository][dill]
  on GitHub.
 
 ## Installation
@@ -39,7 +39,7 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-Install the dependncies and devDependencies and start the client. on port :3000.
+Install the dependencies and devDependencies and start the client. on port :3000.
 ```sh
 cd HONEY_HOTEL
 cd frontend
