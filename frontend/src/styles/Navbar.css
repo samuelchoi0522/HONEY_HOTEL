@@ -1,0 +1,40 @@
+/* Navbar.css */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333; /* Dark background color */
+    color: white; /* White text color */
+  }
+  
+  .navbar-logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+  }
+  
+  .sign-in-button {
+    background-color: #007bff; /* Blue button color */
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    line-height: 18px;
+    
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  
+  .sign-in-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
