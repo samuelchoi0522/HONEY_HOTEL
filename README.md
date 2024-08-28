@@ -29,7 +29,7 @@ And of course, Honey Hotel is accessible with a [public repository][dill]
 
 ## Installation
 
-Honey Hotel requires [Java](https://www.java.com/en/) v22+, [PostgreSQL](https://www.postgresql.org/) v14, [Maven](https://maven.apache.org/) v3.9, and [Node.js](https://nodejs.org/en) v18.20 to run.
+Honey Hotel requires [Java](https://www.java.com/en/) v22, [PostgreSQL](https://www.postgresql.org/) v14, [Maven](https://maven.apache.org/) v3.9, and [Node.js](https://nodejs.org/en) v18.20 to run.
 
 Install the dependencies and devDependencies and start the server on port :8080.
 
