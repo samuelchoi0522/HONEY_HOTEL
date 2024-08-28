@@ -7,5 +7,4 @@ import com.honey_hotel.backend.model.AppUser;
 
 @Repository
 public interface UserRepository extends JpaRepository<AppUser, Long> {
-    // You can add custom query methods if needed
 }
