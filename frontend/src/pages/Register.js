@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
-import '../styles/Register.css';
+import React, { useState } from "react";
+import "../styles/Register.css";
 
 function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch('http://localhost:8080/api/register', {
-      method: 'POST',
+    const response = await fetch("http://localhost:8080/api/register", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ firstname: firstName, lastname: lastName, email, password }),
     });
 
     if (response.ok) {
-      alert('Registration successful!');
+      alert("Registration successful!");
     } else {
-      alert('Registration failed. Please try again.');
+      alert("Registration failed. Please try again.");
     }
   };
 
@@ -27,6 +29,22 @@ function Register() {
     <div className="register-container">
       <h2>Register</h2>
       <form className="register-form" onSubmit={handleSubmit}>
+        <label htmlFor="firstName">First Name:</label>
+        <input
+          type="text"
+          id="firstName"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+        <label htmlFor="lastName">Last Name:</label>
+        <input
+          type="text"
+          id="lastName"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+        />
         <label htmlFor="email">Email:</label>
         <input
           type="email"
