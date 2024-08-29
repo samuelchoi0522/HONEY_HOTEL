@@ -24,8 +24,8 @@ public class RegistrationController {
     @PostMapping("/api/register")
     public ResponseEntity<?> registerUser(@RequestBody AppUser user) {
         // Validate user data
-        if (user.getEmail() == null || user.getPassword() == null) {
-            return ResponseEntity.badRequest().body("Email or Password is missing");
+        if (user.getFirstname() == null || user.getLastname() == null || user.getEmail() == null || user.getPassword() == null) {
+            return ResponseEntity.badRequest().body("A required field is missing.");
         }
         // Hash Password
         user.setPassword(hashPassword(user.getPassword()));
