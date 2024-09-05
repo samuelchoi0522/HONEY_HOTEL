@@ -5,12 +5,12 @@ import '../styles/Navbar.css';
 function Navbar() {
   return (
     <nav className="navbar">
-      <div className="navbar-logo">
-        {/* logo or sm */}
-      </div>
+        <Link to="/" className="navbar-brand">
+          <img src="/uploads/HONEY_HOTEL_LOGO.png" alt="Logo" className="navbar-logo" style={{ height: '70px', width: 'auto' }}/>
+        </Link>
       <div className="navbar-links">
-        <Link to="/signin">
-            <button className="sign-in-button">Sign In</button>
+        <Link to="/Login">
+            <button className="sign-in-button">FIND YOUR HIVE</button>
         </Link>
       </div>
     </nav>
