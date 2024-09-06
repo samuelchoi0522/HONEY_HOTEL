@@ -11,16 +11,18 @@ import Navbar from './components/Navbar';
 import './styles/App.css';
 
 function App() {
-  return (
-    <Router>
-        <Navbar />
-         <Routes>
-            <Route path="/" exact element={<Homepage />} />
-            <Route path="/Login" element={<Login />} /> {/* Route for SignIn */}
-            <Route path="/register" element={<Register />} /> {/* Route for Register */}
-         </Routes>
-    </Router>
-  );
+    return (
+        <Router>
+            <Navbar />
+                <div className="app-container">
+                <Routes>
+                    <Route path="/" exact element={<Homepage />} />
+                    <Route path="/Login" element={<Login />} /> {/* Route for SignIn */}
+                    <Route path="/register" element={<Register />} /> {/* Route for Register */}
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
