@@ -4,7 +4,7 @@ import '../styles/Homepage.css';
 const Homepage = () => {
     const [backgroundVideo, setBackgroundVideo] = useState(true);
     const [backgroundSource, setBackgroundSource] = useState('/uploads/Landing_Video.mp4');
-    const [opacity, setOpacity] = useState(1);
+    const [opacity, setOpacity] = useState(0.7);
 
     const changeBackground = (isVideo, source) => {
         if (backgroundSource !== source || backgroundVideo !== isVideo) {
@@ -12,11 +12,11 @@ const Homepage = () => {
             setTimeout(() => {
                 setBackgroundVideo(isVideo);
                 setBackgroundSource(source);
-                setOpacity(1);
+                setOpacity(0.7);
             }, 500);
         }
     };
-    
+
 
     return (
         <div className="homepage-container">
@@ -42,7 +42,7 @@ const Homepage = () => {
                             backgroundSize: 'cover',
                             height: '100%',
                             width: '100%',
-                            opacity: opacity, // Bind opacity to the fade effect
+                            opacity: opacity,
                         }}
                     ></div>
                 )}
