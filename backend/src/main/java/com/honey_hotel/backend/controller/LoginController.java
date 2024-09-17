@@ -29,28 +29,4 @@ public class LoginController {
         }
 
         // Hash the provided password
-        String hashedPassword = hashPassword(user.getPassword());
-
-        // Find the user by email
-        Optional<AppUser> existingUserOpt = userRepository.findByEmail(user.getEmail());
-
-        if (!existingUserOpt.isPresent()) {
-            // User not found
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid email or password.");
-        }
-
-        AppUser existingUser = existingUserOpt.get();
-
-        // Compare hashed passwords
-        if (!existingUser.getPassword().equals(hashedPassword)) {
-            // Password does not match
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid email or password.");
-        }
-
-        // Authentication successful
-        // You can include additional user details or tokens here if needed
-        return ResponseEntity.ok("Login successful!");
-    }
-}
+        String hashedP
