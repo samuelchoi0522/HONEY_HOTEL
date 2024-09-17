@@ -1,0 +1,6 @@
+{
+    "java.project.sourcePaths": [
+        "backend/src/main/java/com/honey_hotel/backend"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
+}
