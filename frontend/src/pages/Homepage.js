@@ -3,7 +3,7 @@ import '../styles/Homepage.css';
 
 const Homepage = () => {
     const [backgroundVideo, setBackgroundVideo] = useState(true);
-    const [backgroundSource, setBackgroundSource] = useState('/uploads/Landing_Video.mp4');
+    const [backgroundSource, setBackgroundSource] = useState('/uploads/Landing_Video (1).mp4');
     const [opacity, setOpacity] = useState(0.7);
 
     const changeBackground = (isVideo, source) => {
