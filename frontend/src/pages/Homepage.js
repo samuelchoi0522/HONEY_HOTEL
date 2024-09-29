@@ -71,6 +71,50 @@ const Homepage = () => {
                     <span>SIGN IN</span>
                 </div>
             </div>
+
+            {/* Spacer */}
+            <div className="spacer" style={{ height: '250px' }}></div>
+
+            <div className="lower-homepage-container">
+                <div className="explore-more-with-honeyhotel-container">
+                    <span className="explore-more-with-hotelhotel-text">{`EXPLORE MORE WITH HONEY HOTEL`}</span>
+                </div>
+
+                <div className="image-grid">
+                    <div className="shopping-image-646482">
+                        <img
+                            src="/uploads/HOMEPAGE_SHOPPING_IMAGE.png"
+                            alt="Shopping Image"
+                        />
+                        <div className="image-caption">
+                            <h3>DISCOVER OUR STORES</h3>
+                            <p>PARTICIPATE IN OUR ENGAGING AND UNIQUE ACTIVITIES</p>
+                        </div>
+                    </div>
+                    <div className="restuarant-imag-646466">
+                        <img
+                            src="/uploads/HOMEPAGE_RESTAURANT_IMAGE.png"
+                            alt="Restaurant Image"
+                        />
+                        <div className="image-caption">
+                            <h3>DISCOVER OUR MICHELIN STAR RESTAURANTS</h3>
+                            <p>EXPLORE OUR GROWING COLLECTION OF AWARD WINNING RESTAURANTS</p>
+                        </div>
+                    </div>
+                    <div className="activities-imag-646479">
+                        <img
+                            src="/uploads/HOMEPAGE_ACTIVITIES_IMAGE.png"
+                            alt="Activities Image"
+                        />
+                        <div className="image-caption">
+                            <h3>DISCOVER OUR ACTIVITIES</h3>
+                            <p>PARTICIPATE IN OUR ENGAGING AND UNIQUE ACTIVITIES</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     );
 };
