@@ -27,21 +27,18 @@
   }
   
   .footer-links {
-    font: kaisei tokumin;
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
   }
   
   .footer-column {
-    font: kaisei tokumin;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
   
   .footer-column h3 {
-    font: kaisei tokumin;
     margin-bottom: 10px;
     font-size: 18px;
     text-transform: uppercase;
@@ -49,7 +46,6 @@
   }
   
   .footer-column a {
-    font: kaisei tokumin;
     color: white;
     text-decoration: none;
     margin-bottom: 5px;
@@ -62,8 +58,9 @@
   }
   
   .footer-bottom {
+    text-align: left;
     margin-top: 20px;
-    font-size: 12px;
+    font-size: 10px;
     color: #666;
   }
   

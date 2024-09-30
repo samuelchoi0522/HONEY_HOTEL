@@ -145,12 +145,12 @@
   color: #555;
 }
 
-.shopping-image-646482,
-.restuarant-imag-646466,
-.activities-imag-646479 {
+.shopping-image,
+.restuarant-imag,
+.activities-imag {
   position: relative;
 }
-.shopping-image-646482 {
+.shopping-image {
   grid-column: 1 / 2;
   grid-row: 1 / 3;
   grid-column: span 1;
@@ -158,25 +158,25 @@
   width: 100%;
 }
 
-.shopping-image-646482 img {
+.shopping-image img {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
 
-.restuarant-imag-646466{
+.restuarant-imag{
     grid-column: 2 / 3;
     grid-row: 1 / 2;
     grid-column: span 1;
     height: 280px;
     width: 100%;
 }
-.restuarant-imag-646466 img{
+.restuarant-imag img{
     height: 100%;
     width: 100%;
     object-fit: cover;
 }
-.activities-imag-646479 {
+.activities-imag {
     top: 20px;
     grid-column: 2 / 3;
     grid-row: 2 / 3;
@@ -184,7 +184,7 @@
     height: 280px;
     width: 100%;
 }
-.activities-imag-646479 img{
+.activities-imag img{
     height: 100%;
     width: 100%;
     object-fit: cover;

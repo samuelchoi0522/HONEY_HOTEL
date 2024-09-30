@@ -81,7 +81,7 @@ const Homepage = () => {
                 </div>
 
                 <div className="image-grid">
-                    <div className="shopping-image-646482">
+                    <div className="shopping-image">
                         <img
                             src="/uploads/HOMEPAGE_SHOPPING_IMAGE.png"
                             alt="Shopping Image"
@@ -91,7 +91,7 @@ const Homepage = () => {
                             <p>PARTICIPATE IN OUR ENGAGING AND UNIQUE ACTIVITIES</p>
                         </div>
                     </div>
-                    <div className="restuarant-imag-646466">
+                    <div className="restuarant-imag">
                         <img
                             src="/uploads/HOMEPAGE_RESTAURANT_IMAGE.png"
                             alt="Restaurant Image"
@@ -101,7 +101,7 @@ const Homepage = () => {
                             <p>EXPLORE OUR GROWING COLLECTION OF AWARD WINNING RESTAURANTS</p>
                         </div>
                     </div>
-                    <div className="activities-imag-646479">
+                    <div className="activities-imag">
                         <img
                             src="/uploads/HOMEPAGE_ACTIVITIES_IMAGE.png"
                             alt="Activities Image"
