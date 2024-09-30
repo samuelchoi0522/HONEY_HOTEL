@@ -196,8 +196,13 @@
   object-fit: cover;
 }
 
+.video-wrapper {
+    width: 100%;
+    max-width: 940px;
+}
+
 .video-wrapper iframe {
-  position: relative;
-  width: 940px;
-  height: 529px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
 }
