@@ -16,23 +16,23 @@ function Footer() {
       <div className="footer-links">
         <div className="footer-column">
           <h3>About</h3>
-          <Link to="/about">ABOUT THE GROUP</Link>
+          <Link to="/about"><strong>ABOUT THE GROUP</strong></Link>
         </div>
         <div className="footer-column">
           <h3>Reservations</h3>
-          <Link to="/make-reservation">MAKE A RESERVATION</Link>
-          <Link to="/find-reservation">FIND YOUR RESERVATION</Link>
+          <Link to="/make-reservation"><strong>MAKE A RESERVATION</strong></Link>
+          <Link to="/find-reservation"><strong>FIND YOUR RESERVATION</strong></Link>
         </div>
         <div className="footer-column">
           <h3>Social Media</h3>
           <a href="https://youtube.com" target="_blank" rel="noreferrer">
-            YOUTUBE
+            <strong>YOUTUBE</strong>
           </a>
           <a href="https://instagram.com" target="_blank" rel="noreferrer">
-            INSTAGRAM
+            <strong>INSTAGRAM</strong>
           </a>
           <a href="https://github.com" target="_blank" rel="noreferrer">
-            GITHUB
+            <strong>GITHUB</strong>
           </a>
         </div>
       </div>
