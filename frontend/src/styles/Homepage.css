@@ -106,9 +106,15 @@
   margin-top: 40px;
 }
 
+.hashtag-honeyhotel {
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+}
+
 .explore-more-with-hotelhotel-text,
 .the-story-text,
-.honeyhotel {
+.hashtag-honeyhotel {
   font-size: 2em;
   letter-spacing: calc(1.2 * var(--ratio));
   line-height: 120px;
@@ -205,4 +211,13 @@
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
+}
+
+.instagram-posts{
+    display: flex;
+    padding-bottom: 40px;
+}
+
+.instagram-post{
+    padding: 10px;
 }
