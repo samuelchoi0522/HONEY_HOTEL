@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700;800&display=swap');
+
+.footer {
+    background-color: black;
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+    font-family: kaisei tokumin;
+  }
+  
+  .footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .footer-logo .logo {
+    width: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .footer h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .footer-links {
+    font: kaisei tokumin;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .footer-column {
+    font: kaisei tokumin;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .footer-column h3 {
+    font: kaisei tokumin;
+    margin-bottom: 10px;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  
+  .footer-column a {
+    font: kaisei tokumin;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 5px;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  
+  .footer-column a:hover {
+    color: #f0c040; /* Honey-like color */
+  }
+  
+  .footer-bottom {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #666;
+  }
+  
