@@ -100,10 +100,16 @@
   text-align: center;
 }
 
+.the-story-text {
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+}
+
 .explore-more-with-hotelhotel-text,
-.the-story-64917-0,
-.honeyhotel-64922-0 {
-  font-size: calc(23 * var(--ratio));
+.the-story-text,
+.honeyhotel {
+  font-size: 2em;
   letter-spacing: calc(1.2 * var(--ratio));
   line-height: 120px;
 
@@ -164,28 +170,34 @@
   object-fit: cover;
 }
 
-.restuarant-imag{
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-    grid-column: span 1;
-    height: 280px;
-    width: 100%;
+.restuarant-imag {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  grid-column: span 1;
+  height: 280px;
+  width: 100%;
 }
-.restuarant-imag img{
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+.restuarant-imag img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 .activities-imag {
-    top: 20px;
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
-    grid-column: span 1;
-    height: 280px;
-    width: 100%;
+  top: 20px;
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  grid-column: span 1;
+  height: 280px;
+  width: 100%;
 }
-.activities-imag img{
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+.activities-imag img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.video-wrapper iframe {
+  position: relative;
+  width: 940px;
+  height: 529px;
 }
