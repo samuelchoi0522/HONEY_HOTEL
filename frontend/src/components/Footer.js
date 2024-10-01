@@ -28,10 +28,10 @@ function Footer() {
           <a href="https://youtube.com" target="_blank" rel="noreferrer">
             <strong>YOUTUBE</strong>
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noreferrer">
+          <a href="https://www.instagram.com/honeyhotel2024/" target="_blank" rel="noreferrer">
             <strong>INSTAGRAM</strong>
           </a>
-          <a href="https://github.com" target="_blank" rel="noreferrer">
+          <a href="https://github.com/samuelchoi0522/HONEY_HOTEL" target="_blank" rel="noreferrer">
             <strong>GITHUB</strong>
           </a>
         </div>
