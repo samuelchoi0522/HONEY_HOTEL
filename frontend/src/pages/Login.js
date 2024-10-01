@@ -29,10 +29,10 @@ function Login() {
     return (
         <div className="signin-container">
             <div className="signin-left">
-                <h2>Sign In</h2>
-                <p>View and edit your account to customize your preferences.</p>
+                <h2 style={{ fontWeight: 100, textAlign: "center", fontSize: "3em" }}>SIGN IN</h2>
+                <p style={{ fontWeight: 100, textAlign: "center", fontSize: "1.6em", marginBottom: "60px" }}>View and edit your account to customize your preferences.</p>
                 <form className="signin-form" onSubmit={handleSubmit}>
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="email" style={{ fontWeight: 100 }}>Email:</label>
                     <input
                         type="email"
                         id="email"
@@ -42,7 +42,7 @@ function Login() {
                         onChange={(e) => setEmail(e.target.value)}
                     />
 
-                    <label htmlFor="password">Password:</label>
+                    <label htmlFor="password" style={{ fontWeight: 100 }}>Password:</label>
                     <input
                         type="password"
                         id="password"
@@ -52,11 +52,11 @@ function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    <button type="submit">Sign In</button>
+                    <button type="submit"><strong>SIGN IN</strong></button> 
+                    <p className="register-link" style={{ fontWeight: 100, fontSize: "1.2em" }}>
+                        Don't have an account? <Link to="/register">Register</Link>
+                    </p>
                 </form>
-                <p className="register-link">
-                    Don't have an account? <Link to="/register">Register</Link>
-                </p>
             </div>
 
             <div className="signin-right" style={{ backgroundImage: "url('/uploads/LOGIN_LANDING_PHOTO.jpeg')" }}>

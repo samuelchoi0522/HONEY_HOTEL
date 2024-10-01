@@ -26,6 +26,7 @@
 
 .sign-in-button {
   transition: ease-in-out 0.2s;
+  border: 1.5px solid #000;
   background-color: #ffffff;
   margin-right: 50px;
   color: rgb(0, 0, 0);

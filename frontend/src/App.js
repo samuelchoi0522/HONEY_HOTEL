@@ -5,35 +5,38 @@ import Homepage from './pages/Homepage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Navbar from './components/Navbar';
+import NavbarWhite from './components/Navbar_WHITE';
 import Footer from './components/Footer';
 
 import './styles/App.css';
 
 function Layout() {
-  const location = useLocation();
+    const location = useLocation();
 
-  // Conditionally render Navbar and Footer only on specific pages
-  const showNavbarAndFooter = location.pathname !== '/login' && location.pathname !== '/register';
+    // Conditionally render Navbar and Footer only on specific pages
+    const showNavbarAndFooter = location.pathname !== '/login' && location.pathname !== '/register';
+    const showNavbarForLoginAndRegister = location.pathname === '/login' || location.pathname === '/register';
 
-  return (
-    <div className="app-container">
-      {showNavbarAndFooter && <Navbar />}
-      <Routes>
-        <Route path="/" exact element={<Homepage />} />
-        <Route path="/login" element={<Login />} /> {/* Login page without Navbar and Footer */}
-        <Route path="/register" element={<Register />} /> {/* Register page without Navbar and Footer */}
-      </Routes>
-      {showNavbarAndFooter && <Footer />}
-    </div>
-  );
+    return (
+        <div className="app-container">
+            {showNavbarAndFooter && <Navbar />}
+            {showNavbarForLoginAndRegister && <NavbarWhite />}
+            <Routes>
+                <Route path="/" exact element={<Homepage />} />
+                <Route path="/login" element={<Login />} /> {/* Login page without Navbar and Footer */}
+                <Route path="/register" element={<Register />} /> {/* Register page without Navbar and Footer */}
+            </Routes>
+            {showNavbarAndFooter && <Footer />}
+        </div>
+    );
 }
 
 function App() {
-  return (
-    <Router>
-      <Layout />
-    </Router>
-  );
+    return (
+        <Router>
+            <Layout />
+        </Router>
+    );
 }
 
 export default App;
