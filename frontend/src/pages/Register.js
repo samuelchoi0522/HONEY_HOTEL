@@ -161,7 +161,7 @@ function Register() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         autoComplete="current-password"
-                        style={{ marginTop: "30px", marginBottom: "30px" }}
+                        style={{ marginTop: "20px", marginBottom: "30px" }}
                         sx={{
                             '& label.Mui-focused': {
                                 color: 'black',

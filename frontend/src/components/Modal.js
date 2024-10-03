@@ -6,9 +6,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDateRangeField';
-import { LicenseInfo } from '@mui/x-license-pro';  // Import LicenseInfo
+import { LicenseInfo } from '@mui/x-license-pro';
 import dayjs from 'dayjs';
-import '../styles/Modal.css'; // Link to your custom CSS
+import '../styles/Modal.css';
 
 LicenseInfo.setLicenseKey(process.env.REACT_APP_MUI_X_LICENSEKEY);
 
@@ -18,22 +18,21 @@ const theme = createTheme({
         MuiAutocomplete: {
             styleOverrides: {
                 root: {
-                    marginTop: '-10px', // Move the autocomplete up by 10px
+                    marginTop: '-10px',
                 },
             },
         },
         MuiTextField: {
             styleOverrides: {
                 root: {
-                    // Remove the underline only for Autocomplete's TextField
                     '& .MuiInput-underline:before': {
-                        borderBottom: 'none', // Completely remove the default underline
+                        borderBottom: 'none',
                     },
                     '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-                        borderBottom: 'none', // Remove hover underline
+                        borderBottom: 'none',
                     },
                     '& .MuiInput-underline:after': {
-                        borderBottom: 'none', // Remove focus underline
+                        borderBottom: 'none',
                     },
                 },
             },
@@ -43,15 +42,15 @@ const theme = createTheme({
                 root: {
                     position: 'relative',
                     '&:hover:not(.Mui-disabled):before': {
-                        backgroundColor: '#F0D10B', // Hover effect for underline
+                        backgroundColor: '#F0D10B',
                     },
                     '&.Mui-focused:before': {
-                        backgroundColor: '#F0D10B', // Focused underline color
+                        backgroundColor: '#F0D10B',
                     },
                     '& .MuiOutlinedInput-notchedOutline': {
-                        border: 'none', // Remove the border of the DateRangePicker
+                        border: 'none',
                     },
-                    marginTop: '-10px', // Move the date range picker up by 10px
+                    marginTop: '-10px',
                 },
             },
         },
@@ -59,23 +58,23 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '&.Mui-selected': {
-                        backgroundColor: '#000000', // Change the selected date circle color to black
-                        color: '#ffffff', // Change text color inside the circle to white
+                        backgroundColor: '#000000',
+                        color: '#ffffff',
                     },
                     '&.Mui-selected:hover': {
                         color: '#000000',
-                        backgroundColor: '#000000', // Ensure hover doesn't change the black color
+                        backgroundColor: '#000000',
                     },
                     '&.Mui-selected.MuiPickersDay-dayOutsideMonth': {
                         color: '#000000',
-                        backgroundColor: '#000000', // Outside month days also have black when selected
+                        backgroundColor: '#000000',
                     },
                 },
                 dayInsideMonth: {
                     '&.Mui-selected': {
-                        borderRadius: '50%', // Ensure the circle shape
-                        width: '40px', // Adjust the size of the selected date circle
-                        height: '40px', // Adjust the size of the selected date circle
+                        borderRadius: '50%',
+                        width: '40px',
+                        height: '40px',
                     },
                 },
             },
@@ -229,12 +228,13 @@ const Modal = ({ open, handleClose }) => {
                                         />
                                     </LocalizationProvider>
 
-                                    {/* "Find Hives" Button */}
-                                    <button className="find-hives-button" onClick={() => alert('Find Hives clicked!')}>
-                                        Find Hives
-                                    </button>
+
                                 </div>
                             </div>
+                            {/* "Find Hives" Button */}
+                            <button className="find-hives-button" onClick={() => alert('Find Hives clicked!')}>
+                                Find Hives
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -46,3 +46,8 @@
   border-color: #f0d10b;
   color: white;
 }
+
+.navbar-link{
+    text-align: left;
+    z-index: 1000;
+}

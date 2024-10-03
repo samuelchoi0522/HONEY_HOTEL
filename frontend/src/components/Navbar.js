@@ -14,13 +14,14 @@ function Navbar() {
                 <img src="/uploads/HONEY_HOTEL_LOGO.png" alt="Logo" className="navbar-logo" style={{ height: '70px', width: 'auto' }} />
             </Link>
             <div className="navbar-links">
-                {/* Use onClick to trigger the modal */}
+                <Link to="/" className="navbar-link">
+                    HOME
+                </Link>
                 <button className="sign-in-button" onClick={handleModalOpen}>
                     FIND YOUR HIVE
                 </button>
             </div>
 
-            {/* Modal Component */}
             <Modal open={showModal} handleClose={handleModalClose} />
         </nav>
     );
