@@ -5,12 +5,16 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import '../styles/Login.css';
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [showFailAlert, setShowFailAlert] = useState(false);
     const navigate = useNavigate();
 
     const handleClickShowPassword = () => {
@@ -19,23 +23,25 @@ function Login() {
 
     useEffect(() => {
         const checkSession = async () => {
+            console.log("checking session");
             try {
                 const response = await fetch("http://localhost:8080/api/check-session", {
                     method: "POST",
-                    credentials: "include",  // This ensures cookies are sent
+                    credentials: "include",
                     headers: { 'Content-Type': 'application/json' }
                 });
-        
-                const data = await response.text();
-        
-                if (response.ok && data.includes("is already logged in")) {
-                    console.log("User is already logged in, redirecting to homepage");
-                    navigate("/"); // Redirect to homepage
+
+                const data = await response.json();
+                console.log(data);
+
+                if (response.ok && data.isLoggedIn) {
+                    console.log("User is logged in:", data);
+                    navigate("/");
                 } else {
                     console.log("No active session found.");
                 }
             } catch (error) {
-                console.error("Error fetching session:", error);
+                console.error("Error checking session:", error);
             }
         };
 
@@ -55,12 +61,14 @@ function Login() {
         });
 
         if (response.ok) {
-            alert("Login successful!");
-            console.log(`${email} logged in successfully.`);
-            navigate("/"); // Redirect to homepage after successful login
+            setShowSuccessAlert(true); // Show the success alert
+
+            // Delay the redirect by 3 seconds
+            setTimeout(() => {
+                navigate("/"); // Redirect to homepage after delay
+            }, 2500);
         } else {
-            const errorMessage = await response.text();
-            alert("Login failed: " + errorMessage);
+            setShowFailAlert(true); // Show the fail alert
         }
     };
 
@@ -69,6 +77,35 @@ function Login() {
             <div className="signin-left">
                 <h2 style={{ fontWeight: 100, textAlign: "center", fontSize: "3em" }}>SIGN IN</h2>
                 <p style={{ fontWeight: 100, textAlign: "center", fontSize: "1.6em", marginBottom: "60px" }}>View and edit your account to customize your preferences.</p>
+
+                {showSuccessAlert &&(
+                    <Alert
+                        icon={<CheckIcon fontSize="inherit" />}
+                        severity="success"
+                        sx={{
+                            maxWidth: "570px",   // Set max width
+                            margin: "0 auto",    // Center the alert horizontally
+                            textAlign: "center", // Align text to center
+                            marginBottom: "20px" // Add some space at the bottom
+                        }}
+                    >
+                        Login successful! Redirecting to homepage...
+                    </Alert>
+                )}
+
+                {showFailAlert && !showSuccessAlert && (
+                    <Alert
+                        severity="error"
+                        sx={{
+                            maxWidth: "570px",   // Set max width
+                            margin: "0 auto",    // Center the alert horizontally
+                            textAlign: "center", // Align text to center
+                            marginBottom: "20px" // Add some space at the bottom
+                        }}
+                    >
+                        Login Failed. Incorrect email or password.
+                    </Alert>
+                )}
 
                 <form className="signin-form" onSubmit={handleSubmit}>
                     <TextField

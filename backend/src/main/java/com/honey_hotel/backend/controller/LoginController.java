@@ -1,5 +1,7 @@
 package com.honey_hotel.backend.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,10 +68,20 @@ public class LoginController {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             AppUser user = (AppUser) session.getAttribute("user");
-            System.out.println(user.getEmail() + " is already logged in, redirecting to homepage.");
-            return ResponseEntity.ok(user.getEmail() + " is already logged in, redirecting to homepage.");
+
+            // Return a JSON response with the user's firstname and login status
+            Map<String, Object> response = new HashMap<>();
+            response.put("isLoggedIn", true);
+            response.put("firstname", user.getFirstname()); // assuming user.getFirstname() exists
+
+            return ResponseEntity.ok(response); // Return as JSON
         }
-        return ResponseEntity.ok("No user logged in.");
+
+        // Return a JSON response indicating the user is not logged in
+        Map<String, Object> response = new HashMap<>();
+        response.put("isLoggedIn", false);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/api/logout")

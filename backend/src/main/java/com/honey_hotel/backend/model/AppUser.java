@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "users")
 @CrossOrigin(origins = "http://localhost:3000")
-public class AppUser  implements Serializable {
+public class AppUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

@@ -76,7 +76,7 @@ const Homepage = () => {
                 </div>
                 <div className="nav-item" onMouseEnter={() => changeBackground(true, '/uploads/Landing_Video.mp4')}>
                     <img src="/icons/SIGNIN_ICON.png" alt="SIGN IN" />
-                    <span>SIGN IN</span>
+                    <span>ACCOUNT</span>
                 </div>
             </div>
 
@@ -92,7 +92,7 @@ const Homepage = () => {
                     <div className="shopping-image">
                         <img
                             src="/uploads/HOMEPAGE_SHOPPING_IMAGE.png"
-                            alt="Shopping Image"
+                            alt="Shopping"
                         />
                         <div className="image-caption">
                             <h3>DISCOVER OUR STORES</h3>
@@ -102,7 +102,7 @@ const Homepage = () => {
                     <div className="restuarant-imag">
                         <img
                             src="/uploads/HOMEPAGE_RESTAURANT_IMAGE.png"
-                            alt="Restaurant Image"
+                            alt="Restaurant"
                         />
                         <div className="image-caption">
                             <h3>DISCOVER OUR MICHELIN STAR RESTAURANTS</h3>
@@ -112,7 +112,7 @@ const Homepage = () => {
                     <div className="activities-imag">
                         <img
                             src="/uploads/HOMEPAGE_ACTIVITIES_IMAGE.png"
-                            alt="Activities Image"
+                            alt="Activities"
                         />
                         <div className="image-caption">
                             <h3>DISCOVER OUR ACTIVITIES</h3>

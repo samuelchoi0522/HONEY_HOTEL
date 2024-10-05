@@ -22,13 +22,17 @@
 .navbar-links {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1; /* Take up the available space */
 }
 
-.navbar-link-items{
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* Align the links to the left */
-    flex-grow: 1; /* Take up available space */
+.navbar-link-items {
+  padding-left: 20px;
+  padding-right: 20px;
+  text-decoration: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .sign-in-button {
@@ -54,7 +58,21 @@
   color: white;
 }
 
-.navbar-link{
-    text-align: left;
-    z-index: 1000;
+.navbar-link {
+  text-align: left;
+  z-index: 1000;
+}
+
+.account-link, .login-link{
+    text-decoration: none;
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    text-align: center;
+    margin-right: 30px;
+    margin-bottom: -7px;
+}
+
+.login-link{
+    margin-bottom: -20px;
 }

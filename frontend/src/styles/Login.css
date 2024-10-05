@@ -43,10 +43,6 @@
   font-family: josefin sans;
 }
 
-.signin-left form button {
-
-}
-
 .signin-button{
     transition: ease-in-out 0.2s;
     padding: 12px;
@@ -84,4 +80,15 @@
   background-size: cover;
   background-position: center;
   height: 100%;
+}
+
+.log-out-button{
+    margin-left: 20px;
+}
+
+.login-link{
+    text-decoration: none;
+    color: white;
+    font-size: 10px;
+    margin-right: 10px
 }
