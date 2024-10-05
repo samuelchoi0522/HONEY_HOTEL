@@ -14,15 +14,18 @@ import com.honey_hotel.backend.model.AppUser;
 import com.honey_hotel.backend.repository.UserRepository;
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class LoginController {
 
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/api/login")
-    public ResponseEntity<?> loginUser(@RequestBody AppUser user) {
+    public ResponseEntity<?> loginUser(@RequestBody AppUser user, HttpServletRequest request) {
         // Check for missing fields
         if (user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.badRequest().body("A required field is missing.");
@@ -35,7 +38,6 @@ public class LoginController {
         Optional<AppUser> existingUserOpt = userRepository.findByEmail(user.getEmail());
 
         if (!existingUserOpt.isPresent()) {
-            // User not found
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid email or password.");
         }
@@ -44,13 +46,40 @@ public class LoginController {
 
         // Compare hashed passwords
         if (!existingUser.getPassword().equals(hashedPassword)) {
-            // Password does not match
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid email or password.");
         }
 
-        // Authentication successful
-        // You can include additional user details or tokens here if needed
+        // Set user session
+        HttpSession session = request.getSession(true);
+        session.setAttribute("user", existingUser);
+
+        // Log user login and session ID
+        System.out.println(existingUser.getEmail() + " has logged in.");
+        System.out.println("Session created with ID: " + session.getId());
+
         return ResponseEntity.ok("Login successful!");
+    }
+
+    @PostMapping("/api/check-session")
+    public ResponseEntity<?> checkSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("user") != null) {
+            AppUser user = (AppUser) session.getAttribute("user");
+            System.out.println(user.getEmail() + " is already logged in, redirecting to homepage.");
+            return ResponseEntity.ok(user.getEmail() + " is already logged in, redirecting to homepage.");
+        }
+        return ResponseEntity.ok("No user logged in.");
+    }
+
+    @PostMapping("/api/logout")
+    public ResponseEntity<?> logoutUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        AppUser user = (AppUser) session.getAttribute("user");
+        if (session != null) {
+            System.out.println(user.getEmail() + " logged out.");
+            session.invalidate();
+        }
+        return ResponseEntity.ok("Logout successful.");
     }
 }

@@ -1,14 +1,21 @@
 package com.honey_hotel.backend.model;
 
+import java.io.Serializable;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+
 @Entity
 @Table(name = "users")
-public class AppUser {
+@CrossOrigin(origins = "http://localhost:3000")
+public class AppUser  implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

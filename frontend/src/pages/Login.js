@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -11,10 +11,36 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
+
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const response = await fetch("http://localhost:8080/api/check-session", {
+                    method: "POST",
+                    credentials: "include",  // This ensures cookies are sent
+                    headers: { 'Content-Type': 'application/json' }
+                });
+        
+                const data = await response.text();
+        
+                if (response.ok && data.includes("is already logged in")) {
+                    console.log("User is already logged in, redirecting to homepage");
+                    navigate("/"); // Redirect to homepage
+                } else {
+                    console.log("No active session found.");
+                }
+            } catch (error) {
+                console.error("Error fetching session:", error);
+            }
+        };
+
+        checkSession();
+    }, [navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,12 +50,14 @@ function Login() {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",  // Include credentials for login request
             body: JSON.stringify({ email, password }),
         });
 
         if (response.ok) {
             alert("Login successful!");
-            // Redirect to homepage or perform other actions
+            console.log(`${email} logged in successfully.`);
+            navigate("/"); // Redirect to homepage after successful login
         } else {
             const errorMessage = await response.text();
             alert("Login failed: " + errorMessage);

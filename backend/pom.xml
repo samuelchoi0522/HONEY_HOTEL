@@ -29,7 +29,7 @@
 	<properties>
 		<java.version>22</java.version>
 	</properties>
-	<dependencies>
+<dependencies>
     <!-- Spring Boot Starter Data JPA -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -49,6 +49,24 @@
         <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <!-- Spring Session Core (for session management) -->
+    <dependency>
+        <groupId>org.springframework.session</groupId>
+        <artifactId>spring-session-core</artifactId>
+    </dependency>
+
+    <!-- Optional: Spring Session JDBC (if you want to persist sessions in DB) -->
+    <dependency>
+        <groupId>org.springframework.session</groupId>
+        <artifactId>spring-session-jdbc</artifactId>
+    </dependency>
+
+    <!-- Optional: Redis Session management (if using Redis for session management) -->
+    <dependency>
+        <groupId>org.springframework.session</groupId>
+        <artifactId>spring-session-data-redis</artifactId>
+    </dependency>
+
     <!-- Spring Boot DevTools (Optional) -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -62,8 +80,9 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
-    </dependency>   
+    </dependency>
 </dependencies>
+
 
 
 	<build>
