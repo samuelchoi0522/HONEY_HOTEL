@@ -8,6 +8,8 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDateRangeField';
 import { LicenseInfo } from '@mui/x-license-pro';
 import dayjs from 'dayjs';
+import SetOccupancyDialog from './Set_Occupancy_Dialog.js';
+import SetRateDialog from './Set_Rate_Dialog.js';
 import '../styles/Modal.css';
 
 LicenseInfo.setLicenseKey(process.env.REACT_APP_MUI_X_LICENSEKEY);
@@ -227,15 +229,16 @@ const Modal = ({ open, handleClose }) => {
                                             }}
                                         />
                                     </LocalizationProvider>
-
-
                                 </div>
                             </div>
                             {/* "Find Hives" Button */}
                             <button className="find-hives-button" onClick={() => alert('Find Hives clicked!')}>
-                                Find Hives
+                                FIND HIVES
                             </button>
                         </div>
+                        <SetOccupancyDialog />
+                        <SetRateDialog />
+                        {/* put the number of guests nd promo code stuff here */}
                     </div>
                 </div>
             </div>
