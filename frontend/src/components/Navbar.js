@@ -6,14 +6,14 @@ import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 function Navbar() {
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track if the user is logged in
-    const [userName, setUserName] = useState(''); // State to store user's name
-    const [hover, setHover] = useState(false); // State to track if the account icon is hovered
+    const [showModal, setShowModal] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userName, setUserName] = useState('');
+    const [hover, setHover] = useState(false);
 
 
     useEffect(() => {
-        // Check if the user is logged in by fetching session data
+        //check if the user is logged in by fetching session data
         const checkSession = async () => {
             console.log("checking session");
             try {
@@ -28,10 +28,10 @@ function Navbar() {
 
                 if (response.ok && data.isLoggedIn) {
                     setIsLoggedIn(true);
-                    console.log("User is logged in:", data);
-                    setUserName(data.firstname.toUpperCase()); // Use firstname from backend response in all caps
+                    console.log("User is logged in:", data);    //debugging
+                    setUserName(data.firstname.toUpperCase());
                 } else {
-                    console.log("No active session found.");
+                    console.log("No active session found.");    //debugging
                     setIsLoggedIn(false);
                 }
             } catch (error) {
@@ -49,7 +49,7 @@ function Navbar() {
         try {
             const response = await fetch("http://localhost:8080/api/logout", {
                 method: "POST",
-                credentials: "include", // Ensures cookies are sent to invalidate the session
+                credentials: "include",
             });
 
             if (response.ok) {
@@ -101,14 +101,20 @@ function Navbar() {
                         onClick={handleLogout}
                         style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }}
                         onMouseEnter={() => setHover(true)}
-                        onMouseLeave={() => setHover(false)} // Set hover state on mouse events
+                        onMouseLeave={() => setHover(false)}
                     >
                         {hover ? (
                             <LogoutIcon style={{ fontSize: 20, marginBottom: "-10px" }} />
                         ) : (
                             <PersonIcon style={{ fontSize: 20, marginBottom: "-10px" }} />
                         )}
-                        <p>HI, {userName}!</p>
+
+                        {hover ? (
+                            <p>LOGOUT</p>
+                        ) : (
+                            <p>HI, {userName}!</p>
+                        )}
+                        
                     </div>
                 ) : (
                     <div className="login-link">
