@@ -45,7 +45,6 @@ Install the dependencies and devDependencies and start the client. on port :3000
 cd HONEY_HOTEL
 cd frontend
 npm install
-npm run build
 npm start
 ```
 
