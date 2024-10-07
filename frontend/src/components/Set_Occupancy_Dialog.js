@@ -64,8 +64,11 @@ export default function SetOccupancyDialog() {
                             value={rooms}
                             min={1}
                             max={10}
-                            onChange={(event, value) => setRooms(value)}
                             step={1}
+                            onChange={(event, value) => {
+                                setRooms(value);
+                                console.log(`NUMBER OF ROOMS: `, value);
+                            }}
                         />
                     </div>
 
@@ -77,7 +80,10 @@ export default function SetOccupancyDialog() {
                             value={adults}
                             min={1}
                             max={8}
-                            onChange={(event, value) => setAdults(value)}
+                            onChange={(event, value) => {
+                                setAdults(value)
+                                console.log(`NUMBER OF ADULTS: `, value);
+                            }}
                             step={1}
                         />
                     </div>
@@ -90,7 +96,10 @@ export default function SetOccupancyDialog() {
                             value={children}
                             min={0}
                             max={8}
-                            onChange={(event, value) => setChildren(value)}
+                            onChange={(event, value) => {
+                                setChildren(value)
+                                console.log(`NUMBER OF CHILDREN: `, value);
+                            }}
                             step={1}
                         />
                     </div>

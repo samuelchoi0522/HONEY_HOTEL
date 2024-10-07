@@ -14,7 +14,6 @@ import '../styles/Modal.css';
 
 LicenseInfo.setLicenseKey(process.env.REACT_APP_MUI_X_LICENSEKEY);
 
-// Define the custom theme
 const theme = createTheme({
     components: {
         MuiAutocomplete: {
@@ -89,8 +88,8 @@ const hotelLocations = [
 ];
 
 const Modal = ({ open, handleClose }) => {
-    const [selectedCountry, setSelectedCountry] = useState(null); // State to manage selected country
-    const [dateRange, setDateRange] = useState([null, null]); // State for date range
+    const [selectedHotel, setSelectedHotel] = useState(null);
+    const [dateRange, setDateRange] = useState([null, null]);
 
     const calculateNights = () => {
         if (dateRange[0] && dateRange[1]) {
@@ -102,9 +101,9 @@ const Modal = ({ open, handleClose }) => {
     };
 
     const nights = calculateNights();
-    const today = dayjs(); // Get today's date
+    const today = dayjs();
 
-    if (!open) return null; // Do not render if the modal is not open
+    if (!open) return null;
 
     return (
         <ThemeProvider theme={theme}>
@@ -113,26 +112,24 @@ const Modal = ({ open, handleClose }) => {
                     <button className="close-button" onClick={handleClose}>×</button>
                     <div className="modal-content">
                         <div className="inputs-container">
-                            {/* Destination Field */}
                             <div className="field destination">
                                 <label className="label">
                                     <img src="/icons/DESTINATION_ICON.png" alt="Destination Icon" className="icon" />
                                     &nbsp;DESTINATION
                                 </label>
 
-                                {/* Use Material-UI Autocomplete component */}
                                 <Autocomplete
-                                    id="country-select"
+                                    id="hotel-select"
                                     options={hotelLocations}
                                     getOptionLabel={(option) => option.title}
-                                    value={selectedCountry}
+                                    value={selectedHotel}
                                     onChange={(event, newValue) => {
-                                        setSelectedCountry(newValue);
+                                        setSelectedHotel(newValue);
                                     }}
                                     sx={{
                                         width: 250,
                                         '& .MuiAutocomplete-popupIndicator': {
-                                            color: '#000000', // Change dropdown arrow color
+                                            color: '#000000',
                                         },
                                     }}
                                     renderInput={(params) => (
@@ -142,35 +139,35 @@ const Modal = ({ open, handleClose }) => {
                                             variant="standard"
                                             InputProps={{
                                                 ...params.InputProps,
-                                                disableUnderline: true, // Explicitly disable the underline
+                                                disableUnderline: true,
                                             }}
                                             sx={{
-                                                position: 'relative', // Required for the underline styling
+                                                position: 'relative',
                                                 '&:before': {
                                                     content: '""',
                                                     position: 'absolute',
                                                     left: 0,
                                                     right: 0,
                                                     bottom: '-2px',
-                                                    height: '2px', // Height of the custom underline
-                                                    backgroundColor: '#000000', // Default underline color
-                                                    transition: 'background-color 0.2s ease', // Add transition effect
+                                                    height: '2px',
+                                                    backgroundColor: '#000000',
+                                                    transition: 'background-color 0.2s ease',
                                                 },
                                                 '&:hover:before': {
-                                                    backgroundColor: '#F0D10B', // Hover effect to change underline color
+                                                    backgroundColor: '#F0D10B',
                                                 },
                                                 '& label.Mui-focused': {
-                                                    color: '#000000', // Change label color to #F0D10B when focused
+                                                    color: '#000000',
                                                 },
                                                 '& .MuiInputBase-root': {
                                                     '&:before': {
-                                                        borderBottom: 'none', // Remove underline
+                                                        borderBottom: 'none',
                                                     },
                                                     '&:hover:before': {
-                                                        borderBottom: 'none', // Remove underline on hover
+                                                        borderBottom: 'none',
                                                     },
                                                     '&:after': {
-                                                        borderBottom: 'none', // Remove underline on focus
+                                                        borderBottom: 'none',
                                                     },
                                                 },
                                             }}
@@ -179,7 +176,7 @@ const Modal = ({ open, handleClose }) => {
                                 />
                             </div>
 
-                            {/* Single Date Range Picker with button */}
+                            {/* date range picker */}
                             <div className="field date-range-picker">
                                 <label className="label">
                                     <img src="/icons/CALENDAR_ICON.png" alt="Calendar Icon" className="icon" />
@@ -191,37 +188,38 @@ const Modal = ({ open, handleClose }) => {
                                         <DateRangePicker
                                             value={dateRange}
                                             onChange={(newValue) => setDateRange(newValue)}
-                                            minDate={today} // Set minimum date to today's date
+                                            minDate={today}
                                             slots={{ field: SingleInputDateRangeField }}
                                             sx={{
                                                 width: 250,
-                                                position: 'relative', // Required for the underline styling
+                                                position: 'relative',
                                                 '&:before': {
                                                     content: '""',
                                                     position: 'absolute',
                                                     left: 0,
                                                     right: 0,
                                                     bottom: '5px',
-                                                    height: '2px', // Height of the custom underline
-                                                    backgroundColor: '#000000', // Default underline color
-                                                    transition: 'background-color 0.2s ease', // Add transition effect
+                                                    height: '2px',
+                                                    backgroundColor: '#000000',
+                                                    transition: 'background-color 0.2s ease',
                                                 },
                                                 '&:hover:before': {
-                                                    backgroundColor: '#F0D10B', // Hover effect to change underline color
+                                                    backgroundColor: '#F0D10B',
                                                 },
                                             }}
                                         />
                                     </LocalizationProvider>
                                 </div>
                             </div>
-                            {/* "Find Hives" Button */}
+                            {/* submit button */}
                             <button className="find-hives-button" onClick={() => alert('Find Hives clicked!')}>
                                 FIND HIVES
                             </button>
                         </div>
+
+                        {/* occupancy and rate dialog boxes */}
                         <SetOccupancyDialog />
                         <SetRateDialog />
-                        {/* put the number of guests nd promo code stuff here */}
                     </div>
                 </div>
             </div>
