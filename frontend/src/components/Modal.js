@@ -91,6 +91,7 @@ const Modal = ({ open, handleClose }) => {
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [dateRange, setDateRange] = useState([null, null]);
 
+
     const calculateNights = () => {
         if (dateRange[0] && dateRange[1]) {
             const start = dayjs(dateRange[0]);
@@ -212,7 +213,7 @@ const Modal = ({ open, handleClose }) => {
                                 </div>
                             </div>
                             {/* submit button */}
-                            <button className="find-hives-button" onClick={() => alert('Find Hives clicked!')}>
+                            <button className="find-hives-button" onClick={() => console.log()}>
                                 FIND HIVES
                             </button>
                         </div>
