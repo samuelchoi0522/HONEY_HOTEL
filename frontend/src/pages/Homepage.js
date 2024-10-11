@@ -5,6 +5,7 @@ const Homepage = () => {
     const [backgroundVideo, setBackgroundVideo] = useState(true);
     const [backgroundSource, setBackgroundSource] = useState('/uploads/Landing_Video (1).mp4');
     const [opacity, setOpacity] = useState(0.7);
+    const [activeIndex, setActiveIndex] = useState(null);
 
     const changeBackground = (isVideo, source) => {
         if (backgroundSource !== source || backgroundVideo !== isVideo) {
@@ -28,7 +29,7 @@ const Homepage = () => {
 
     return (
         <div className="homepage-container">
-            {/* Video or Image */}
+            {/* Landing Video */}
             <div className="video-container">
                 {backgroundVideo ? (
                     <video
@@ -56,38 +57,42 @@ const Homepage = () => {
                 )}
             </div>
 
+            
+            
+            
             {/* Navigation Bar */}
+            <div className="nav-line">
+                <div className="nav-line1"></div>
+                <div
+                    className="hover-box"
+                    style={{
+                        left: activeIndex !== null ? `${activeIndex * 17}%` : '0',
+                    }}
+                ></div>
+            </div>
+            
             <div className="navigation-bar">
-                <div className="nav-item" onMouseEnter={() => changeBackground(true, '/uploads/Landing_Video.mp4')}>
-                    <img src="/icons/HOTEL_RESORTS_ICON.png" alt="Hotels and Resorts" />
-                    <span>HOTELS AND RESORTS</span>
-                </div>
-                <div className="nav-item" onMouseEnter={() => changeBackground(false, '/uploads/HOTEL_AMENITIES_PHOTO.jpeg')}>
-                    <img src="/icons/AMENITIES_ICON.png" alt="AMENITIES" />
-                    <span>AMENITIES</span>
-                </div>
-                <div className="nav-item" onMouseEnter={() => changeBackground(false, '/uploads/HOTEL_DINING_PHOTO.jpeg')}>
-                    <img src="/icons/DINING_ICON.png" alt="DINING" />
-                    <span>DINING</span>
-                </div>
-                <div className="nav-item" onMouseEnter={() => changeBackground(false, '/uploads/HOTEL_SHOPPING_PHOTO.jpeg')}>
-                    <img src="/icons/SHOPPING_ICON.png" alt="SHOP" />
-                    <span>SHOP</span>
-                </div>
-                <div className="nav-item" onMouseEnter={() => changeBackground(true, '/uploads/Landing_Video.mp4')}>
-                    <img src="/icons/SIGNIN_ICON.png" alt="SIGN IN" />
-                    <span>ACCOUNT</span>
-                </div>
+                {['/uploads/Landing_Video.mp4', '/uploads/HOTEL_AMENITIES_PHOTO.jpeg', '/uploads/HOTEL_DINING_PHOTO.jpeg', '/uploads/HOTEL_SHOPPING_PHOTO.jpeg', '/uploads/Landing_Video.mp4'].map((source, index) => (
+                    <div
+                        key={index}
+                        className="nav-item"
+                        onMouseEnter={() => { setActiveIndex(index); changeBackground(index === 0 || index === 4, source); }}
+                    >
+                        <img src={`/icons/ICON${index}.png`} alt="Nav Item" />
+                        <span>{['HOTELS', 'AMENITIES', 'DINING', 'SHOP', 'ACCOUNT'][index]}</span>
+                    </div>
+                ))}
             </div>
 
             {/* Spacer */}
             <div className="spacer" style={{ height: '250px' }}></div>
 
+            {/* Quick Links */}
             <div className="lower-homepage-container">
                 <div className="explore-more-with-honeyhotel-container">
                     <span className="explore-more-with-hotelhotel-text">{`EXPLORE MORE WITH HONEY HOTEL`}</span>
                 </div>
-
+                
                 <div className="image-grid">
                     <div className="shopping-image">
                         <img
@@ -120,12 +125,14 @@ const Homepage = () => {
                         </div>
                     </div>
                 </div>
-
+                
+                {/* Youtube Video */}
                 <span className="the-story-text">{`THE STORY`}</span>
                 <div className="video-wrapper">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/NpEaa2P7qZI?si=td7dVTOVEoADBofN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
 
+                {/* Instagram Posts */}
                 <span className="hashtag-honeyhotel">{`#HONEYHOTEL`}</span>
                 <div className="instagram-posts">
                     <div className="instagram-post" dangerouslySetInnerHTML={{
