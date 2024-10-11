@@ -84,12 +84,66 @@ const theme = createTheme({
 });
 
 const hotelLocations = [
-    { title: 'Brazos Bliss Hotel, Waco, Texas'},
+    { title: 'Brazos Bliss Hotel, Waco, Texas, USA' },
+    { title: 'The Grand Palace, Paris, France' },
+    { title: 'Seaside Serenity Resort, Phuket, Thailand' },
+    { title: 'Urban Oasis, Tokyo, Japan' },
+    { title: 'Misty Mountain Lodge, Queenstown, New Zealand' },
+    { title: 'Desert Mirage Hotel, Dubai, UAE' },
+    { title: 'Maple Leaf Lodge, Banff, Canada' },
+    { title: 'Savannah Retreat, Nairobi, Kenya' },
+    { title: 'Alpine Meadows Hotel, Interlaken, Switzerland' },
+    { title: 'Casa Del Sol, Barcelona, Spain' },
+    { title: 'Emerald Bay Resort, Bora Bora, French Polynesia' },
+    { title: 'Crescent Cove Hotel, Sydney, Australia' },
+    { title: 'Royal Garden Inn, London, UK' },
+    { title: 'Blue Lagoon Resort, Reykjavik, Iceland' },
+    { title: 'Rainforest Hideaway, Tulum, Mexico' },
+    { title: 'Golden Sands Hotel, Cape Town, South Africa' },
+    { title: 'Redwood Retreat, San Francisco, California, USA' },
+    { title: 'Lakefront Lodge, Queenstown, New Zealand' },
+    { title: 'Coconut Grove Resort, Bali, Indonesia' },
+    { title: 'Northern Lights Inn, Tromsø, Norway' }
 ];
+
 
 const Modal = ({ open, handleClose }) => {
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [dateRange, setDateRange] = useState([null, null]);
+    const [rooms, setRooms] = useState(1);
+    const [adults, setAdults] = useState(1);
+    const [children, setChildren] = useState(0);
+    const [rateOption, setRateOption] = useState('Lowest Regular Rate');
+    const [ratePromoCode, setRatePromoCode] = useState('');
+
+    const handleSetOccupancy = (rooms, adults, children) => {
+        setRooms(rooms);
+        setAdults(adults);
+        setChildren(children);
+    };
+
+    const handleSetRate = (option, promoCode) => {
+        setRateOption(option);
+        setRatePromoCode(promoCode);
+    };
+
+    const handleFindHivesClick = () => {
+        const hotelTitle = selectedHotel ? selectedHotel.title : "No hotel selected";
+        const startDate = dateRange[0] ? dayjs(dateRange[0]).format('MM/DD/YYYY') : "No start date selected";
+        const endDate = dateRange[1] ? dayjs(dateRange[1]).format('MM/DD/YYYY') : "No end date selected";
+        const nights = calculateNights();
+
+        console.log(`Hotel: ${hotelTitle}`);
+        console.log(`Rooms: ${rooms}, Adults: ${adults}, Children: ${children}`);
+        console.log(`Rate Option: ${rateOption}`);
+        if (rateOption === 'Promo Code' && ratePromoCode) {
+            console.log(`Promo Code: ${ratePromoCode.toUpperCase()}`);
+        }
+        console.log(`Start Date: ${startDate}`);
+        console.log(`End Date: ${endDate}`);
+        console.log(`Number of Nights: ${nights}`);
+    };
+
 
 
     const calculateNights = () => {
@@ -213,14 +267,14 @@ const Modal = ({ open, handleClose }) => {
                                 </div>
                             </div>
                             {/* submit button */}
-                            <button className="find-hives-button" onClick={() => console.log()}>
+                            <button className="find-hives-button" onClick={handleFindHivesClick}>
                                 FIND HIVES
                             </button>
                         </div>
 
                         {/* occupancy and rate dialog boxes */}
-                        <SetOccupancyDialog />
-                        <SetRateDialog />
+                        <SetOccupancyDialog onSetOccupancy={handleSetOccupancy} />
+                        <SetRateDialog onSetRate={handleSetRate} />
                     </div>
                 </div>
             </div>

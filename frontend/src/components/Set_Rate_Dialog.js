@@ -25,7 +25,9 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
     },
 }));
 
-export default function SetOccupancyDialog() {
+
+
+export default function SetOccupancyDialog({ onSetRate }) {
     const [open, setOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState('Lowest Regular Rate');
     const [promoCode, setPromoCode] = useState('');
@@ -35,6 +37,7 @@ export default function SetOccupancyDialog() {
     };
 
     const handleClose = () => {
+        onSetRate(selectedOption, promoCode);
         setOpen(false);
     };
 
@@ -121,7 +124,7 @@ export default function SetOccupancyDialog() {
                         {selectedOption === 'Promo Code' && (
                             <TextField
                                 id="outlined-password-input"
-                                label="Promo Code"
+                                label="Add Promo Code"
                                 value={promoCode}
                                 onChange={(e) => setPromoCode(e.target.value)}
                             />

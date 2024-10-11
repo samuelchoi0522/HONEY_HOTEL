@@ -72,7 +72,7 @@ const Homepage = () => {
             </div>
             
             <div className="navigation-bar">
-                {['/uploads/Landing_Video.mp4', '/uploads/HOTEL_AMENITIES_PHOTO.jpeg', '/uploads/HOTEL_DINING_PHOTO.jpeg', '/uploads/HOTEL_SHOPPING_PHOTO.jpeg', '/uploads/Landing_Video.mp4'].map((source, index) => (
+                {['/uploads/Landing_Video (1).mp4', '/uploads/HOTEL_AMENITIES_PHOTO.jpeg', '/uploads/HOTEL_DINING_PHOTO.jpeg', '/uploads/HOTEL_SHOPPING_PHOTO.jpeg', '/uploads/Landing_Video (1).mp4'].map((source, index) => (
                     <div
                         key={index}
                         className="nav-item"

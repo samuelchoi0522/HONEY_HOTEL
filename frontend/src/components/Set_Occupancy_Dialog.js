@@ -11,7 +11,7 @@ import {
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function SetOccupancyDialog() {
+export default function SetOccupancyDialog({ onSetOccupancy }) {
     const [open, setOpen] = useState(false);
     const [rooms, setRooms] = useState(1);
     const [adults, setAdults] = useState(1);
@@ -22,6 +22,7 @@ export default function SetOccupancyDialog() {
         setOpen(true);
     };
     const handleClose = () => {
+        onSetOccupancy(rooms, adults, children);
         setOpen(false);
     };
     
