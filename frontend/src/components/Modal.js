@@ -145,7 +145,7 @@ const Modal = ({ open, handleClose }) => {
         if (!locationIsValid || !dateRangeIsValid) return;
 
         const bookingDetails = {
-            hotel: hotelTitle,
+            hotelLocation: hotelTitle,
             startDate,
             endDate,
             nights,
@@ -156,7 +156,9 @@ const Modal = ({ open, handleClose }) => {
             promoCode: rateOption === 'Promo Code' ? ratePromoCode : ''
         };
 
-        // Send data to the backend
+        console.log(hotelTitle, startDate, endDate, nights, rooms, adults, children, rateOption, ratePromoCode);
+
+        // Send data to the backend and log the response
         fetch("http://localhost:8080/api/hives/find", {
             method: "POST",
             headers: {
@@ -168,12 +170,14 @@ const Modal = ({ open, handleClose }) => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.text();  // Use .text() to handle empty response
+                return response.json();  // Parse the response as JSON
             })
-            .then(data => console.log("Booking details sent successfully"))
-            .catch(error => console.error("Error sending booking details:", error));
-        
+            .then(data => {
+                console.log("Available rooms:", data);  // Log the received data
+            })
+            .catch(error => console.error("Error fetching available rooms:", error));
     };
+
 
 
 
