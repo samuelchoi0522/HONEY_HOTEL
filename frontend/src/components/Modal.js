@@ -116,6 +116,9 @@ const Modal = ({ open, handleClose }) => {
     const [rateOption, setRateOption] = useState('Lowest Regular Rate');
     const [ratePromoCode, setRatePromoCode] = useState('');
 
+    const [locationError, setLocationError] = useState(false);
+    const [dateRangeError, setDateRangeError] = useState(false);
+
     const handleSetOccupancy = (rooms, adults, children) => {
         setRooms(rooms);
         setAdults(adults);
@@ -133,15 +136,43 @@ const Modal = ({ open, handleClose }) => {
         const endDate = dateRange[1] ? dayjs(dateRange[1]).format('MM/DD/YYYY') : "No end date selected";
         const nights = calculateNights();
 
-        console.log(`Hotel: ${hotelTitle}`);
-        console.log(`Rooms: ${rooms}, Adults: ${adults}, Children: ${children}`);
-        console.log(`Rate Option: ${rateOption}`);
-        if (rateOption === 'Promo Code' && ratePromoCode) {
-            console.log(`Promo Code: ${ratePromoCode.toUpperCase()}`);
-        }
-        console.log(`Start Date: ${startDate}`);
-        console.log(`End Date: ${endDate}`);
-        console.log(`Number of Nights: ${nights}`);
+        const locationIsValid = Boolean(selectedHotel);
+        const dateRangeIsValid = dateRange[0] && dateRange[1];
+
+        setLocationError(!locationIsValid);
+        setDateRangeError(!dateRangeIsValid);
+
+        if (!locationIsValid || !dateRangeIsValid) return;
+
+        const bookingDetails = {
+            hotel: hotelTitle,
+            startDate,
+            endDate,
+            nights,
+            rooms,
+            adults,
+            children,
+            rateOption,
+            promoCode: rateOption === 'Promo Code' ? ratePromoCode : ''
+        };
+
+        // Send data to the backend
+        fetch("http://localhost:8080/api/hives/find", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(bookingDetails),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();  // Use .text() to handle empty response
+            })
+            .then(data => console.log("Booking details sent successfully"))
+            .catch(error => console.error("Error sending booking details:", error));
+        
     };
 
 
@@ -180,11 +211,20 @@ const Modal = ({ open, handleClose }) => {
                                     value={selectedHotel}
                                     onChange={(event, newValue) => {
                                         setSelectedHotel(newValue);
+                                        setLocationError(false);
                                     }}
                                     sx={{
                                         width: 250,
                                         '& .MuiAutocomplete-popupIndicator': {
                                             color: '#000000',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: locationError ? 'red' : 'inherit',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: locationError ? 'red' : 'inherit',
+                                            },
                                         },
                                     }}
                                     renderInput={(params) => (
@@ -192,6 +232,7 @@ const Modal = ({ open, handleClose }) => {
                                             {...params}
                                             label="Where can we take you?"
                                             variant="standard"
+                                            error={locationError}
                                             InputProps={{
                                                 ...params.InputProps,
                                                 disableUnderline: true,
@@ -212,7 +253,7 @@ const Modal = ({ open, handleClose }) => {
                                                     backgroundColor: '#F0D10B',
                                                 },
                                                 '& label.Mui-focused': {
-                                                    color: '#000000',
+                                                    color: locationError ? 'red' : 'inherit',
                                                 },
                                                 '& .MuiInputBase-root': {
                                                     '&:before': {
@@ -242,11 +283,26 @@ const Modal = ({ open, handleClose }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DateRangePicker
                                             value={dateRange}
-                                            onChange={(newValue) => setDateRange(newValue)}
+                                            onChange={(newValue) => {
+                                                setDateRange(newValue)
+                                                setDateRangeError(false)
+                                            }}
                                             minDate={today}
+                                            error={dateRangeError}
                                             slots={{ field: SingleInputDateRangeField }}
                                             sx={{
                                                 width: 250,
+                                                '& .MuiInputBase-input::placeholder': {
+                                                    color: dateRangeError ? 'red' : 'inherit',
+                                                },
+                                                '& .MuiOutlinedInput-root': {
+                                                    '& fieldset': {
+                                                        borderColor: dateRangeError ? 'red' : 'inherit',
+                                                    },
+                                                    '&:hover fieldset': {
+                                                        borderColor: dateRangeError ? 'red' : 'inherit',
+                                                    },
+                                                },
                                                 position: 'relative',
                                                 '&:before': {
                                                     content: '""',
@@ -260,6 +316,11 @@ const Modal = ({ open, handleClose }) => {
                                                 },
                                                 '&:hover:before': {
                                                     backgroundColor: '#F0D10B',
+                                                },
+                                            }}
+                                            slotProps={{
+                                                textField: {
+                                                    error: dateRangeError,
                                                 },
                                             }}
                                         />
