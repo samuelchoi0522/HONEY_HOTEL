@@ -33,7 +33,6 @@ public class Room {
     private LocalDate availableFrom;
     private LocalDate availableUntil;
 
-    // Getters and setters
     public Long getId() {
         return id;
     }

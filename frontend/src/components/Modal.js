@@ -158,7 +158,6 @@ const Modal = ({ open, handleClose }) => {
 
         console.log(hotelTitle, startDate, endDate, nights, rooms, adults, children, rateOption, ratePromoCode);
 
-        // Send data to the backend and log the response
         fetch("http://localhost:8080/api/hives/find", {
             method: "POST",
             headers: {
@@ -170,10 +169,10 @@ const Modal = ({ open, handleClose }) => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();  // Parse the response as JSON
+                return response.json();
             })
             .then(data => {
-                console.log("Available rooms:", data);  // Log the received data
+                console.log("Available rooms:", data);
             })
             .catch(error => console.error("Error fetching available rooms:", error));
     };

@@ -13,7 +13,6 @@ public class BookingDetails {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate endDate;
 
-    // Getters and setters
     public String getHotelLocation() {
         return hotelLocation;
     }

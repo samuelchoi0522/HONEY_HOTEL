@@ -33,7 +33,6 @@ public class RoomCategory {
     @JsonBackReference
     private Hotel hotel;
 
-    // Getters and setters
     public Long getId() {
         return id;
     }

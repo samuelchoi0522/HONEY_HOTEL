@@ -26,7 +26,6 @@ public class Hotel {
     @JsonManagedReference
     private List<RoomCategory> roomCategories;
 
-    // Getters and setters
     public Long getId() {
         return id;
     }
