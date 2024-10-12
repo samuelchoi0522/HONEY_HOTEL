@@ -79,7 +79,7 @@ const Homepage = () => {
                         onMouseEnter={() => { setActiveIndex(index); changeBackground(index === 0 || index === 4, source); }}
                     >
                         <img src={`/icons/ICON${index}.png`} alt="Nav Item" />
-                        <span>{['HOTELS', 'AMENITIES', 'DINING', 'SHOP', 'ACCOUNT'][index]}</span>
+                        <span>{['\u00A0HOTELS', 'AMENITIES', 'DINING', 'SHOP', 'ACCOUNT'][index]}</span>
                     </div>
                 ))}
             </div>
