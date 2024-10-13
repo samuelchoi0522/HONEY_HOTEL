@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import '../styles/FindHives.css';  // Import the CSS file for styling
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import '../styles/FindHives.css';
 
 const FindHive = () => {
     const location = useLocation();
     const rooms = location.state?.rooms || [];
 
-    const [sortConfig, setSortConfig] = useState({ key: 'category', direction: 'asc' });
+    const [sortConfig, setSortConfig] = useState({ key: 'price', direction: 'asc' });
 
-    const handleSort = (key) => {
-        setSortConfig(prevConfig => ({
-            key,
-            direction: prevConfig.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc',
-        }));
+    const handleSortChange = (event) => {
+        const value = event.target.value;
+        const [key, direction] = value.split('-');
+        setSortConfig({ key, direction });
     };
 
     const sortedRooms = [...rooms].sort((a, b) => {
@@ -33,39 +31,35 @@ const FindHive = () => {
 
     return (
         <div>
-            <FormControl variant="outlined" style={{ minWidth: 200, marginBottom: '20px' }}>
+            <FormControl
+                variant="outlined"
+                sx={{
+                    minWidth: 200,
+                    marginBottom: 4,
+                    marginTop: 20,
+                    backgroundColor: '#fff',
+                    padding: '8px',
+                }}
+            >
                 <InputLabel id="sort-by-label">Sort by</InputLabel>
                 <Select
                     labelId="sort-by-label"
-                    value={sortConfig.key}
-                    onChange={(e) => handleSort(e.target.value)}
+                    value={`${sortConfig.key}-${sortConfig.direction}`}
+                    onChange={handleSortChange}
                     label="Sort by"
                 >
-                    <MenuItem value="category">Category</MenuItem>
-                    <MenuItem value="price">Lowest Price</MenuItem>
-                    <MenuItem value="roomSize">Room Size</MenuItem>
+                    <MenuItem value="price-asc">Price (Low to High)</MenuItem>
+                    <MenuItem value="price-desc">Price (High to Low)</MenuItem>
                 </Select>
             </FormControl>
 
-            <div className="room-list">
+            <div className="room-list" style={{ marginTop: '20px' }}>
                 {sortedRooms.map(room => (
                     <div key={room.id} className="room-card">
-                        <TableSortLabel
-                            active={sortConfig.key === 'category'}
-                            direction={sortConfig.key === 'category' ? sortConfig.direction : 'asc'}
-                            onClick={() => handleSort('category')}
-                        >
-                            <h3>{room.category ? room.category.categoryName : "Category not available"} - {room.roomSize} Room</h3>
-                        </TableSortLabel>
+                        <h3>{room.category ? room.category.categoryName : "Category not available"} - {room.roomSize} Room</h3>
                         <p>Bed Type: {room.bedType}</p>
                         <p>Smoking Allowed: {room.smokingAllowed ? 'Yes' : 'No'}</p>
-                        <TableSortLabel
-                            active={sortConfig.key === 'price'}
-                            direction={sortConfig.key === 'price' ? sortConfig.direction : 'asc'}
-                            onClick={() => handleSort('price')}
-                        >
-                            <p>Price: ${room.price} / night</p>
-                        </TableSortLabel>
+                        <p>Price: ${room.price} / night</p>
                         <button>Select Room</button>
                     </div>
                 ))}

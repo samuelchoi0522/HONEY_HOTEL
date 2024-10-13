@@ -28,8 +28,7 @@ const Homepage = () => {
 
 
     return (
-        <div className="homepage-container">
-            {/* Landing Video */}
+        <div className="homepage-container" style={{ backgroundColor: 'black' }}>
             <div className="video-container">
                 {backgroundVideo ? (
                     <video
