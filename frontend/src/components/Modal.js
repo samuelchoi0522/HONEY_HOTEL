@@ -10,6 +10,8 @@ import { LicenseInfo } from '@mui/x-license-pro';
 import dayjs from 'dayjs';
 import SetOccupancyDialog from './Set_Occupancy_Dialog.js';
 import SetRateDialog from './Set_Rate_Dialog.js';
+import { useNavigate } from 'react-router-dom';
+
 import '../styles/Modal.css';
 
 LicenseInfo.setLicenseKey(process.env.REACT_APP_MUI_X_LICENSEKEY);
@@ -115,7 +117,7 @@ const Modal = ({ open, handleClose }) => {
     const [children, setChildren] = useState(0);
     const [rateOption, setRateOption] = useState('Lowest Regular Rate');
     const [ratePromoCode, setRatePromoCode] = useState('');
-
+    const navigate = useNavigate();
     const [locationError, setLocationError] = useState(false);
     const [dateRangeError, setDateRangeError] = useState(false);
 
@@ -173,12 +175,11 @@ const Modal = ({ open, handleClose }) => {
             })
             .then(data => {
                 console.log("Available rooms:", data);
+                // Redirect to the FindHive page and pass the room data as state
+                navigate('/find-hive', { state: { rooms: data } });
             })
             .catch(error => console.error("Error fetching available rooms:", error));
     };
-
-
-
 
     const calculateNights = () => {
         if (dateRange[0] && dateRange[1]) {

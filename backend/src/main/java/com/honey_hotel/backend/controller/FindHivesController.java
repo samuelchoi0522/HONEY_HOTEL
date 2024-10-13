@@ -27,25 +27,15 @@ public class FindHivesController {
                 bookingDetails.getEndDate()
         );
 
-
-        if (availableRooms.isEmpty()) {
-            System.out.println("No available rooms found for the specified date range.");
-        } else {
-            availableRooms.forEach(room -> {
-                System.out.println("Room ID: " + room.getId()
-                        + ", Category: " + room.getCategory().getCategoryName()
-                        + ", Size: " + room.getRoomSize()
-                        + ", Bed Type: " + room.getBedType()
-                        + ", Smoking Allowed: " + room.isSmokingAllowed()
-                        + ", Status: " + room.getStatus()
-                        + ", Price: $" + room.getPrice()
-                        + ", Available From: " + room.getAvailableFrom()
-                        + ", Available Until: " + room.getAvailableUntil());
-            });
-        }
+        availableRooms.forEach(room -> {
+            if (room.getCategory() == null) {
+                System.out.println("Room ID " + room.getId() + " does not have a category.");
+            } else {
+                System.out.println("Room ID " + room.getId() + " has category " + room.getCategory().getCategoryName());
+            }
+        });
 
         return availableRooms;
     }
-
 
 }

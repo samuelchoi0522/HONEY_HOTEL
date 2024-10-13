@@ -2,9 +2,10 @@ package com.honey_hotel.backend.model;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,16 +14,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "rooms") 
+@Table(name = "rooms")
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_type_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnoreProperties("rooms")
     private RoomCategory category;
 
     private String bedType;
@@ -88,7 +89,7 @@ public class Room {
     public void setPrice(double price) {
         this.price = price;
     }
-    
+
     public LocalDate getAvailableFrom() {
         return availableFrom;
     }
