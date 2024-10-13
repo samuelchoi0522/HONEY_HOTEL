@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import NavbarWhite from './components/Navbar_WHITE';
 import NavbarFindHives from './components/Navbar_FindHives';
+import CheckRatesBar from './components/CheckRatesBar';
 import Footer from './components/Footer';
 import Reservation from './pages/Reservation';
 import FindHive from './pages/FindHive';
@@ -25,6 +26,7 @@ function Layout() {
             {showNavbarAndFooter && <Navbar />}
             {showNavbarForLoginAndRegister && <NavbarWhite />}
             {showNavbarForFindHive && <NavbarFindHives />}
+            {showNavbarForFindHive && <CheckRatesBar />}
             <Routes>
                 <Route path="/" exact element={<Homepage />} />
                 <Route path="/login" element={<Login />} /> {/* Login page without Navbar and Footer */}
