@@ -1,6 +1,8 @@
 package com.honey_hotel.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,18 +21,31 @@ public class Room {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "room_type_id", nullable = false)
+    @JoinColumn(name = "room_category_id", nullable = false)
     @JsonIgnoreProperties("rooms")
     private RoomCategory category;
 
     private String bedType;
     private boolean smokingAllowed;
-    private String roomSize;
     private double price;
-    private String priceCategory; // New field for price_category
 
-    // Getters and setters
+    @Column(name = "price_category") // Make sure the column name matches your database schema
+    private String priceCategory;
 
+    @Column(name = "room_type_id", nullable = false)
+    private int roomTypeId;
+
+    // A static array of room type names mapped to room type IDs
+    private static final String[] ROOM_TYPE_NAMES = {
+            "Single", // ID 1
+            "Double", // ID 2
+            "Family", // ID 3
+            "Suite", // ID 4
+            "Deluxe", // ID 5
+            "Standard" // ID 6
+    };
+
+    /////// room id
     public Long getId() {
         return id;
     }
@@ -38,7 +53,9 @@ public class Room {
     public void setId(Long id) {
         this.id = id;
     }
+    /////// room id
 
+    /////// room category (Nature Retreat, etc.)
     public RoomCategory getCategory() {
         return category;
     }
@@ -46,7 +63,9 @@ public class Room {
     public void setCategory(RoomCategory category) {
         this.category = category;
     }
+    /////// room category (Nature Retreat, etc.)
 
+    /////// bed type (Single, Double, etc.)
     public String getBedType() {
         return bedType;
     }
@@ -54,7 +73,9 @@ public class Room {
     public void setBedType(String bedType) {
         this.bedType = bedType;
     }
+    /////// bed type (Single, Double, etc.)
 
+    /////// smoking allowed
     public boolean isSmokingAllowed() {
         return smokingAllowed;
     }
@@ -62,15 +83,9 @@ public class Room {
     public void setSmokingAllowed(boolean smokingAllowed) {
         this.smokingAllowed = smokingAllowed;
     }
+    /////// smoking allowed
 
-    public String getRoomSize() {
-        return roomSize;
-    }
-
-    public void setRoomSize(String roomSize) {
-        this.roomSize = roomSize;
-    }
-
+    /////// price
     public double getPrice() {
         return price;
     }
@@ -78,7 +93,26 @@ public class Room {
     public void setPrice(double price) {
         this.price = price;
     }
+    /////// price
 
+    // Getter for room type name (e.g. Single, Double, etc.)
+    public String getRoomType() {
+        if (roomTypeId >= 1 && roomTypeId <= ROOM_TYPE_NAMES.length) {
+            return ROOM_TYPE_NAMES[roomTypeId - 1]; // Mapping ID to String
+        } else {
+            return "Unknown"; // Default if roomTypeId is out of bounds
+        }
+    }
+
+    public int getRoomTypeId() {
+        return roomTypeId;
+    }
+
+    public void setRoomTypeId(int roomTypeId) {
+        this.roomTypeId = roomTypeId;
+    }
+    
+    /////// price category(economy, comfort, etc.)
     public String getPriceCategory() {
         return priceCategory;
     }
@@ -86,4 +120,5 @@ public class Room {
     public void setPriceCategory(String priceCategory) {
         this.priceCategory = priceCategory;
     }
+    /////// price category(economy, comfort, etc.)
 }
