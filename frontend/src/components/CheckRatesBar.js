@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDateRangeField';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SetOccupancyDialog from './Set_Occupancy_Dialog.js';
 import '../styles/CheckRatesBar.css';
 
@@ -34,6 +34,10 @@ const hotelLocations = [
 ];
 
 const CheckRatesBar = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // States for hotel, dates, and occupancy
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [dateRange, setDateRange] = useState([null, null]);
     const [rooms, setRooms] = useState(1);
@@ -41,11 +45,26 @@ const CheckRatesBar = () => {
     const [children, setChildren] = useState(0);
     const [dateRangeError, setDateRangeError] = useState(false);
 
-    const navigate = useNavigate();
+    // Load the booking details from the location state, if available
+    useEffect(() => {
+        if (location.state?.bookingDetails) {
+            const { hotelLocation, startDate, endDate, rooms, adults, children } = location.state.bookingDetails;
+
+            // Find the matching hotel based on location
+            const matchingHotel = hotelLocations.find(hotel => hotel.title === hotelLocation);
+            setSelectedHotel(matchingHotel || null);
+
+            // Set the date range and occupancy values
+            setDateRange([startDate ? dayjs(startDate) : null, endDate ? dayjs(endDate) : null]);
+            setRooms(rooms || 1);
+            setAdults(adults || 2);
+            setChildren(children || 0);
+        }
+    }, [location.state]);
 
     const handleFindHivesClick = () => {
-        const startDate = dateRange[0] ? dayjs(dateRange[0]).format('MM/DD/YYYY') : "";
-        const endDate = dateRange[1] ? dayjs(dateRange[1]).format('MM/DD/YYYY') : "";
+        const startDate = dateRange[0] ? dayjs(dateRange[0]).format('YYYY-MM-DD') : "No start date selected";
+        const endDate = dateRange[1] ? dayjs(dateRange[1]).format('YYYY-MM-DD') : "No end date selected";
 
         const bookingDetails = {
             hotelLocation: selectedHotel?.title || "",
@@ -62,8 +81,12 @@ const CheckRatesBar = () => {
             body: JSON.stringify(bookingDetails),
         })
             .then(response => response.json())
-            .then(data => navigate('/find-hive', { state: { rooms: data } }))
+            .then(data => {
+                const rooms = Array.isArray(data) ? data : []; // Ensure rooms is always an array
+                navigate('/find-hive', { state: { rooms } });
+            })
             .catch(error => console.error("Error fetching available rooms:", error));
+
     };
 
     const handleSetOccupancy = (newRooms, newAdults, newChildren) => {
@@ -162,8 +185,6 @@ const CheckRatesBar = () => {
                         }}
                     />
                 </LocalizationProvider>
-
-
             </div>
 
             <div className="input-container">

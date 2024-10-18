@@ -1,7 +1,6 @@
 package com.honey_hotel.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +25,11 @@ public class Room {
 
     private String bedType;
     private boolean smokingAllowed;
-    private String status;
     private String roomSize;
     private double price;
+    private String priceCategory; // New field for price_category
+
+    // Getters and setters
 
     public Long getId() {
         return id;
@@ -62,14 +63,6 @@ public class Room {
         this.smokingAllowed = smokingAllowed;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getRoomSize() {
         return roomSize;
     }
@@ -84,5 +77,13 @@ public class Room {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getPriceCategory() {
+        return priceCategory;
+    }
+
+    public void setPriceCategory(String priceCategory) {
+        this.priceCategory = priceCategory;
     }
 }

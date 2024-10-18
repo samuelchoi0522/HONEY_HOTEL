@@ -160,6 +160,7 @@ const Modal = ({ open, handleClose }) => {
 
         console.log(hotelTitle, startDate, endDate, nights, rooms, adults, children, rateOption, ratePromoCode);
 
+        // Fetch available rooms and pass booking details
         fetch("http://localhost:8080/api/hives/find", {
             method: "POST",
             headers: {
@@ -175,10 +176,12 @@ const Modal = ({ open, handleClose }) => {
             })
             .then(data => {
                 console.log("Available rooms:", data);
-                navigate('/find-hive', { state: { rooms: data, bookingDetails } });
+                // Navigate to the /check-rates page and pass bookingDetails and available rooms as state
+                navigate('/find-hive', { state: { bookingDetails, rooms: data } });
             })
             .catch(error => console.error("Error fetching available rooms:", error));
     };
+
 
     const calculateNights = () => {
         if (dateRange[0] && dateRange[1]) {

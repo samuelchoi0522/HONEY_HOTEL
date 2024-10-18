@@ -17,7 +17,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             + "JOIN r.category rc "
             + "JOIN rc.hotel h "
             + "WHERE LOWER(h.name) LIKE LOWER(CONCAT('%', :location, '%')) "
-            + "AND r.status = 'Available' "
             + "AND NOT EXISTS ("
             + "    SELECT res FROM Reservation res "
             + "    WHERE res.room = r "
@@ -26,5 +25,4 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findAvailableRooms(@Param("location") String location,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
-
 }

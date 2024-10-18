@@ -10,7 +10,7 @@ const FindHive = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const rooms = location.state?.rooms || [];
+    const rooms = Array.isArray(location.state?.rooms) ? location.state.rooms : [];
     const bookingDetails = location.state?.bookingDetails || {};
     const [sortConfig, setSortConfig] = useState({ key: 'price', direction: 'asc' });
 
