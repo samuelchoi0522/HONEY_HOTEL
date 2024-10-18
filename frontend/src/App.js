@@ -17,7 +17,6 @@ import './styles/App.css';
 function Layout() {
     const location = useLocation();
 
-    // Conditionally render Navbar and Footer only on specific pages
     const showNavbarAndFooter = location.pathname.toLowerCase() !== '/login' && location.pathname.toLowerCase() !== '/register';
     const showNavbarForLoginAndRegister = location.pathname.toLowerCase() === '/login' || location.pathname.toLowerCase() === '/register';
     const showNavbarForFindHive = location.pathname.toLowerCase() === '/find-hive';

@@ -9,9 +9,9 @@ import '../styles/FindHives.css';
 const FindHive = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [user, setUser] = useState(null); // Track user session
+    const [user, setUser] = useState(null);
     const rooms = location.state?.rooms || [];
-    const bookingDetails = location.state?.bookingDetails || {}; // Get booking details
+    const bookingDetails = location.state?.bookingDetails || {};
     const [sortConfig, setSortConfig] = useState({ key: 'price', direction: 'asc' });
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const FindHive = () => {
             try {
                 const response = await fetch("http://localhost:8080/api/reservations/check-session", {
                     method: "POST",
-                    credentials: "include", // Ensure cookies are included
+                    credentials: "include",
                     headers: { 'Content-Type': 'application/json' }
                 });
 
@@ -30,7 +30,7 @@ const FindHive = () => {
 
                     if (data.isLoggedIn) {
                         console.log("User is logged in:", data.firstname);
-                        setUser(data); // Update your state with user info
+                        setUser(data);
                     } else {
                         console.log("No active session found.");
                         setUser(null);
@@ -60,9 +60,9 @@ const FindHive = () => {
             }
 
             const reservationDetails = {
-                userId: user.id, // assuming user has id field
+                userId: user.id,
                 roomId: room.id,
-                hotelLocation: bookingDetails.hotelLocation, // Assuming location info is available
+                hotelLocation: bookingDetails.hotelLocation,
                 startDate: bookingDetails.startDate,
                 endDate: bookingDetails.endDate
             };
@@ -78,7 +78,6 @@ const FindHive = () => {
             });
 
             if (!response.ok) {
-                // If the response is not OK, throw an error with the response text
                 const errorText = await response.text();
                 throw new Error(`Server Error: ${errorText}`);
             }

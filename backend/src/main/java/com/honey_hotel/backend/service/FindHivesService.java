@@ -19,7 +19,6 @@ public class FindHivesService {
         System.out.println("Query Parameters - Location: " + hotelLocation + ", Start Date: " + startDate
                 + ", End Date: " + endDate);
 
-        // Pass startDate and endDate to repository query
         List<Room> availableRooms = roomRepository.findAvailableRooms(hotelLocation, startDate, endDate);
 
         System.out.println("SIZE: " + availableRooms.size());

@@ -56,19 +56,18 @@ function Login() {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include",  // Include credentials for login request
+            credentials: "include",
             body: JSON.stringify({ email, password }),
         });
 
         if (response.ok) {
-            setShowSuccessAlert(true); // Show the success alert
+            setShowSuccessAlert(true);
 
-            // Delay the redirect by 3 seconds
             setTimeout(() => {
-                navigate("/"); // Redirect to homepage after delay
+                navigate("/");
             }, 2500);
         } else {
-            setShowFailAlert(true); // Show the fail alert
+            setShowFailAlert(true);
         }
     };
 
@@ -78,15 +77,15 @@ function Login() {
                 <h2 style={{ fontWeight: 100, textAlign: "center", fontSize: "3em" }}>SIGN IN</h2>
                 <p style={{ fontWeight: 100, textAlign: "center", fontSize: "1.6em", marginBottom: "60px" }}>View and edit your account to customize your preferences.</p>
 
-                {showSuccessAlert &&(
+                {showSuccessAlert && (
                     <Alert
                         icon={<CheckIcon fontSize="inherit" />}
                         severity="success"
                         sx={{
-                            maxWidth: "570px",   // Set max width
-                            margin: "0 auto",    // Center the alert horizontally
-                            textAlign: "center", // Align text to center
-                            marginBottom: "20px" // Add some space at the bottom
+                            maxWidth: "570px",
+                            margin: "0 auto",
+                            textAlign: "center",
+                            marginBottom: "20px"
                         }}
                     >
                         Login successful! Redirecting to homepage...
@@ -97,10 +96,10 @@ function Login() {
                     <Alert
                         severity="error"
                         sx={{
-                            maxWidth: "570px",   // Set max width
-                            margin: "0 auto",    // Center the alert horizontally
-                            textAlign: "center", // Align text to center
-                            marginBottom: "20px" // Add some space at the bottom
+                            maxWidth: "570px",
+                            margin: "0 auto",
+                            textAlign: "center",
+                            marginBottom: "20px"
                         }}
                     >
                         Login Failed. Incorrect email or password.
@@ -119,13 +118,13 @@ function Login() {
                         type="email"
                         sx={{
                             '& label.Mui-focused': {
-                                color: 'black',  // Change label color when focused
+                                color: 'black',
                             },
                             '& .MuiInput-underline:after': {
-                                borderBottomColor: 'black',  // Change underline color when focused
+                                borderBottomColor: 'black',
                             },
                             '& .MuiInputLabel-asterisk': {
-                                color: 'red',  // Change color of required asterisk
+                                color: 'red',
                             }
                         }}
                     />
@@ -149,7 +148,7 @@ function Login() {
                                 borderBottomColor: 'black',
                             },
                             '& .MuiInputLabel-asterisk': {
-                                color: 'red',// Change color of required asterisk
+                                color: 'red',
                             }
                         }}
                         InputProps={{

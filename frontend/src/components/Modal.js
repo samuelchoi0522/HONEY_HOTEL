@@ -175,7 +175,6 @@ const Modal = ({ open, handleClose }) => {
             })
             .then(data => {
                 console.log("Available rooms:", data);
-                // Redirect to the FindHive page and pass the room data as state
                 navigate('/find-hive', { state: { rooms: data, bookingDetails } });
             })
             .catch(error => console.error("Error fetching available rooms:", error));

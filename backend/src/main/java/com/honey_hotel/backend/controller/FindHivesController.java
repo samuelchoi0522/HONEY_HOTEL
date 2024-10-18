@@ -1,7 +1,6 @@
 package com.honey_hotel.backend.controller;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -27,11 +26,9 @@ public class FindHivesController {
     @PostMapping("/find")
     public ResponseEntity<?> findRooms(@RequestBody BookingDetails bookingDetails) {
         try {
-            // Parse the start and end dates using the provided format (MM/DD/YYYY)
             LocalDate startDate = bookingDetails.getStartDate();
             LocalDate endDate = bookingDetails.getEndDate();
 
-            // Call the service to find available rooms
             List<Room> availableRooms = findHivesService.findAvailableRooms(
                     bookingDetails.getHotelLocation(),
                     startDate,
@@ -48,7 +45,6 @@ public class FindHivesController {
 
             return ResponseEntity.ok(availableRooms);
         } catch (DateTimeParseException e) {
-            // Handle invalid date format and return a bad request response
             return ResponseEntity.badRequest().body("Error: Invalid date format. Please use MM/DD/YYYY.");
         }
     }
