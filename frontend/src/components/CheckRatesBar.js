@@ -77,7 +77,6 @@ const CheckRatesBar = () => {
     return (
         <div className="check-rates-bar">
             <div className="input-container">
-                <label className="input-label">DESTINATION</label>
                 <Autocomplete
                     options={hotelLocations}
                     getOptionLabel={(option) => option.title}
@@ -115,7 +114,6 @@ const CheckRatesBar = () => {
             </div>
 
             <div className="input-container">
-                <label className="input-label">CHECK IN - CHECK OUT</label>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DateRangePicker
                         value={dateRange}
@@ -169,7 +167,6 @@ const CheckRatesBar = () => {
             </div>
 
             <div className="input-container">
-                <label className="input-label">GUESTS</label>
                 <SetOccupancyDialog
                     rooms={rooms}
                     adults={adults}

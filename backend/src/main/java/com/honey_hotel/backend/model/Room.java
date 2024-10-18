@@ -1,7 +1,5 @@
 package com.honey_hotel.backend.model;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -31,8 +29,6 @@ public class Room {
     private String status;
     private String roomSize;
     private double price;
-    private LocalDate availableFrom;
-    private LocalDate availableUntil;
 
     public Long getId() {
         return id;
@@ -88,21 +84,5 @@ public class Room {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public LocalDate getAvailableFrom() {
-        return availableFrom;
-    }
-
-    public void setAvailableFrom(LocalDate availableFrom) {
-        this.availableFrom = availableFrom;
-    }
-
-    public LocalDate getAvailableUntil() {
-        return availableUntil;
-    }
-
-    public void setAvailableUntil(LocalDate availableUntil) {
-        this.availableUntil = availableUntil;
     }
 }

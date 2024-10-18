@@ -1,8 +1,12 @@
 package com.honey_hotel.backend.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,23 +23,33 @@ public class FindHivesController {
     @Autowired
     private FindHivesService findHivesService;
 
+
     @PostMapping("/find")
-    public List<Room> findRooms(@RequestBody BookingDetails bookingDetails) {
-        List<Room> availableRooms = findHivesService.findAvailableRooms(
-                bookingDetails.getHotelLocation(),
-                bookingDetails.getStartDate(),
-                bookingDetails.getEndDate()
-        );
+    public ResponseEntity<?> findRooms(@RequestBody BookingDetails bookingDetails) {
+        try {
+            // Parse the start and end dates using the provided format (MM/DD/YYYY)
+            LocalDate startDate = bookingDetails.getStartDate();
+            LocalDate endDate = bookingDetails.getEndDate();
 
-        availableRooms.forEach(room -> {
-            if (room.getCategory() == null) {
-                System.out.println("Room ID " + room.getId() + " does not have a category.");
-            } else {
-                System.out.println("Room ID " + room.getId() + " has category " + room.getCategory().getCategoryName());
-            }
-        });
+            // Call the service to find available rooms
+            List<Room> availableRooms = findHivesService.findAvailableRooms(
+                    bookingDetails.getHotelLocation(),
+                    startDate,
+                    endDate);
 
-        return availableRooms;
+            availableRooms.forEach(room -> {
+                if (room.getCategory() == null) {
+                    System.out.println("Room ID " + room.getId() + " does not have a category.");
+                } else {
+                    System.out.println(
+                            "Room ID " + room.getId() + " has category " + room.getCategory().getCategoryName());
+                }
+            });
+
+            return ResponseEntity.ok(availableRooms);
+        } catch (DateTimeParseException e) {
+            // Handle invalid date format and return a bad request response
+            return ResponseEntity.badRequest().body("Error: Invalid date format. Please use MM/DD/YYYY.");
+        }
     }
-
 }

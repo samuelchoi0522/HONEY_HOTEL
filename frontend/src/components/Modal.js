@@ -134,8 +134,8 @@ const Modal = ({ open, handleClose }) => {
 
     const handleFindHivesClick = () => {
         const hotelTitle = selectedHotel ? selectedHotel.title : "No hotel selected";
-        const startDate = dateRange[0] ? dayjs(dateRange[0]).format('MM/DD/YYYY') : "No start date selected";
-        const endDate = dateRange[1] ? dayjs(dateRange[1]).format('MM/DD/YYYY') : "No end date selected";
+        const startDate = dateRange[0] ? dayjs(dateRange[0]).format('YYYY-MM-DD') : "No start date selected";
+        const endDate = dateRange[1] ? dayjs(dateRange[1]).format('YYYY-MM-DD') : "No end date selected";
         const nights = calculateNights();
 
         const locationIsValid = Boolean(selectedHotel);
@@ -176,7 +176,7 @@ const Modal = ({ open, handleClose }) => {
             .then(data => {
                 console.log("Available rooms:", data);
                 // Redirect to the FindHive page and pass the room data as state
-                navigate('/find-hive', { state: { rooms: data } });
+                navigate('/find-hive', { state: { rooms: data, bookingDetails } });
             })
             .catch(error => console.error("Error fetching available rooms:", error));
     };

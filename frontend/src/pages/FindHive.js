@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,14 +8,86 @@ import '../styles/FindHives.css';
 
 const FindHive = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null); // Track user session
     const rooms = location.state?.rooms || [];
-
+    const bookingDetails = location.state?.bookingDetails || {}; // Get booking details
     const [sortConfig, setSortConfig] = useState({ key: 'price', direction: 'asc' });
+
+    useEffect(() => {
+        const checkSession = async () => {
+            console.log("Checking session...");
+            try {
+                const response = await fetch("http://localhost:8080/api/reservations/check-session", {
+                    method: "POST",
+                    credentials: "include", // Ensure cookies are included
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("Session response:", data);
+
+                    if (data.isLoggedIn) {
+                        console.log("User is logged in:", data.firstname);
+                        setUser(data); // Update your state with user info
+                    } else {
+                        console.log("No active session found.");
+                        setUser(null);
+                    }
+                } else {
+                    console.error("Session check failed with status:", response.status);
+                }
+            } catch (error) {
+                console.error("Error checking session:", error);
+            }
+        };
+
+        checkSession();
+    }, [navigate]);
 
     const handleSortChange = (event) => {
         const value = event.target.value;
         const [key, direction] = value.split('-');
         setSortConfig({ key, direction });
+    };
+
+    const handleSelectRoom = async (room) => {
+        try {
+            if (!user) {
+                alert('Please log in to make a reservation.');
+                return;
+            }
+
+            const reservationDetails = {
+                userId: user.id, // assuming user has id field
+                roomId: room.id,
+                hotelLocation: bookingDetails.hotelLocation, // Assuming location info is available
+                startDate: bookingDetails.startDate,
+                endDate: bookingDetails.endDate
+            };
+
+            console.log("Reservation Details:", reservationDetails);
+
+            const response = await fetch('http://localhost:8080/api/reservations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reservationDetails),
+            });
+
+            if (!response.ok) {
+                // If the response is not OK, throw an error with the response text
+                const errorText = await response.text();
+                throw new Error(`Server Error: ${errorText}`);
+            }
+
+            alert('Reservation successful!');
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Failed to make reservation: ${error.message}`);
+        }
     };
 
     const sortedRooms = [...rooms].sort((a, b) => {
@@ -60,7 +132,7 @@ const FindHive = () => {
                         <p>Bed Type: {room.bedType}</p>
                         <p>Smoking Allowed: {room.smokingAllowed ? 'Yes' : 'No'}</p>
                         <p>Price: ${room.price} / night</p>
-                        <button>Select Room</button>
+                        <button onClick={() => handleSelectRoom(room)}>Select Room</button>
                     </div>
                 ))}
             </div>

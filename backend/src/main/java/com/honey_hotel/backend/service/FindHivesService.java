@@ -16,9 +16,9 @@ public class FindHivesService {
     private RoomRepository roomRepository;
 
     public List<Room> findAvailableRooms(String hotelLocation, LocalDate startDate, LocalDate endDate) {
-        // System.out.println("Query Parameters - Location: " + hotelLocation + ", Start Date: " + startDate + ", End Date: " + endDate);
+        System.out.println("Query Parameters - Location: " + hotelLocation + ", Start Date: " + startDate + ", End Date: " + endDate);
 
-        List<Room> availableRooms = roomRepository.findAvailableRooms(hotelLocation, startDate, endDate);
+        List<Room> availableRooms = roomRepository.findAvailableRooms(hotelLocation);
 
         System.out.println("SIZE: " + availableRooms.size());
         if (!availableRooms.isEmpty()) {
