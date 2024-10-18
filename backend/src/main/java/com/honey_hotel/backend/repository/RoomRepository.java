@@ -1,5 +1,6 @@
 package com.honey_hotel.backend.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,14 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             + "JOIN r.category rc "
             + "JOIN rc.hotel h "
             + "WHERE LOWER(h.name) LIKE LOWER(CONCAT('%', :location, '%')) "
-            + "AND r.status = 'Available' ")
-    List<Room> findAvailableRooms(@Param("location") String location);
+            + "AND r.status = 'Available' "
+            + "AND NOT EXISTS ("
+            + "    SELECT res FROM Reservation res "
+            + "    WHERE res.room = r "
+            + "    AND (res.checkInDate <= :endDate AND res.checkOutDate >= :startDate)"
+            + ")")
+    List<Room> findAvailableRooms(@Param("location") String location,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
+
 }
