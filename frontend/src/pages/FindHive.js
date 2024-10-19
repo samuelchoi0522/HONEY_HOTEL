@@ -11,7 +11,6 @@ const FindHive = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const rooms = Array.isArray(location.state?.rooms) ? location.state.rooms : [];
-    const bookingDetails = location.state?.bookingDetails || {};
     const [sortConfig, setSortConfig] = useState({ key: 'price', direction: 'asc' });
 
     useEffect(() => {
@@ -43,40 +42,30 @@ const FindHive = () => {
         setSortConfig({ key, direction });
     };
 
-    const handleSelectRoom = async (room) => {
-        try {
-            if (!user) {
-                alert('Please log in to make a reservation.');
-                return;
-            }
+    const handleRoomCardClick = (categoryName, roomType, roomOptions) => {
+        const bookingDetails = location.state?.bookingDetails || {}; // Retrieve booking details from the state
 
-            const reservationDetails = {
-                userId: user.id,
-                roomId: room.id,
-                hotelLocation: bookingDetails.hotelLocation,
-                startDate: bookingDetails.startDate,
-                endDate: bookingDetails.endDate
-            };
+        const updatedBookingDetails = {
+            ...bookingDetails,
+            checkInDate: bookingDetails.startDate,
+            checkOutDate: bookingDetails.endDate,
+        };
 
-            const response = await fetch('http://localhost:8080/api/reservations', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(reservationDetails),
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Server Error: ${errorText}`);
-            }
-
-            alert('Reservation successful!');
-        } catch (error) {
-            alert(`Failed to make reservation: ${error.message}`);
-        }
+        navigate('/room-details', {
+            state: {
+                categoryName,
+                roomType,
+                roomOptions,
+                ...updatedBookingDetails, // Spread the booking details to pass them to RoomDetails
+            },
+        });
     };
 
-    // Group rooms by category and then by roomType within each category
+
+
+    // Group rooms by category and then by roomType
     const groupedRooms = rooms.reduce((acc, room) => {
+        console.log('testing:', location.state?.bookingDetails);
         const categoryName = room.category ? room.category.categoryName : "Unknown Category";
         const roomType = room.roomType || "Unknown Room Type";
 
@@ -91,16 +80,6 @@ const FindHive = () => {
         acc[categoryName][roomType].push(room);
         return acc;
     }, {});
-
-    // Sort rooms within each roomType by price or roomSize
-    Object.keys(groupedRooms).forEach(categoryName => {
-        Object.keys(groupedRooms[categoryName]).forEach(roomType => {
-            groupedRooms[categoryName][roomType].sort((a, b) => {
-                const direction = sortConfig.direction === 'asc' ? 1 : -1;
-                return sortConfig.key === 'price' ? direction * (a.price - b.price) : direction * a.roomSize.localeCompare(b.roomSize);
-            });
-        });
-    });
 
     return (
         <div>
@@ -132,19 +111,21 @@ const FindHive = () => {
                 {Object.keys(groupedRooms).map(categoryName => (
                     <div key={categoryName} className="room-category">
                         <h2 style={{ color: 'black' }}>{categoryName}</h2>
-                        {Object.keys(groupedRooms[categoryName]).map(roomType => (
-                            <div key={roomType} className="room-type">
-                                <h3 style={{ color: 'black' }}>{roomType} Room</h3>
-                                {groupedRooms[categoryName][roomType].map(room => (
-                                    <div key={room.id} className="room-card">
-                                        <p>Bed Type: {room.bedType}</p>
-                                        <p>Smoking Allowed: {room.smokingAllowed ? 'Yes' : 'No'}</p>
-                                        <p>Price: ${room.price} / night</p>
-                                        <button onClick={() => handleSelectRoom(room)}>Select Room</button>
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
+                        {Object.keys(groupedRooms[categoryName]).map(roomType => {
+                            // Get the first room as a representative of the room type
+                            const representativeRoom = groupedRooms[categoryName][roomType][0];
+                            return (
+                                <div key={roomType} className="room-card">
+                                    <h3 style={{ color: 'black' }}>{roomType} Room</h3>
+                                    <p>Starting from: ${representativeRoom.price} / night</p>
+                                    <button
+                                        onClick={() => handleRoomCardClick(categoryName, roomType, groupedRooms[categoryName][roomType])}
+                                    >
+                                        Select Room
+                                    </button>
+                                </div>
+                            );
+                        })}
                     </div>
                 ))}
             </div>

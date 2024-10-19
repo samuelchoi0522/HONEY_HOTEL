@@ -83,7 +83,7 @@ const CheckRatesBar = () => {
             .then(response => response.json())
             .then(data => {
                 const rooms = Array.isArray(data) ? data : []; // Ensure rooms is always an array
-                navigate('/find-hive', { state: { rooms } });
+                navigate('/find-hive', { state: { bookingDetails, rooms: data } });
             })
             .catch(error => console.error("Error fetching available rooms:", error));
 

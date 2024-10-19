@@ -11,6 +11,9 @@ import CheckRatesBar from './components/CheckRatesBar';
 import Footer from './components/Footer';
 import Reservation from './pages/Reservation';
 import FindHive from './pages/FindHive';
+import RoomDetails from './pages/RoomDetails';
+import AddVacationPackage from './pages/AddVacationPackage';
+import Checkout from './pages/Checkout';
 
 import './styles/App.css';
 
@@ -32,6 +35,9 @@ function Layout() {
                 <Route path="/register" element={<Register />} /> {/* Register page without Navbar and Footer */}
                 <Route path="/find-hive" element={<FindHive />} />
                 <Route path="/reservation" element={<Reservation />} />
+                <Route path="/room-details" element={<RoomDetails />} />
+                <Route path="/add-vacation-package" element={<AddVacationPackage />} />
+                <Route path="/checkout" element={<Checkout />} />
             </Routes>
             {showNavbarAndFooter && <Footer />}
         </div>
