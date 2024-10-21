@@ -9,6 +9,7 @@ import NavbarWhite from './components/Navbar_WHITE';
 import NavbarFindHives from './components/Navbar_FindHives';
 import CheckRatesBar from './components/CheckRatesBar';
 import Footer from './components/Footer';
+import AccountPage from './pages/AccountPage'
 import Reservation from './pages/Reservation';
 import FindHive from './pages/FindHive';
 import RoomDetails from './pages/RoomDetails';
@@ -33,6 +34,7 @@ function Layout() {
                 <Route path="/" exact element={<Homepage />} />
                 <Route path="/login" element={<Login />} /> {/* Login page without Navbar and Footer */}
                 <Route path="/register" element={<Register />} /> {/* Register page without Navbar and Footer */}
+                <Route path="/account" element={<AccountPage />} />
                 <Route path="/find-hive" element={<FindHive />} />
                 <Route path="/reservation" element={<Reservation />} />
                 <Route path="/room-details" element={<RoomDetails />} />
