@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import NavbarWhite from './components/Navbar_WHITE';
 import Footer from './components/Footer';
+import AccountPage from './pages/AccountPage'
 
 import './styles/App.css';
 
@@ -25,6 +26,7 @@ function Layout() {
                 <Route path="/" exact element={<Homepage />} />
                 <Route path="/login" element={<Login />} /> {/* Login page without Navbar and Footer */}
                 <Route path="/register" element={<Register />} /> {/* Register page without Navbar and Footer */}
+                <Route path="/account" element={<AccountPage />} />
             </Routes>
             {showNavbarAndFooter && <Footer />}
         </div>
