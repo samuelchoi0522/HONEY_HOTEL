@@ -22,13 +22,12 @@ const AccountPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Add form submission logic here
         console.log('Form Submitted:', formData);
         navigate('/home'); // Example navigation
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '100vh' }}>
+        <div style={{ color: 'black', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '100vh' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px' }}>
                 {/* Left Section: Reset Password and Change Email */}
                 <div style={{ width: '45%', padding: '20px' }}>
