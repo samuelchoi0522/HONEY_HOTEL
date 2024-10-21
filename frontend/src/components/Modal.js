@@ -10,11 +10,12 @@ import { LicenseInfo } from '@mui/x-license-pro';
 import dayjs from 'dayjs';
 import SetOccupancyDialog from './Set_Occupancy_Dialog.js';
 import SetRateDialog from './Set_Rate_Dialog.js';
+import { useNavigate } from 'react-router-dom';
+
 import '../styles/Modal.css';
 
 LicenseInfo.setLicenseKey(process.env.REACT_APP_MUI_X_LICENSEKEY);
 
-// Define the custom theme
 const theme = createTheme({
     components: {
         MuiAutocomplete: {
@@ -84,30 +85,103 @@ const theme = createTheme({
     },
 });
 
-const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-    { title: '12 Angry Men', year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: 'Pulp Fiction', year: 1994 },
-    {
-        title: 'The Lord of the Rings: The Return of the King',
-        year: 2003,
-    },
-    { title: 'The Good, the Bad and the Ugly', year: 1966 },
-    { title: 'Fight Club', year: 1999 },
-    {
-        title: 'The Lord of the Rings: The Fellowship of the Ring',
-        year: 2001,
-    },
-    // Add more movies here
+const hotelLocations = [
+    { title: 'Brazos Bliss Hotel, Waco, Texas, USA' },
+    { title: 'The Grand Palace, Paris, France' },
+    { title: 'Seaside Serenity Resort, Phuket, Thailand' },
+    { title: 'Urban Oasis, Tokyo, Japan' },
+    { title: 'Misty Mountain Lodge, Queenstown, New Zealand' },
+    { title: 'Desert Mirage Hotel, Dubai, UAE' },
+    { title: 'Maple Leaf Lodge, Banff, Canada' },
+    { title: 'Savannah Retreat, Nairobi, Kenya' },
+    { title: 'Alpine Meadows Hotel, Interlaken, Switzerland' },
+    { title: 'Casa Del Sol, Barcelona, Spain' },
+    { title: 'Emerald Bay Resort, Bora Bora, French Polynesia' },
+    { title: 'Crescent Cove Hotel, Sydney, Australia' },
+    { title: 'Royal Garden Inn, London, UK' },
+    { title: 'Blue Lagoon Resort, Reykjavik, Iceland' },
+    { title: 'Rainforest Hideaway, Tulum, Mexico' },
+    { title: 'Golden Sands Hotel, Cape Town, South Africa' },
+    { title: 'Redwood Retreat, San Francisco, California, USA' },
+    { title: 'Lakefront Lodge, Queenstown, New Zealand' },
+    { title: 'Coconut Grove Resort, Bali, Indonesia' },
+    { title: 'Northern Lights Inn, Tromsø, Norway' }
 ];
 
+
 const Modal = ({ open, handleClose }) => {
-    const [selectedCountry, setSelectedCountry] = useState(null); // State to manage selected country
-    const [dateRange, setDateRange] = useState([null, null]); // State for date range
+    const [selectedHotel, setSelectedHotel] = useState(null);
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [rooms, setRooms] = useState(1);
+    const [adults, setAdults] = useState(1);
+    const [children, setChildren] = useState(0);
+    const [rateOption, setRateOption] = useState('Lowest Regular Rate');
+    const [ratePromoCode, setRatePromoCode] = useState('');
+    const navigate = useNavigate();
+    const [locationError, setLocationError] = useState(false);
+    const [dateRangeError, setDateRangeError] = useState(false);
+
+    const handleSetOccupancy = (rooms, adults, children) => {
+        setRooms(rooms);
+        setAdults(adults);
+        setChildren(children);
+    };
+
+    const handleSetRate = (option, promoCode) => {
+        setRateOption(option);
+        setRatePromoCode(promoCode);
+    };
+
+    const handleFindHivesClick = () => {
+        const hotelTitle = selectedHotel ? selectedHotel.title : "No hotel selected";
+        const startDate = dateRange[0] ? dayjs(dateRange[0]).format('YYYY-MM-DD') : "No start date selected";
+        const endDate = dateRange[1] ? dayjs(dateRange[1]).format('YYYY-MM-DD') : "No end date selected";
+        const nights = calculateNights();
+
+        const locationIsValid = Boolean(selectedHotel);
+        const dateRangeIsValid = dateRange[0] && dateRange[1];
+
+        setLocationError(!locationIsValid);
+        setDateRangeError(!dateRangeIsValid);
+
+        if (!locationIsValid || !dateRangeIsValid) return;
+
+        const bookingDetails = {
+            hotelLocation: hotelTitle,
+            startDate,
+            endDate,
+            nights,
+            rooms,
+            adults,
+            children,
+            rateOption,
+            promoCode: rateOption === 'Promo Code' ? ratePromoCode : ''
+        };
+
+        console.log(hotelTitle, startDate, endDate, nights, rooms, adults, children, rateOption, ratePromoCode);
+
+        // Fetch available rooms and pass booking details
+        fetch("http://localhost:8080/api/hives/find", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(bookingDetails),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Available rooms:", data);
+                // Navigate to the /check-rates page and pass bookingDetails and available rooms as state
+                navigate('/find-hive', { state: { bookingDetails, rooms: data } });
+            })
+            .catch(error => console.error("Error fetching available rooms:", error));
+    };
+
 
     const calculateNights = () => {
         if (dateRange[0] && dateRange[1]) {
@@ -119,9 +193,9 @@ const Modal = ({ open, handleClose }) => {
     };
 
     const nights = calculateNights();
-    const today = dayjs(); // Get today's date
+    const today = dayjs();
 
-    if (!open) return null; // Do not render if the modal is not open
+    if (!open) return null;
 
     return (
         <ThemeProvider theme={theme}>
@@ -130,26 +204,33 @@ const Modal = ({ open, handleClose }) => {
                     <button className="close-button" onClick={handleClose}>×</button>
                     <div className="modal-content">
                         <div className="inputs-container">
-                            {/* Destination Field */}
                             <div className="field destination">
                                 <label className="label">
                                     <img src="/icons/DESTINATION_ICON.png" alt="Destination Icon" className="icon" />
                                     &nbsp;DESTINATION
                                 </label>
 
-                                {/* Use Material-UI Autocomplete component */}
                                 <Autocomplete
-                                    id="country-select"
-                                    options={top100Films}
+                                    id="hotel-select"
+                                    options={hotelLocations}
                                     getOptionLabel={(option) => option.title}
-                                    value={selectedCountry}
+                                    value={selectedHotel}
                                     onChange={(event, newValue) => {
-                                        setSelectedCountry(newValue);
+                                        setSelectedHotel(newValue);
+                                        setLocationError(false);
                                     }}
                                     sx={{
                                         width: 250,
                                         '& .MuiAutocomplete-popupIndicator': {
-                                            color: '#000000', // Change dropdown arrow color
+                                            color: '#000000',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: locationError ? 'red' : 'inherit',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: locationError ? 'red' : 'inherit',
+                                            },
                                         },
                                     }}
                                     renderInput={(params) => (
@@ -157,37 +238,38 @@ const Modal = ({ open, handleClose }) => {
                                             {...params}
                                             label="Where can we take you?"
                                             variant="standard"
+                                            error={locationError}
                                             InputProps={{
                                                 ...params.InputProps,
-                                                disableUnderline: true, // Explicitly disable the underline
+                                                disableUnderline: true,
                                             }}
                                             sx={{
-                                                position: 'relative', // Required for the underline styling
+                                                position: 'relative',
                                                 '&:before': {
                                                     content: '""',
                                                     position: 'absolute',
                                                     left: 0,
                                                     right: 0,
                                                     bottom: '-2px',
-                                                    height: '2px', // Height of the custom underline
-                                                    backgroundColor: '#000000', // Default underline color
-                                                    transition: 'background-color 0.2s ease', // Add transition effect
+                                                    height: '2px',
+                                                    backgroundColor: '#000000',
+                                                    transition: 'background-color 0.2s ease',
                                                 },
                                                 '&:hover:before': {
-                                                    backgroundColor: '#F0D10B', // Hover effect to change underline color
+                                                    backgroundColor: '#F0D10B',
                                                 },
                                                 '& label.Mui-focused': {
-                                                    color: '#000000', // Change label color to #F0D10B when focused
+                                                    color: locationError ? 'red' : 'inherit',
                                                 },
                                                 '& .MuiInputBase-root': {
                                                     '&:before': {
-                                                        borderBottom: 'none', // Remove underline
+                                                        borderBottom: 'none',
                                                     },
                                                     '&:hover:before': {
-                                                        borderBottom: 'none', // Remove underline on hover
+                                                        borderBottom: 'none',
                                                     },
                                                     '&:after': {
-                                                        borderBottom: 'none', // Remove underline on focus
+                                                        borderBottom: 'none',
                                                     },
                                                 },
                                             }}
@@ -196,7 +278,7 @@ const Modal = ({ open, handleClose }) => {
                                 />
                             </div>
 
-                            {/* Single Date Range Picker with button */}
+                            {/* date range picker */}
                             <div className="field date-range-picker">
                                 <label className="label">
                                     <img src="/icons/CALENDAR_ICON.png" alt="Calendar Icon" className="icon" />
@@ -207,38 +289,59 @@ const Modal = ({ open, handleClose }) => {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DateRangePicker
                                             value={dateRange}
-                                            onChange={(newValue) => setDateRange(newValue)}
-                                            minDate={today} // Set minimum date to today's date
+                                            onChange={(newValue) => {
+                                                setDateRange(newValue)
+                                                setDateRangeError(false)
+                                            }}
+                                            minDate={today}
+                                            error={dateRangeError}
                                             slots={{ field: SingleInputDateRangeField }}
                                             sx={{
                                                 width: 250,
-                                                position: 'relative', // Required for the underline styling
+                                                '& .MuiInputBase-input::placeholder': {
+                                                    color: dateRangeError ? 'red' : 'inherit',
+                                                },
+                                                '& .MuiOutlinedInput-root': {
+                                                    '& fieldset': {
+                                                        borderColor: dateRangeError ? 'red' : 'inherit',
+                                                    },
+                                                    '&:hover fieldset': {
+                                                        borderColor: dateRangeError ? 'red' : 'inherit',
+                                                    },
+                                                },
+                                                position: 'relative',
                                                 '&:before': {
                                                     content: '""',
                                                     position: 'absolute',
                                                     left: 0,
                                                     right: 0,
                                                     bottom: '5px',
-                                                    height: '2px', // Height of the custom underline
-                                                    backgroundColor: '#000000', // Default underline color
-                                                    transition: 'background-color 0.2s ease', // Add transition effect
+                                                    height: '2px',
+                                                    backgroundColor: '#000000',
+                                                    transition: 'background-color 0.2s ease',
                                                 },
                                                 '&:hover:before': {
-                                                    backgroundColor: '#F0D10B', // Hover effect to change underline color
+                                                    backgroundColor: '#F0D10B',
+                                                },
+                                            }}
+                                            slotProps={{
+                                                textField: {
+                                                    error: dateRangeError,
                                                 },
                                             }}
                                         />
                                     </LocalizationProvider>
                                 </div>
                             </div>
-                            {/* "Find Hives" Button */}
-                            <button className="find-hives-button" onClick={() => alert('Find Hives clicked!')}>
+                            {/* submit button */}
+                            <button className="find-hives-button" onClick={handleFindHivesClick}>
                                 FIND HIVES
                             </button>
                         </div>
-                        <SetOccupancyDialog />
-                        <SetRateDialog />
-                        {/* put the number of guests nd promo code stuff here */}
+
+                        {/* occupancy and rate dialog boxes */}
+                        <SetOccupancyDialog onSetOccupancy={handleSetOccupancy} />
+                        <SetRateDialog onSetRate={handleSetRate} />
                     </div>
                 </div>
             </div>

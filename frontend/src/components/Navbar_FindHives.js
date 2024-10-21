@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Navbar.css';
-import Modal from './Modal.js';
+import '../styles/Navbar_FindHives.css';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-function Navbar() {
-    const [showModal, setShowModal] = useState(false);
+function Navbar_FindHives() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userName, setUserName] = useState('');
     const [hover, setHover] = useState(false);
@@ -41,9 +39,6 @@ function Navbar() {
 
         checkSession();
     }, []);
-
-    const handleModalOpen = () => setShowModal(true);
-    const handleModalClose = () => setShowModal(false);
 
     const handleLogout = async () => {
         try {
@@ -114,7 +109,7 @@ function Navbar() {
                         ) : (
                             <p>HI, {userName}!</p>
                         )}
-                        
+
                     </div>
                 ) : (
                     <div className="login-link">
@@ -125,14 +120,9 @@ function Navbar() {
                     </div>
                 )}
             </div>
-
-            <button className="sign-in-button" onClick={handleModalOpen}>
-                FIND YOUR HIVE
-            </button>
-
-            <Modal open={showModal} handleClose={handleModalClose} />
-        </nav>
+            <img src="/icons/ICON3.png" alt="Additional Icon" className="additional-icon" />
+            </nav>
     );
 }
 
-export default Navbar;
+export default Navbar_FindHives;

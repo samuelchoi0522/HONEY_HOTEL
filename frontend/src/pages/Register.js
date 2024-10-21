@@ -59,19 +59,19 @@ function Register() {
                                 }}
                                 sx={{
                                     '& .MuiNativeSelect-root': {
-                                        fontWeight: 'bold',  // Custom styling for dropdown
+                                        fontWeight: 'bold',
                                     },
                                     '& .MuiInputLabel-root': {
-                                        color: 'black',  // Label color
+                                        color: 'black',
                                     },
                                     '& .MuiNativeSelect-icon': {
-                                        color: 'black',  // Icon color
+                                        color: 'black',
                                     },
                                     '&:before': {
-                                        borderBottomColor: 'black',  // Default underline color
+                                        borderBottomColor: 'black',
                                     },
                                     '&:after': {
-                                        borderBottomColor: 'black',  // Focused underline color
+                                        borderBottomColor: 'black',
                                     },
                                 }}
                             >
@@ -95,13 +95,13 @@ function Register() {
                             type="first name"
                             sx={{
                                 '& label.Mui-focused': {
-                                    color: 'black',  // Change label color when focused
+                                    color: 'black',
                                 },
                                 '& .MuiInput-underline:after': {
-                                    borderBottomColor: 'black',  // Change underline color when focused
+                                    borderBottomColor: 'black',
                                 },
                                 '& .MuiInputLabel-asterisk': {
-                                    color: 'red',  // Change color of required asterisk
+                                    color: 'red',
                                 },
                                 marginLeft: "20px"
                             }}
@@ -118,13 +118,13 @@ function Register() {
                         type="last name"
                         sx={{
                             '& label.Mui-focused': {
-                                color: 'black',  // Change label color when focused
+                                color: 'black',
                             },
                             '& .MuiInput-underline:after': {
-                                borderBottomColor: 'black',  // Change underline color when focused
+                                borderBottomColor: 'black',
                             },
                             '& .MuiInputLabel-asterisk': {
-                                color: 'red',  // Change color of required asterisk
+                                color: 'red',
                             },
 
                             marginBottom: "20px"
@@ -141,13 +141,13 @@ function Register() {
                         type="email"
                         sx={{
                             '& label.Mui-focused': {
-                                color: 'black',  // Change label color when focused
+                                color: 'black',
                             },
                             '& .MuiInput-underline:after': {
-                                borderBottomColor: 'black',  // Change underline color when focused
+                                borderBottomColor: 'black',
                             },
                             '& .MuiInputLabel-asterisk': {
-                                color: 'red',  // Change color of required asterisk
+                                color: 'red',
                             }
                         }}
                     />
@@ -170,7 +170,7 @@ function Register() {
                                 borderBottomColor: 'black',
                             },
                             '& .MuiInputLabel-asterisk': {
-                                color: 'red',// Change color of required asterisk
+                                color: 'red',
                             }
                         }}
                         InputProps={{

@@ -1,138 +1,139 @@
 .inputs-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
 }
 
 .icon {
-  height: 15px;
-  width: auto;
+    height: 15px;
+    width: auto;
 }
 
 /* Modal Overlay */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
 }
 
 /* Modal Container */
 .modal-container {
-  background-color: #fff;
-  padding: 30px;
-  width: 80%;
-  max-width: 800px;
-  min-width: 800px;
-  position: relative;
-  box-sizing: border-box;
+    background-color: #fff;
+    padding: 30px;
+    width: 80%;
+    max-width: 800px;
+    min-width: 800px;
+    position: relative;
+    box-sizing: border-box;
 }
 
 /* Close Button */
 .close-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 30px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: black;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: black;
 }
 
 /* Modal Content */
 .modal-content {
-  font-family: "Helvetica Neue", sans-serif;
+    font-family: "Helvetica Neue", sans-serif;
 }
 
 /* Destination Field */
 .field.destination {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
 }
 
 /* Date Range Picker Field */
 .field.date-range-picker {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
 }
 
 /* Label Styling */
 .label {
-  margin-top: 30px;
-  font-size: 12px;
-  letter-spacing: 2px;
-  font-weight: bold;
-  color: #000000;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
+    margin-top: 30px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
 }
 
 /* Placeholder option styling */
 .placeholder-option {
-  opacity: 0.5;
+    opacity: 0.5;
 }
 
 .destination-dropdown:focus .placeholder-option {
-  opacity: 1;
+    opacity: 1;
 }
 
 /* Date Range and Button Container */
 .date-range-container {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Add space between the date picker and button */
-  width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Add space between the date picker and button */
+    width: 100%;
 }
 
 /* Adjust the button styles */
 .find-hives-button {
-  transition: ease-in-out 0.2s;
-  background-color: #000000;
-  color: rgb(255, 255, 255);
-  border-color: #000000;
-  cursor: pointer;
-  letter-spacing: 1px;
-  line-height: 20px;
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 9px;
-  font-weight: 800;
-  border: 1.5px solid #000000;
-  width: 300px;
-  height: 40px;
-  margin-top: 55px;
+    transition: ease-in-out 0.2s;
+    background-color: #000000;
+    color: rgb(255, 255, 255);
+    border-color: #000000;
+    cursor: pointer;
+    letter-spacing: 1px;
+    line-height: 20px;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    border: 1.5px solid #000000;
+    width: 300px;
+    height: 40px;
+    margin-top: 55px;
 }
 
 .find-hives-button:hover {
-  background-color: #000;
-  border-color: #f0d10b;
+    background-color: #000;
+    border-color: #f0d10b;
 }
 
 /* Media Query for Tablet and Smaller Screens */
 @media (max-width: 768px) {
-  .modal-container {
-    width: 90%;
-    max-width: none;
-  }
+    .modal-container {
+        width: 90%;
+        max-width: none;
+    }
 }
 
 /* Media Query for Mobile Screens */
 @media (max-width: 480px) {
-  .modal-container {
-    width: 95%;
-    padding: 20px;
-  }
+    .modal-container {
+        width: 95%;
+        padding: 20px;
+    }
 }

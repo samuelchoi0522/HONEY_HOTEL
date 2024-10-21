@@ -11,7 +11,7 @@ import {
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function SetOccupancyDialog() {
+export default function SetOccupancyDialog({ onSetOccupancy }) {
     const [open, setOpen] = useState(false);
     const [rooms, setRooms] = useState(1);
     const [adults, setAdults] = useState(1);
@@ -22,6 +22,7 @@ export default function SetOccupancyDialog() {
         setOpen(true);
     };
     const handleClose = () => {
+        onSetOccupancy(rooms, adults, children);
         setOpen(false);
     };
     
@@ -64,8 +65,11 @@ export default function SetOccupancyDialog() {
                             value={rooms}
                             min={1}
                             max={10}
-                            onChange={(event, value) => setRooms(value)}
                             step={1}
+                            onChange={(event, value) => {
+                                setRooms(value);
+                                console.log(`NUMBER OF ROOMS: `, value);
+                            }}
                         />
                     </div>
 
@@ -77,7 +81,10 @@ export default function SetOccupancyDialog() {
                             value={adults}
                             min={1}
                             max={8}
-                            onChange={(event, value) => setAdults(value)}
+                            onChange={(event, value) => {
+                                setAdults(value)
+                                console.log(`NUMBER OF ADULTS: `, value);
+                            }}
                             step={1}
                         />
                     </div>
@@ -90,7 +97,10 @@ export default function SetOccupancyDialog() {
                             value={children}
                             min={0}
                             max={8}
-                            onChange={(event, value) => setChildren(value)}
+                            onChange={(event, value) => {
+                                setChildren(value)
+                                console.log(`NUMBER OF CHILDREN: `, value);
+                            }}
                             step={1}
                         />
                     </div>

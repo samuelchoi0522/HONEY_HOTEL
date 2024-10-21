@@ -11,10 +11,10 @@ public class SessionConfig {
     @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-        serializer.setSameSite("None");  // Use "None" for cross-origin requests
-        serializer.setCookiePath("/");   // Ensure the cookie is valid site-wide
-        serializer.setUseHttpOnlyCookie(true);  // Only HTTP (no JS access)
-        serializer.setUseSecureCookie(true);    // Secure flag, set to true for HTTPS
+        serializer.setSameSite("None");
+        serializer.setCookiePath("/"); 
+        serializer.setUseHttpOnlyCookie(true); 
+        serializer.setUseSecureCookie(true);  
         return serializer;
     }
 }

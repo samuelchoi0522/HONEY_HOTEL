@@ -10,37 +10,37 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import TextField from '@mui/material/TextField';
 
-// Define custom styles for the FormControlLabel
 const StyledFormControlLabel = styled((props) => <FormControlLabel {...props} />)(
     ({ theme, checked }) => ({
         '.MuiFormControlLabel-label': {
-            color: checked ? '#ffb84d' : theme.palette.text.primary, // Set to gold when checked
+            color: checked ? '#ffb84d' : theme.palette.text.primary,
         },
     })
 );
 
-// Define custom styles for the Radio
 const StyledRadio = styled(Radio)(({ theme }) => ({
-    color: '#b0b8c4', // Default color (grey)
+    color: '#b0b8c4',
     '&.Mui-checked': {
-        color: '#ffb84d', // Gold color when checked
+        color: '#ffb84d',
     },
 }));
 
-export default function SetOccupancyDialog() {
+
+
+export default function SetOccupancyDialog({ onSetRate }) {
     const [open, setOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState('LowestRegularRate'); // Track selected option
-    const [promoCode, setPromoCode] = useState(''); // Track promo code input
+    const [selectedOption, setSelectedOption] = useState('Lowest Regular Rate');
+    const [promoCode, setPromoCode] = useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
+        onSetRate(selectedOption, promoCode);
         setOpen(false);
     };
 
-    // Custom FormControlLabel component
     function MyFormControlLabel(props) {
         const radioGroup = useRadioGroup();
         let checked = false;
@@ -79,7 +79,7 @@ export default function SetOccupancyDialog() {
                     },
                 }}
             >
-                LOWEST REGULAR RATE
+                {selectedOption === 'Promo Code' ? promoCode.toUpperCase() : selectedOption.toUpperCase()}
             </Button>
 
             <Dialog open={open} onClose={handleClose}>
@@ -89,10 +89,13 @@ export default function SetOccupancyDialog() {
                         <RadioGroup
                             name="use-radio-group"
                             value={selectedOption}
-                            onChange={(e) => setSelectedOption(e.target.value)} // Track the selected option
+                            onChange={(e) => {
+                                setSelectedOption(e.target.value);
+                                console.log(`Selected Option: ${e.target.value}`);
+                            }}
                         >
                             <MyFormControlLabel
-                                value="LowestRegularRate"
+                                value="Lowest Regular Rate"
                                 label="Lowest Regular Rate"
                                 control={<StyledRadio />}
                             />
@@ -102,26 +105,26 @@ export default function SetOccupancyDialog() {
                                 control={<StyledRadio />}
                             />
                             <MyFormControlLabel
-                                value="SeniorDiscount"
+                                value="Senior Discount"
                                 label="Senior Discount"
                                 control={<StyledRadio />}
                             />
                             <MyFormControlLabel
-                                value="Government/Military"
+                                value="Government & Military"
                                 label="Government & Military"
                                 control={<StyledRadio />}
                             />
                             <MyFormControlLabel
-                                value="PromoCode"
+                                value="Promo Code"
                                 label="Promo Code"
                                 control={<StyledRadio />}
                             />
                         </RadioGroup>
 
-                        {selectedOption === 'PromoCode' && (
+                        {selectedOption === 'Promo Code' && (
                             <TextField
                                 id="outlined-password-input"
-                                label="Promo Code"
+                                label="Add Promo Code"
                                 value={promoCode}
                                 onChange={(e) => setPromoCode(e.target.value)}
                             />
@@ -132,7 +135,6 @@ export default function SetOccupancyDialog() {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={() => {
-                            console.log(`Selected Option: ${selectedOption}, Promo Code: ${promoCode}`);
                             handleClose();
                         }}
                     >
