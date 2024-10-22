@@ -22,7 +22,6 @@ const AccountPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Add form submission logic here
         console.log('Form Submitted:', formData);
         navigate('/home'); // Example navigation
     };
