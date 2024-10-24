@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TextField, Button } from '@mui/material';
 import "../styles/AccountPage.css";
 
 const AccountPage = () => {
@@ -31,30 +32,34 @@ const AccountPage = () => {
                 <div className="left-section">
                     <h2>Reset Password</h2>
                     <form onSubmit={handleSubmit}>
-                        <label htmlFor="password">New Password*</label>
-                        <input
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="New Password*"
                             type="password"
-                            id="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="At least 8 characters"
                             required
-                            className="input-field"
+                            variant="outlined"
                         />
 
-                        <label htmlFor="confirmPassword">Confirm Password*</label>
-                        <input
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Confirm Password*"
                             type="password"
-                            id="confirmPassword"
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             placeholder="Match/No Match"
                             required
-                            className="input-field"
+                            variant="outlined"
                         />
-                        <button type="submit">Submit</button> {/* Add submit button */}
+                        <Button type="submit" variant="contained" color="primary">
+                            Submit
+                        </Button> {/* Add submit button */}
                     </form>
                 </div>
 
