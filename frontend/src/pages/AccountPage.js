@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../styles/AccountPage.css"
+import "../styles/AccountPage.css";
 
 const AccountPage = () => {
     const [formData, setFormData] = useState({
-        email: '',
         password: '',
         confirmPassword: '',
-        phone: '',
     });
 
     const navigate = useNavigate();
@@ -33,19 +31,7 @@ const AccountPage = () => {
                 <div className="left-section">
                     <h2>Reset Password</h2>
                     <form onSubmit={handleSubmit}>
-                        <label htmlFor="email">Email*</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Please enter email associated with your account"
-                            required
-                            className="input-field"
-                        />
-
-                        <label htmlFor="password">Password*</label>
+                        <label htmlFor="password">New Password*</label>
                         <input
                             type="password"
                             id="password"
@@ -68,6 +54,7 @@ const AccountPage = () => {
                             required
                             className="input-field"
                         />
+                        <button type="submit">Submit</button> {/* Add submit button */}
                     </form>
                 </div>
 
