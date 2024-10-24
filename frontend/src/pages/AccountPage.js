@@ -57,9 +57,15 @@ const AccountPage = () => {
                             required
                             variant="outlined"
                         />
-                        <Button type="submit" variant="contained" color="primary">
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            style={{ backgroundColor: 'black', color: 'white', marginTop: '16px' }} // Make the button black
+                            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = 'darkgray')} // Change color on hover
+                            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'black')} // Reset color on mouse out
+                        >
                             Submit
-                        </Button> {/* Add submit button */}
+                        </Button>
                     </form>
                 </div>
 
