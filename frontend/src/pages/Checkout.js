@@ -28,6 +28,16 @@ const Checkout = () => {
     const methods = useForm({
         defaultValues: {
             payment: {
+                checkInDate,
+                checkOutDate,
+                categoryName,
+                roomType,
+                selectedBedType,
+                selectedSmoking,
+                totalPrice,
+                reservedActivity,
+                activityDate,
+                roomPrice,
                 cardnumber: '',
                 expiry: '',
                 cvv: '',
