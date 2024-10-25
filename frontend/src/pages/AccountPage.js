@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button } from '@mui/material';
 import "../styles/AccountPage.css";
@@ -24,6 +24,35 @@ const AccountPage = () => {
         console.log('Form Submitted:', formData);
         navigate('/home');
     };
+
+
+    useEffect(() => {
+        const checkSession = async () => {
+            console.log("checking session");
+            try {
+                const response = await fetch("http://localhost:8080/api/check-session", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                if (response.ok && data.isLoggedIn) {
+                    console.log("User is logged in:", data);
+                    navigate("/account");
+                }
+                else {
+                    console.log("No active session found.");
+                    navigate("/login");
+                }
+            } catch (error) {
+                console.error("Error checking session:", error);
+            }
+        };
+        checkSession();
+    }, [navigate]);
 
     return (
         <div className="account-page">
