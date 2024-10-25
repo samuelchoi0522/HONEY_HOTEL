@@ -1,0 +1,46 @@
+.account-page {
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    margin-top: 80px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.left-section {
+    width: 45%;
+    padding: 20px;
+}
+
+.right-section {
+    width: 45%;
+    padding: 20px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.reservations-container {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.booking-box {
+    background-color: #eaeaea;
+    min-height: 100px;
+    margin-bottom: 20px;
+    padding: 10px;
+}

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
@@ -8,59 +9,68 @@ import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDa
 import dayjs from 'dayjs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SetOccupancyDialog from './Set_Occupancy_Dialog.js';
-import '../styles/CheckRatesBar.css';
+import styles from '../styles/CheckRatesBar.module.css'; // Import CSS module
 
 const hotelLocations = [
     { title: 'Brazos Bliss Hotel, Waco, Texas, USA' },
     { title: 'The Grand Palace, Paris, France' },
     { title: 'Seaside Serenity Resort, Phuket, Thailand' },
     { title: 'Urban Oasis, Tokyo, Japan' },
-    { title: 'Misty Mountain Lodge, Queenstown, New Zealand' },
-    { title: 'Desert Mirage Hotel, Dubai, UAE' },
-    { title: 'Maple Leaf Lodge, Banff, Canada' },
-    { title: 'Savannah Retreat, Nairobi, Kenya' },
-    { title: 'Alpine Meadows Hotel, Interlaken, Switzerland' },
-    { title: 'Casa Del Sol, Barcelona, Spain' },
-    { title: 'Emerald Bay Resort, Bora Bora, French Polynesia' },
-    { title: 'Crescent Cove Hotel, Sydney, Australia' },
-    { title: 'Royal Garden Inn, London, UK' },
-    { title: 'Blue Lagoon Resort, Reykjavik, Iceland' },
-    { title: 'Rainforest Hideaway, Tulum, Mexico' },
-    { title: 'Golden Sands Hotel, Cape Town, South Africa' },
-    { title: 'Redwood Retreat, San Francisco, California, USA' },
-    { title: 'Lakefront Lodge, Queenstown, New Zealand' },
-    { title: 'Coconut Grove Resort, Bali, Indonesia' },
-    { title: 'Northern Lights Inn, Tromsø, Norway' }
+    // Add more locations here
 ];
+
+const dateRangePickerTheme = createTheme({
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    fontFamily: 'Kaisei Tokumin, serif',
+                    fontSize: '0.9rem',
+                    textAlign: 'center',
+                    lineHeight: '1.5rem',
+                    color: '#FFFFFF',
+                    backgroundColor: '#363535',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.336)',
+                    borderRadius: 0,
+                    height: '33px',
+                },
+            },
+        },
+    },
+});
 
 const CheckRatesBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
-    // States for hotel, dates, and occupancy
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [dateRange, setDateRange] = useState([null, null]);
     const [rooms, setRooms] = useState(1);
     const [adults, setAdults] = useState(2);
     const [children, setChildren] = useState(0);
     const [dateRangeError, setDateRangeError] = useState(false);
+    const [autocompleteWidth, setAutocompleteWidth] = useState(300); // State to control width
 
-    // Load the booking details from the location state, if available
+    const textRef = useRef(null);
+
     useEffect(() => {
         if (location.state?.bookingDetails) {
             const { hotelLocation, startDate, endDate, rooms, adults, children } = location.state.bookingDetails;
-
-            // Find the matching hotel based on location
             const matchingHotel = hotelLocations.find(hotel => hotel.title === hotelLocation);
             setSelectedHotel(matchingHotel || null);
-
-            // Set the date range and occupancy values
             setDateRange([startDate ? dayjs(startDate) : null, endDate ? dayjs(endDate) : null]);
             setRooms(rooms || 1);
             setAdults(adults || 2);
             setChildren(children || 0);
         }
     }, [location.state]);
+
+    useEffect(() => {
+        // Adjust width based on the selected title's length
+        if (selectedHotel && textRef.current) {
+            const newWidth = textRef.current.scrollWidth + 40; // Add padding
+            setAutocompleteWidth(Math.min(Math.max(newWidth, 200), 500)); // Min 200px, Max 500px
+        }
+    }, [selectedHotel]);
 
     const handleFindHivesClick = () => {
         const startDate = dateRange[0] ? dayjs(dateRange[0]).format('YYYY-MM-DD') : "No start date selected";
@@ -82,11 +92,10 @@ const CheckRatesBar = () => {
         })
             .then(response => response.json())
             .then(data => {
-                const rooms = Array.isArray(data) ? data : []; // Ensure rooms is always an array
+                const rooms = Array.isArray(data) ? data : [];
                 navigate('/find-hive', { state: { bookingDetails, rooms: data } });
             })
             .catch(error => console.error("Error fetching available rooms:", error));
-
     };
 
     const handleSetOccupancy = (newRooms, newAdults, newChildren) => {
@@ -98,8 +107,8 @@ const CheckRatesBar = () => {
     const today = dayjs();
 
     return (
-        <div className="check-rates-bar">
-            <div className="input-container">
+        <div className={styles.checkRatesBar}>
+            <div className={styles.inputContainer}>
                 <Autocomplete
                     options={hotelLocations}
                     getOptionLabel={(option) => option.title}
@@ -110,97 +119,70 @@ const CheckRatesBar = () => {
                             {...params}
                             label="Find A Hotel Or Resort"
                             variant="outlined"
+                            inputRef={textRef}
                             sx={{
+                                
                                 '& .MuiInputLabel-root': {
-                                    fontFamily: 'Kaisei Tokumin, serif',
-                                    fontStyle: 'italic',
-                                    fontSize: '0.85rem',
-                                    lineHeight: '0px',
-                                    overflow: 'visible',
-                                    color: '#FFFFFF'
+                                    color: 'white', // Set label color
+                                    fontFamily: 'Kaisei Tokumin, serif', // Set label font
+                                    fontSize: '1rem', // Set label font size
+                                    fontWeight: 'bold', // Optional: make it bold
+                                    fontStyle: 'italic', // Optional: make it italic
+                                    zIndex: 1,
                                 },
                                 '& .MuiOutlinedInput-root': {
-                                    fontFamily: 'Kaisei Tokumin, serif',
-                                    fontSize: '0.9rem',
-                                    textAlign: 'center',
-                                    lineHeight: '1.5rem',
+                                    height: 33,
+                                    color: '#FFFFFF', // Set input text color
+                                    '& .MuiInputBase-input': {
+                                        color: '#FFFFFFF', // Set text color inside the input
+                                    },
                                 },
-                                '& .MuiInputBase-input': {
-                                    fontFamily: 'Kaisei Tokumin, serif',
-                                    textAlign: 'center',
-                                }
+                                '& .MuiSvgIcon-root': {
+                                    color: '#FFFFFF', // Set icon color
+                                },
+                                width: autocompleteWidth,
+
+                                backgroundColor: '#363535',
+                                outline: 'none',
+                                color: '#FFFFFF',
+                                borderRadius: 0,
                             }}
+                            className={styles.destinationInput}
                         />
                     )}
-                    className="destination-input"
                 />
             </div>
 
-            <div className="input-container">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateRangePicker
-                        value={dateRange}
-                        onChange={(newValue) => {
-                            setDateRange(newValue);
-                            setDateRangeError(false);
-                        }}
-                        minDate={today}
-                        error={dateRangeError}
-                        slots={{ field: SingleInputDateRangeField }}
-                        sx={{
-                            width: 250,
-                            '& .MuiOutlinedInput-root': {
-                                fontFamily: 'Kaisei Tokumin, serif',
-                                fontSize: '0.9rem',
-                                textAlign: 'center',
-                                lineHeight: '1.5rem',
-                                color: '#FFFFFF',
-                                backgroundColor: '#363535',
-                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.336)',
-                                borderRadius: 0,
-                                height: '33px',
-                                '& fieldset': {
-                                    borderColor: dateRangeError ? 'red' : 'white',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: dateRangeError ? 'red' : '#F0D10B',
-                                },
-                            },
-                            '& .MuiInputBase-input': {
-                                textAlign: 'center',
-                                fontFamily: 'Kaisei Tokumin, serif',
-                                fontSize: '0.85rem',
-                                padding: '8px 0',
-                            },
-                            '& .MuiInputBase-input::placeholder': {
-                                color: dateRangeError ? 'red' : '#FFFFFF',
-                                fontFamily: 'Kaisei Tokumin, serif',
-                                fontSize: '0.85rem'
-                            },
-                        }}
-                        slotProps={{
-                            textField: {
-                                error: dateRangeError,
-                            },
-                        }}
-                    />
-                </LocalizationProvider>
+            <div className={styles.inputContainer}>
+                <ThemeProvider theme={dateRangePickerTheme}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateRangePicker
+                            value={dateRange}
+                            onChange={(newValue) => {
+                                setDateRange(newValue);
+                                setDateRangeError(false);
+                            }}
+                            minDate={today}
+                            error={dateRangeError}
+                            slots={{ field: SingleInputDateRangeField }}
+                        />
+                    </LocalizationProvider>
+                </ThemeProvider>
             </div>
 
-            <div className="input-container">
+            <div className={styles.inputContainer}>
                 <SetOccupancyDialog
                     rooms={rooms}
                     adults={adults}
                     children={children}
                     onSetOccupancy={handleSetOccupancy}
-                    className="guests-input"
                 />
             </div>
 
-            <button className="check-rates-button" onClick={handleFindHivesClick}>
+            <button className={styles.checkRatesButton} onClick={handleFindHivesClick}>
                 CHECK RATES
             </button>
-        </div >
+        </div>
     );
 };
 

@@ -46,7 +46,13 @@
     border: none;
     cursor: pointer;
     color: black;
+    background-color: none;
 }
+
+.close-button:hover {
+    background-color: transparent;
+}
+
 
 /* Modal Content */
 .modal-content {
@@ -115,6 +121,7 @@
     width: 300px;
     height: 40px;
     margin-top: 55px;
+    border-radius: 0px;
 }
 
 .find-hives-button:hover {

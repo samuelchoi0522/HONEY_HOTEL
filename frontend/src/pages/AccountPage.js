@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TextField, Button } from '@mui/material';
+import "../styles/AccountPage.css";
 
 const AccountPage = () => {
     const [formData, setFormData] = useState({
-        email: '',
         password: '',
         confirmPassword: '',
-        newEmail: '',
-        phone: '',
     });
 
     const navigate = useNavigate();
@@ -23,103 +22,58 @@ const AccountPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Form Submitted:', formData);
-        navigate('/home'); // Example navigation
+        navigate('/home');
     };
 
     return (
-        <div style={{ color: 'black', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '100vh' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px' }}>
-                {/* Left Section: Reset Password and Change Email */}
-                <div style={{ width: '45%', padding: '20px' }}>
+        <div className="account-page">
+            <div className="form-container">
+                {/* Left Section: Reset Password */}
+                <div className="left-section">
                     <h2>Reset Password</h2>
                     <form onSubmit={handleSubmit}>
-                        <label htmlFor="email">Email*</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Please enter email associated with your account"
-                            required
-                            style={{ width: '100%', padding: '10px', marginBottom: '15px', border: '1px solid #ccc', borderRadius: '5px' }}
-                        />
-
-                        <label htmlFor="password">Password*</label>
-                        <input
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="New Password*"
                             type="password"
-                            id="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="At least 8 characters"
                             required
-                            style={{ width: '100%', padding: '10px', marginBottom: '15px', border: '1px solid #ccc', borderRadius: '5px' }}
+                            variant="outlined"
                         />
 
-                        <label htmlFor="confirmPassword">Confirm Password*</label>
-                        <input
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Confirm Password*"
                             type="password"
-                            id="confirmPassword"
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             placeholder="Match/No Match"
                             required
-                            style={{ width: '100%', padding: '10px', marginBottom: '15px', border: '1px solid #ccc', borderRadius: '5px' }}
+                            variant="outlined"
                         />
-                    </form>
-
-                    <h2>Change Email</h2>
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor="newEmail">New Email*</label>
-                        <input
-                            type="email"
-                            id="newEmail"
-                            name="newEmail"
-                            value={formData.newEmail}
-                            onChange={handleChange}
-                            placeholder="Please enter new email"
-                            required
-                            style={{ width: '100%', padding: '10px', marginBottom: '15px', border: '1px solid #ccc', borderRadius: '5px' }}
-                        />
-
-                        <label htmlFor="password">Password*</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Please enter password associated with your account"
-                            required
-                            style={{ width: '100%', padding: '10px', marginBottom: '15px', border: '1px solid #ccc', borderRadius: '5px' }}
-                        />
-
-                        <label htmlFor="confirmPassword">Confirm Password*</label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            required
-                            style={{ width: '100%', padding: '10px', marginBottom: '15px', border: '1px solid #ccc', borderRadius: '5px' }}
-                        />
+                        <Button type="submit" variant="contained" color="primary">
+                            Submit
+                        </Button> {/* Add submit button */}
                     </form>
                 </div>
 
                 {/* Right Section: Reservations */}
-                <div style={{ width: '45%', padding: '20px' }}>
+                <div className="right-section">
                     <h2>Reservations</h2>
-                    <div style={{ backgroundColor: '#f5f5f5', padding: '15px', borderRadius: '10px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
-                        <h3 style={{color: 'black'}}>Active Bookings</h3>
-                        <div style={{ backgroundColor: '#eaeaea', minHeight: '100px', marginBottom: '20px', padding: '10px' }}>
+                    <div className="reservations-container">
+                        <h3>Active Bookings</h3>
+                        <div className="booking-box">
                             {/* Active Bookings will be dynamically loaded here */}
                         </div>
 
-                        <h3 style={{color: 'black'}}>Previous Bookings</h3>
-                        <div style={{ backgroundColor: '#eaeaea', minHeight: '100px', marginBottom: '20px', padding: '10px' }}>
+                        <h3>Previous Bookings</h3>
+                        <div className="booking-box">
                             {/* Previous Bookings will be dynamically loaded here */}
                         </div>
                     </div>
