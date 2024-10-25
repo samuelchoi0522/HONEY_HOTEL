@@ -43,6 +43,28 @@ const AccountPage = () => {
                             placeholder="At least 8 characters"
                             required
                             variant="outlined"
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'black',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'black',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'black',
+                                    },
+                                },
+                                '& label': {
+                                    color: 'gray',
+                                },
+                                '& label.Mui-focused': {
+                                    color: 'gray',
+                                },
+                                '& .MuiInputBase-input': {
+                                    color: 'gray',
+                                },
+                            }}
                         />
 
                         <TextField
@@ -56,10 +78,38 @@ const AccountPage = () => {
                             placeholder="Match/No Match"
                             required
                             variant="outlined"
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: 'black',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: 'black',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: 'black',
+                                    },
+                                },
+                                '& label': {
+                                    color: 'gray',
+                                },
+                                '& label.Mui-focused': {
+                                    color: 'gray',
+                                },
+                                '& .MuiInputBase-input': {
+                                    color: 'gray',
+                                },
+                            }}
                         />
-                        <Button type="submit" variant="contained" color="primary">
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            style={{ backgroundColor: 'black', color: 'white', marginTop: '16px' }}
+                            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = 'darkgray')}
+                            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'black')}
+                        >
                             Submit
-                        </Button> {/* Add submit button */}
+                        </Button>
                     </form>
                 </div>
 
