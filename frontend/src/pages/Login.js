@@ -64,7 +64,13 @@ function Login() {
             setShowSuccessAlert(true);
 
             setTimeout(() => {
-                navigate("/");
+                const reservationData = sessionStorage.getItem("reservationData");
+                if (reservationData) {
+                    navigate("/checkout", { state: JSON.parse(reservationData) });
+                    sessionStorage.removeItem("reservationData");
+                } else {
+                    navigate("/");
+                }
             }, 2500);
         } else {
             setShowFailAlert(true);
