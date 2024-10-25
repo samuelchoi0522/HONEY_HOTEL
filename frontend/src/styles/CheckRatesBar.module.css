@@ -5,7 +5,7 @@
     top: 70px;
     width: 100%;
     background-color: #D9D9D9;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
     display: flex;
     justify-content: start;
     align-items: center;
@@ -26,22 +26,25 @@
     min-width: 200px;
 }
 
-.destinationInput .MuiOutlinedInput-root,
-.dateRangePicker .MuiOutlinedInput-root,
-.guestsInput .MuiOutlinedInput-root {
+.destinationInput .MuiOutlinedInput-root {
     background-color: #363535;
     color: white;
     height: 33px;
     min-width: 300px;
+    /* Set minimum width */
+    width: 400px;
+    /* Set desired width */
+    max-width: 500px;
+    /* Set maximum width */
+    padding-right: 50px;
+    /* Adjust padding to control icon spacing */
     border-radius: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.336);
     display: flex;
     align-items: center;
 }
 
-.destinationInput .MuiOutlinedInput-input,
-.dateRangePicker .MuiOutlinedInput-input,
-.guestsInput .MuiOutlinedInput-input {
+.destinationInput .MuiOutlinedInput-input {
     font-size: 0.85rem;
     padding: 0;
     top: -20px;
@@ -58,6 +61,7 @@
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    border-radius: 0;
 }
 
 .checkRatesButton:hover {

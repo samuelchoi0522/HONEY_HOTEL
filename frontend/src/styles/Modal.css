@@ -1,15 +1,3 @@
-/* .modal-container .destination-input .MuiOutlinedInput-input,
-.modal-container .date-range-picker .MuiOutlinedInput-input,
-.modal-container .guests-input .MuiOutlinedInput-input {
-    font-size: 1rem;
-    padding: 4px;
-    top: 0;
-    text-align: left;
-    line-height: 1.5;
-    height: auto;
-    background-color: transparent;
-} */
-
 .inputs-container {
     display: flex;
     flex-direction: row;

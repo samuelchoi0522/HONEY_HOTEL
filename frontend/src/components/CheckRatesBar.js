@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -9,12 +9,14 @@ import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDa
 import dayjs from 'dayjs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SetOccupancyDialog from './Set_Occupancy_Dialog.js';
-import styles from '../styles/CheckRatesBar.module.css'; // Import the CSS Module
+import styles from '../styles/CheckRatesBar.module.css'; // Import CSS module
 
 const hotelLocations = [
     { title: 'Brazos Bliss Hotel, Waco, Texas, USA' },
     { title: 'The Grand Palace, Paris, France' },
-    // ... Add more locations
+    { title: 'Seaside Serenity Resort, Phuket, Thailand' },
+    { title: 'Urban Oasis, Tokyo, Japan' },
+    // Add more locations here
 ];
 
 const dateRangePickerTheme = createTheme({
@@ -46,6 +48,9 @@ const CheckRatesBar = () => {
     const [adults, setAdults] = useState(2);
     const [children, setChildren] = useState(0);
     const [dateRangeError, setDateRangeError] = useState(false);
+    const [autocompleteWidth, setAutocompleteWidth] = useState(300); // State to control width
+
+    const textRef = useRef(null);
 
     useEffect(() => {
         if (location.state?.bookingDetails) {
@@ -58,6 +63,14 @@ const CheckRatesBar = () => {
             setChildren(children || 0);
         }
     }, [location.state]);
+
+    useEffect(() => {
+        // Adjust width based on the selected title's length
+        if (selectedHotel && textRef.current) {
+            const newWidth = textRef.current.scrollWidth + 40; // Add padding
+            setAutocompleteWidth(Math.min(Math.max(newWidth, 200), 500)); // Min 200px, Max 500px
+        }
+    }, [selectedHotel]);
 
     const handleFindHivesClick = () => {
         const startDate = dateRange[0] ? dayjs(dateRange[0]).format('YYYY-MM-DD') : "No start date selected";
@@ -106,15 +119,33 @@ const CheckRatesBar = () => {
                             {...params}
                             label="Find A Hotel Or Resort"
                             variant="outlined"
+                            inputRef={textRef}
                             sx={{
+                                
                                 '& .MuiInputLabel-root': {
-                                    fontFamily: 'Kaisei Tokumin, serif',
-                                    fontStyle: 'italic',
-                                    fontSize: '0.85rem',
-                                    lineHeight: '0px',
-                                    overflow: 'visible',
-                                    color: '#FFFFFF'
+                                    color: 'white', // Set label color
+                                    fontFamily: 'Kaisei Tokumin, serif', // Set label font
+                                    fontSize: '1rem', // Set label font size
+                                    fontWeight: 'bold', // Optional: make it bold
+                                    fontStyle: 'italic', // Optional: make it italic
+                                    zIndex: 1,
                                 },
+                                '& .MuiOutlinedInput-root': {
+                                    height: 33,
+                                    color: '#FFFFFF', // Set input text color
+                                    '& .MuiInputBase-input': {
+                                        color: '#FFFFFFF', // Set text color inside the input
+                                    },
+                                },
+                                '& .MuiSvgIcon-root': {
+                                    color: '#FFFFFF', // Set icon color
+                                },
+                                width: autocompleteWidth,
+
+                                backgroundColor: '#363535',
+                                outline: 'none',
+                                color: '#FFFFFF',
+                                borderRadius: 0,
                             }}
                             className={styles.destinationInput}
                         />
