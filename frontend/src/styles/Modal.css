@@ -1,3 +1,15 @@
+/* .modal-container .destination-input .MuiOutlinedInput-input,
+.modal-container .date-range-picker .MuiOutlinedInput-input,
+.modal-container .guests-input .MuiOutlinedInput-input {
+    font-size: 1rem;
+    padding: 4px;
+    top: 0;
+    text-align: left;
+    line-height: 1.5;
+    height: auto;
+    background-color: transparent;
+} */
+
 .inputs-container {
     display: flex;
     flex-direction: row;
@@ -46,7 +58,13 @@
     border: none;
     cursor: pointer;
     color: black;
+    background-color: none;
 }
+
+.close-button:hover {
+    background-color: transparent;
+}
+
 
 /* Modal Content */
 .modal-content {
@@ -115,6 +133,7 @@
     width: 300px;
     height: 40px;
     margin-top: 55px;
+    border-radius: 0px;
 }
 
 .find-hives-button:hover {
