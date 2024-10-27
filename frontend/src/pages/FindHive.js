@@ -45,10 +45,12 @@ const FindHive = () => {
     const handleRoomCardClick = (categoryName, roomType, roomOptions) => {
         const bookingDetails = location.state?.bookingDetails || {}; // Retrieve booking details from the state
 
+        // Include roomId in the booking details
         const updatedBookingDetails = {
             ...bookingDetails,
             checkInDate: bookingDetails.startDate,
             checkOutDate: bookingDetails.endDate,
+            roomId: roomOptions[0].id // Set the roomId to the first room in the selected group
         };
 
         navigate('/room-details', {
@@ -56,16 +58,14 @@ const FindHive = () => {
                 categoryName,
                 roomType,
                 roomOptions,
-                ...updatedBookingDetails, // Spread the booking details to pass them to RoomDetails
+                ...updatedBookingDetails, // Pass booking details with roomId
             },
         });
     };
 
-
-
     // Group rooms by category and then by roomType
     const groupedRooms = rooms.reduce((acc, room) => {
-        console.log('testing:', location.state?.bookingDetails);
+        console.log('testing:', location.state?.bookingDetails, 'Room ID:', room.id);
         const categoryName = room.category ? room.category.categoryName : "Unknown Category";
         const roomType = room.roomType || "Unknown Room Type";
 

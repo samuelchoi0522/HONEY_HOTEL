@@ -55,4 +55,6 @@ public class LoginController {
         loginService.invalidateSession(request);
         return ResponseEntity.ok("Logout successful.");
     }
+
+    
 }
