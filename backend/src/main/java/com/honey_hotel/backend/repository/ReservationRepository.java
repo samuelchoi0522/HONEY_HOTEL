@@ -11,13 +11,11 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+    List<Reservation> findByUserId(Long userId);
 
-    @Query("SELECT r FROM Reservation r WHERE r.room.id = :roomId AND " +
-            "((:checkInDate BETWEEN r.checkInDate AND r.checkOutDate) OR " +
-            "(:checkOutDate BETWEEN r.checkInDate AND r.checkOutDate) OR " +
-            "(r.checkInDate BETWEEN :checkInDate AND :checkOutDate))")
-    List<Reservation> findConflictingReservations(
-            @Param("roomId") Long roomId,
-            @Param("checkInDate") LocalDate checkInDate,
-            @Param("checkOutDate") LocalDate checkOutDate);
+    List<Reservation> findByRoomId(Long roomId);
+
+    @Query("SELECT r FROM Reservation r WHERE r.checkInDate <= :endDate AND r.checkOutDate >= :startDate")
+    List<Reservation> findReservationsInRange(@Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
 }

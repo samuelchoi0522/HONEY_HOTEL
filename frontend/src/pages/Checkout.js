@@ -8,6 +8,7 @@ import PaymentComponent from '../components/PaymentComponent';
 const Checkout = () => {
     const location = useLocation();
     const navigate = useNavigate();
+
     const {
         checkInDate,
         checkOutDate,
@@ -16,11 +17,9 @@ const Checkout = () => {
         selectedBedType,
         selectedSmoking,
         totalPrice,
+        roomId,
         reservedActivity,
         activityDate,
-        roomPrice,
-        roomId, // Added roomId
-        hotelReservationId // Added for activity reservation
     } = location.state || {};
 
     const [finalTotal, setFinalTotal] = useState(0);
@@ -37,33 +36,28 @@ const Checkout = () => {
                 selectedBedType,
                 selectedSmoking,
                 totalPrice,
+                roomId,
                 reservedActivity,
                 activityDate,
-                roomPrice,
                 cardnumber: '',
                 expiry: '',
                 cvv: '',
-                accountHolderName: ''
-            }
-        }
+                accountHolderName: '',
+            },
+        },
     });
 
-    // Check if the user is logged in
     useEffect(() => {
         const checkSession = async () => {
             try {
                 const response = await fetch("http://localhost:8080/api/check-session", {
                     method: "POST",
                     credentials: "include",
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { 'Content-Type': 'application/json' },
                 });
 
                 const data = await response.json();
-                if (response.ok && data.isLoggedIn) {
-                    setIsLoggedIn(true);
-                } else {
-                    setIsLoggedIn(false);
-                }
+                setIsLoggedIn(response.ok && data.isLoggedIn);
             } catch (error) {
                 console.error("Error checking session:", error);
             }
@@ -75,9 +69,7 @@ const Checkout = () => {
     // Calculate total price and number of nights
     useEffect(() => {
         if (checkInDate && checkOutDate) {
-            const checkIn = new Date(checkInDate);
-            const checkOut = new Date(checkOutDate);
-            const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+            const nights = Math.ceil((new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24));
             setNumNights(nights);
 
             let basePrice = totalPrice * nights;
@@ -85,107 +77,86 @@ const Checkout = () => {
                 basePrice += reservedActivity.price;
             }
 
-            const tax = basePrice * 0.06;
-            const total = basePrice + tax;
-            setFinalTotal(total.toFixed(2));
+            const tax = basePrice * 0.06; // Assuming 6% tax
+            setFinalTotal((basePrice + tax).toFixed(2));
         }
     }, [checkInDate, checkOutDate, totalPrice, reservedActivity]);
 
-    // Handle reservation submission
+
+    
     const handleReserveRoom = async (data) => {
         if (!isLoggedIn) {
-            sessionStorage.setItem('reservationData', JSON.stringify({
-                checkInDate,
-                checkOutDate,
-                categoryName,
-                roomType,
-                selectedBedType,
-                selectedSmoking,
-                totalPrice,
-                reservedActivity,
-                activityDate,
-                roomPrice,
-                roomId
-            }));
+            sessionStorage.setItem('reservationData', JSON.stringify(location.state));
             navigate('/login');
             return;
         }
 
-        try {
-            // Ensure all required fields are included
-            if (!roomId || !checkInDate || !checkOutDate) {
-                throw new Error("Room ID, check-in date, and check-out date are required.");
-            }
+        if (!roomId || !checkInDate || !checkOutDate) {
+            alert("Please fill in all required fields.");
+            return;
+        }
 
+        try {
             const reservationPayload = {
                 roomId,
                 startDate: checkInDate,
-                endDate: checkOutDate
+                endDate: checkOutDate,
             };
+
+            console.log("Room reservation payload:", reservationPayload);
 
             const reservationResponse = await fetch("http://localhost:8080/api/reservations", {
                 method: "POST",
                 credentials: "include",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(reservationPayload)
+                body: JSON.stringify(reservationPayload),
             });
 
-            const responseText = await reservationResponse.text();
-            let reservationData;
-
-            try {
-                reservationData = JSON.parse(responseText);
-            } catch (e) {
-                console.error("Non-JSON response:", responseText);
-                throw new Error(`Failed to create room reservation: ${responseText}`);
-            }
-
-            console.log("Reservation Response: ", reservationData);
-
             if (!reservationResponse.ok) {
-                throw new Error(`Failed to create room reservation: ${reservationData.message || reservationResponse.status}`);
+                const errorText = await reservationResponse.text();
+                console.error("Error response:", errorText);
+                throw new Error(errorText || "Failed to create reservation");
             }
 
-            // Handle activity reservation if present
+            const reservationData = await reservationResponse.json();
+            console.log("Room reservation response:", reservationData);
+
+            const hotelReservationId = reservationData?.id;
+            if (!hotelReservationId) {
+                throw new Error("Failed to retrieve hotel reservation ID.");
+            }
+
             if (reservedActivity) {
                 const activityReservationPayload = {
-                    hotelReservationId: reservationData.id, // Use the created reservation ID
+                    hotelReservationId,
                     activityId: reservedActivity.id,
+                    reservationDate: activityDate,
                     checkInDate,
-                    checkOutDate
+                    checkOutDate,
                 };
+
+                console.log("Activity reservation payload:", activityReservationPayload);
 
                 const activityResponse = await fetch("http://localhost:8080/api/reservations/activities", {
                     method: "POST",
                     credentials: "include",
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(activityReservationPayload)
+                    body: JSON.stringify(activityReservationPayload),
                 });
 
-                const activityResponseText = await activityResponse.text();
-                let activityData;
-
-                try {
-                    activityData = JSON.parse(activityResponseText);
-                } catch (e) {
-                    console.error("Non-JSON response for activity:", activityResponseText);
-                    throw new Error(`Failed to create activity reservation: ${activityResponseText}`);
-                }
-
-                console.log("Activity Reservation Response: ", activityData);
-
                 if (!activityResponse.ok) {
-                    throw new Error(`Failed to create activity reservation: ${activityData.message || activityResponse.status}`);
+                    const errorText = await activityResponse.text();
+                    console.error("Error response:", errorText);
+                    throw new Error(errorText || "Failed to create activity reservation");
                 }
             }
 
             alert("Reservation successful!");
             navigate('/confirmation');
-
         } catch (error) {
             console.error("Error during reservation:", error);
             alert(`An error occurred while processing your reservation: ${error.message}`);
@@ -194,9 +165,10 @@ const Checkout = () => {
 
 
 
+
     return (
         <div className="checkout-page">
-            <h2 style={{ color: 'black' }}>COMPLETE BOOKING</h2>
+            <h2 style={{ color: 'black' }}>Complete Booking</h2>
             <div className="booking-details">
                 <h3>Room Details</h3>
                 <p><strong>Category:</strong> {categoryName}</p>
@@ -207,15 +179,19 @@ const Checkout = () => {
                 <p><strong>Check-out Date:</strong> {checkOutDate}</p>
                 <p><strong>Number of Nights:</strong> {numNights}</p>
                 <p><strong>Base Price:</strong> ${totalPrice * numNights}</p>
+                <p><strong>Room Id:</strong>{roomId}</p>
+
                 {reservedActivity && (
                     <>
                         <h3>Activity Details</h3>
                         <p><strong>Activity:</strong> {reservedActivity.name}</p>
                         <p><strong>Category:</strong> {reservedActivity.category}</p>
-                        <p><strong>Activity Price:</strong> ${reservedActivity.price}</p>
+                        <p><strong>Price:</strong> ${reservedActivity.price}</p>
                         <p><strong>Activity Date:</strong> {activityDate}</p>
+                        <p><strong>Activity Id:</strong> {reservedActivity.id}</p>
                     </>
                 )}
+
                 <p><strong>Total (including 6% tax):</strong> ${finalTotal}</p>
             </div>
 
