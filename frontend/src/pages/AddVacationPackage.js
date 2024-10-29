@@ -10,7 +10,7 @@ import '../styles/AddVacationPackage.css';
 const AddVacationPackage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { checkInDate, checkOutDate, categoryName, roomType, selectedBedType, selectedSmoking, totalPrice } = location.state || {};
+    const { checkInDate, checkOutDate, categoryName, roomType, selectedBedType, selectedSmoking, totalPrice, roomId } = location.state || {};
 
     const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,8 +22,6 @@ const AddVacationPackage = () => {
 
     useEffect(() => {
         const fetchActivities = async () => {
-            console.log('Fetching check-in and check-out dates:', checkInDate, checkOutDate);
-            // Only fetch if the dates are valid
             if (!isValidDate(checkInDate) || !isValidDate(checkOutDate)) {
                 console.error('Invalid check-in or check-out date.');
                 setLoading(false);
@@ -66,7 +64,13 @@ const AddVacationPackage = () => {
             selectedBedType,
             selectedSmoking,
             totalPrice,
-            reservedActivity: selectedActivity || null,
+            roomId,
+            reservedActivity: selectedActivity ? {
+                id: selectedActivity.id,
+                name: selectedActivity.name,
+                price: selectedActivity.price,
+                category: selectedActivity.category,
+            } : null,
             activityDate: selectedActivity ? dayjs(activityDate).format('YYYY-MM-DD') : null,
         };
 
@@ -91,17 +95,14 @@ const AddVacationPackage = () => {
 
             <div className="activity-list">
                 <h3>Select an Activity (Optional)</h3>
-                <div
-                    className={`activity-card no-activity ${!selectedActivity ? 'selected' : ''}`}
-                >
+                <div className={`activity-card no-activity ${!selectedActivity ? 'selected' : ''}`}>
                     <h3>No Thanks</h3>
                     <Button
                         variant="outlined"
                         color={!selectedActivity ? 'secondary' : 'primary'}
                         onClick={() => setSelectedActivity(null)}
-                        style={{ marginTop: '10px' }}
                     >
-                        {selectedActivity ? 'Select No Activity' : 'No Thanks'}
+                        No Thanks
                     </Button>
                 </div>
 
@@ -118,7 +119,6 @@ const AddVacationPackage = () => {
                                 variant="outlined"
                                 color={selectedActivity?.id === activity.id ? 'secondary' : 'primary'}
                                 onClick={() => setSelectedActivity(activity)}
-                                style={{ marginTop: '10px' }}
                             >
                                 {selectedActivity?.id === activity.id ? 'Selected' : 'Select Activity'}
                             </Button>
@@ -134,7 +134,11 @@ const AddVacationPackage = () => {
                     <DatePicker
                         label="Select Activity Date"
                         value={activityDate}
-                        onChange={(newValue) => setActivityDate(newValue)}
+                        onChange={(newValue) => {
+                            if (newValue) {
+                                setActivityDate(newValue);
+                            }
+                        }}
                         minDate={dayjs(checkInDate)}
                         maxDate={dayjs(checkOutDate)}
                         disablePast

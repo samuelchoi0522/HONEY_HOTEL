@@ -180,6 +180,8 @@ const Modal = ({ open, handleClose }) => {
                 navigate('/find-hive', { state: { bookingDetails, rooms: data } });
             })
             .catch(error => console.error("Error fetching available rooms:", error));
+        
+        handleClose();
     };
 
 

@@ -14,7 +14,7 @@ public interface ActivitiesRepository extends JpaRepository<Activities, Long> {
 
     @Query(value = "SELECT * FROM activities a WHERE a.id NOT IN (" +
             "SELECT ar.activity_id FROM activityreservations ar " +
-            "WHERE ar.check_in_date < :checkOutDate AND ar.check_out_date > :checkInDate)", nativeQuery = true)
+            "WHERE ar.reservation_date BETWEEN :checkInDate AND :checkOutDate)", nativeQuery = true)
     List<Activities> findAvailableActivities(
             @Param("checkInDate") LocalDate checkInDate,
             @Param("checkOutDate") LocalDate checkOutDate);

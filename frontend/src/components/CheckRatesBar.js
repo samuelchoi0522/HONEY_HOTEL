@@ -16,8 +16,24 @@ const hotelLocations = [
     { title: 'The Grand Palace, Paris, France' },
     { title: 'Seaside Serenity Resort, Phuket, Thailand' },
     { title: 'Urban Oasis, Tokyo, Japan' },
-    // Add more locations here
+    { title: 'Misty Mountain Lodge, Queenstown, New Zealand' },
+    { title: 'Desert Mirage Hotel, Dubai, UAE' },
+    { title: 'Maple Leaf Lodge, Banff, Canada' },
+    { title: 'Savannah Retreat, Nairobi, Kenya' },
+    { title: 'Alpine Meadows Hotel, Interlaken, Switzerland' },
+    { title: 'Casa Del Sol, Barcelona, Spain' },
+    { title: 'Emerald Bay Resort, Bora Bora, French Polynesia' },
+    { title: 'Crescent Cove Hotel, Sydney, Australia' },
+    { title: 'Royal Garden Inn, London, UK' },
+    { title: 'Blue Lagoon Resort, Reykjavik, Iceland' },
+    { title: 'Rainforest Hideaway, Tulum, Mexico' },
+    { title: 'Golden Sands Hotel, Cape Town, South Africa' },
+    { title: 'Redwood Retreat, San Francisco, California, USA' },
+    { title: 'Lakefront Lodge, Queenstown, New Zealand' },
+    { title: 'Coconut Grove Resort, Bali, Indonesia' },
+    { title: 'Northern Lights Inn, Tromsø, Norway' }
 ];
+
 
 const dateRangePickerTheme = createTheme({
     components: {

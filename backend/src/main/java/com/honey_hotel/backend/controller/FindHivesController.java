@@ -22,7 +22,6 @@ public class FindHivesController {
     @Autowired
     private FindHivesService findHivesService;
 
-
     @PostMapping("/find")
     public ResponseEntity<?> findRooms(@RequestBody BookingDetails bookingDetails) {
         try {
@@ -34,13 +33,17 @@ public class FindHivesController {
                     startDate,
                     endDate);
 
+            // Debug: Print room details
             availableRooms.forEach(room -> {
-                if (room.getCategory() == null) {
-                    System.out.println("Room ID " + room.getId() + " does not have a category.");
-                } else {
-                    System.out.println(
-                            "Room ID " + room.getId() + " has category " + room.getCategory().getCategoryName());
-                }
+                String categoryName = (room.getCategory() != null) ? room.getCategory().getCategoryName()
+                        : "Unknown Category";
+                System.out.println("Room ID: " + room.getId() +
+                        ", Category: " + categoryName +
+                        ", Bed Type: " + room.getBedType() +
+                        ", Smoking Allowed: " + room.isSmokingAllowed() +
+                        ", Price: " + room.getPrice() +
+                        ", Room Type: " + room.getRoomType() +
+                        ", Price Category: " + room.getPriceCategory());
             });
 
             return ResponseEntity.ok(availableRooms);
