@@ -98,7 +98,7 @@ const AccountPage = () => {
                         <TextField
                             fullWidth
                             margin="normal"
-                            label="New Password*"
+                            label="New Password"
                             type="password"
                             name="password"
                             value={formData.password}
@@ -133,7 +133,7 @@ const AccountPage = () => {
                         <TextField
                             fullWidth
                             margin="normal"
-                            label="Confirm Password*"
+                            label="Confirm Password"
                             type="password"
                             name="confirmPassword"
                             value={formData.confirmPassword}

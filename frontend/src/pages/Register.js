@@ -8,6 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import "../styles/Register.css";
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
     const [title, setTitle] = useState("");
@@ -16,6 +17,7 @@ function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -32,8 +34,26 @@ function Register() {
         });
 
         if (response.ok) {
-            alert("Registration successful!");
-        } else {
+            const loginResponse = await fetch("http://localhost:8080/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+            });
+            if (loginResponse.ok) {
+                alert("Registration and login successful!");
+                navigate("/");
+            } else {
+                alert("Registration successful, but automatic login failed. Please log in manually.");
+                navigate("/login");
+            }
+        }
+        else {
             alert("Registration failed. Please try again.");
         }
     };
