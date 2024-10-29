@@ -23,6 +23,7 @@ Honey Hotel uses a number of open-source projects to work properly:
 - [JUnit] - Unit testing library
 - [Java] - Backend development
 - [PostgreSQL] - SQL Database
+- [Docker] - Containerization platform
 
 And of course, Honey Hotel is accessible with a [public repository][dill]
  on GitHub.
@@ -75,3 +76,4 @@ npm start
    [JUnit]: <https://junit.org/junit5/>
    [Java]: <https://www.java.com/en/>
    [PostgreSQL]: <https://www.postgresql.org/>
+   [Docker]: <https://www.docker.com/>
