@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Navbar.css';
 import Modal from './Modal.js';
 import PersonIcon from '@mui/icons-material/Person';
@@ -10,6 +10,7 @@ function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userName, setUserName] = useState('');
     const [hover, setHover] = useState(false);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -55,12 +56,22 @@ function Navbar() {
             if (response.ok) {
                 setIsLoggedIn(false);
                 setUserName('');
+                navigate("/");
             } else {
                 alert("Logout failed. Please try again.");
             }
         } catch (error) {
             console.error("Error logging out:", error);
             alert("An error occurred while logging out. Please try again.");
+        }
+    };
+
+    const handleAccountClick = () => {
+        if (isLoggedIn) {
+            navigate("/account");
+        } else {
+            alert("Please log in to access this page.");
+            navigate("/login");
         }
     };
 
@@ -89,9 +100,13 @@ function Navbar() {
                 <Link to="/about-us" className="navbar-link-items">
                     ABOUT US
                 </Link>
-                <Link to="/account" className="navbar-link-items">
+                <div
+                    className="navbar-link-items"
+                    onClick={handleAccountClick}
+                    style={{cursor: 'pointer'}}
+                >
                     ACCOUNT
-                </Link>
+                </div>
             </div>
 
             <div className="navbar-user">

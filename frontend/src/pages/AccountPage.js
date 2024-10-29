@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button } from '@mui/material';
 import "../styles/AccountPage.css";
@@ -9,6 +9,7 @@ const AccountPage = () => {
         confirmPassword: '',
     });
 
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -19,10 +20,71 @@ const AccountPage = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        const checkSession = async () => {
+            console.log("checking session");
+            try {
+                const response = await fetch("http://localhost:8080/api/check-session", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                if (response.ok && data.isLoggedIn) {
+                    console.log("User is logged in:", data);
+                    navigate("/account");
+                } else {
+                    console.log("No active session found.");
+                    navigate("/login");
+                }
+            } catch (error) {
+                console.error("Error checking session:", error);
+            }
+        };
+        checkSession();
+    }, [navigate]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form Submitted:', formData);
-        navigate('/home');
+
+        setErrorMessage('');
+
+        if (formData.password !== formData.confirmPassword) {
+            setErrorMessage('Passwords do not match.');
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:8080/api/account/reset-password", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                credentials: "include",
+                body: JSON.stringify({
+                    newPassword: formData.password,
+                    confirmPassword: formData.confirmPassword,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorResponse = await response.text(); // Use .text() for non-JSON responses
+                console.error("Error resetting password:", errorResponse);
+                setErrorMessage(errorResponse); // Set error message
+                return;
+            }
+
+            const data = await response.text();
+            console.log(data.message);
+
+            if (response.ok) {
+                alert("Password changed successfully!");
+            }
+        } catch (error) {
+            console.error("Error resetting password:", error);
+            setErrorMessage('An unexpected error occurred.');
+        }
     };
 
     return (
@@ -31,11 +93,12 @@ const AccountPage = () => {
                 {/* Left Section: Reset Password */}
                 <div className="left-section">
                     <h2>Reset Password</h2>
+                    {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
                     <form onSubmit={handleSubmit}>
                         <TextField
                             fullWidth
                             margin="normal"
-                            label="New Password*"
+                            label="New Password"
                             type="password"
                             name="password"
                             value={formData.password}
@@ -70,7 +133,7 @@ const AccountPage = () => {
                         <TextField
                             fullWidth
                             margin="normal"
-                            label="Confirm Password*"
+                            label="Confirm Password"
                             type="password"
                             name="confirmPassword"
                             value={formData.confirmPassword}
