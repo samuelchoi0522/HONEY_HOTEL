@@ -61,6 +61,7 @@ const AccountPage = () => {
             const response = await fetch("http://localhost:8080/api/account/reset-password", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
+                credentials: "include",
                 body: JSON.stringify({
                     newPassword: formData.password,
                     confirmPassword: formData.confirmPassword,
@@ -74,8 +75,9 @@ const AccountPage = () => {
                 return;
             }
 
-            const data = await response.json();
+            const data = await response.text();
             console.log(data.message);
+
             if (response.ok) {
                 alert("Password changed successfully!");
             }

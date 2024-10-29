@@ -30,8 +30,19 @@ public class AccountController {
     private static final Logger logger = Logger.getLogger(AccountController.class.getName());
 
     private AppUser getLoggedInUser(HttpServletRequest request) {
-        return (AppUser) request.getSession().getAttribute("user");
+        HttpSession session = request.getSession(false); // Get existing session, if any
+        if (session == null) {
+            logger.severe("No session found.");
+            return null;
+        }
+
+        AppUser user = (AppUser) session.getAttribute("user");
+        if (user == null) {
+            logger.severe("User attribute not found in session.");
+        }
+        return user;
     }
+
 
     @RequestMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, Object> request, HttpServletRequest servletRequest) {
