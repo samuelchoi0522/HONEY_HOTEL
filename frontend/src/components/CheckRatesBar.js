@@ -104,7 +104,7 @@ const CheckRatesBar = () => {
                 promoCode: initialPromoCode,
             } = location.state?.bookingDetails;
 
-            console.log("FIND HIVES: Received booking details from MODAL", location.state?.bookingDetails);
+            console.log("FROM: /find-hive: \n\nReceived booking details from MODAL", location.state?.bookingDetails);
 
             const matchingHotel = hotelLocations.find(hotel => hotel.title === hotelLocation);
             setSelectedHotel(matchingHotel || null);
