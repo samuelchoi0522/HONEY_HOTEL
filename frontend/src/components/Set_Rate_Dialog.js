@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -25,19 +25,35 @@ const StyledRadio = styled(Radio)(({ theme }) => ({
     },
 }));
 
-
-
-export default function SetOccupancyDialog({ onSetRate }) {
+export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lowest Regular Rate', promoCode: initialPromoCode = '' }) {
     const [open, setOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState('Lowest Regular Rate');
-    const [promoCode, setPromoCode] = useState('');
+    const [selectedOption, setSelectedOption] = useState(rateOption);
+    const [promoCode, setPromoCode] = useState(initialPromoCode);
+    const [tempSelectedOption, setTempSelectedOption] = useState(rateOption);
+    const [tempPromoCode, setTempPromoCode] = useState(initialPromoCode);
+
+    useEffect(() => {
+        // Set initial values when the dialog opens
+        setTempSelectedOption(rateOption);
+        setTempPromoCode(initialPromoCode);
+    }, [rateOption, initialPromoCode]);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
-        onSetRate(selectedOption, promoCode);
+        // Reset to the initial values when Cancel is clicked
+        setTempSelectedOption(selectedOption);
+        setTempPromoCode(promoCode);
+        setOpen(false);
+    };
+
+    const handleApply = () => {
+        // Set the selected values when Apply is clicked
+        setSelectedOption(tempSelectedOption);
+        setPromoCode(tempPromoCode);
+        onSetRate(tempSelectedOption, tempPromoCode);
         setOpen(false);
     };
 
@@ -56,30 +72,9 @@ export default function SetOccupancyDialog({ onSetRate }) {
         <React.Fragment>
             <Button
                 onClick={handleClickOpen}
-                sx={{
-                    background: 'none',
-                    color: 'black',
-                    boxShadow: 'none',
-                    textTransform: 'none',
-                    marginLeft: '20px',
-                    fontFamily: 'IBM Plex Sans, sans-serif',
-                    fontWeight: 800,
-                    fontSize: '0.755rem',
-                    textDecoration: 'none',
-                    textDecorationColor: 'transparent',
-                    letterSpacing: '0.1em',
-                    left: '-8px',
-                    '&:hover': {
-                        background: 'none',
-                        boxShadow: 'none',
-                        color: 'black',
-                        textDecoration: 'underline',
-                        textDecorationColor: 'black',
-                        transition: 'text-decoration-color 0.2s ease-in-out',
-                    },
-                }}
+                sx={customStyle}
             >
-                {selectedOption === 'Promo Code' ? promoCode.toUpperCase() : selectedOption.toUpperCase()}
+                {tempSelectedOption === 'Promo Code' ? tempPromoCode.toUpperCase() : tempSelectedOption.toUpperCase()}
             </Button>
 
             <Dialog open={open} onClose={handleClose}>
@@ -88,10 +83,13 @@ export default function SetOccupancyDialog({ onSetRate }) {
                     <div className="counter-section">
                         <RadioGroup
                             name="use-radio-group"
-                            value={selectedOption}
+                            value={tempSelectedOption}
                             onChange={(e) => {
-                                setSelectedOption(e.target.value);
-                                console.log(`Selected Option: ${e.target.value}`);
+                                const newOption = e.target.value;
+                                setTempSelectedOption(newOption);
+                                if (newOption !== 'Promo Code') {
+                                    setTempPromoCode(''); // Reset promo code if a different option is selected
+                                }
                             }}
                         >
                             <MyFormControlLabel
@@ -121,25 +119,21 @@ export default function SetOccupancyDialog({ onSetRate }) {
                             />
                         </RadioGroup>
 
-                        {selectedOption === 'Promo Code' && (
+                        {tempSelectedOption === 'Promo Code' && (
                             <TextField
-                                id="outlined-password-input"
+                                id="outlined-promo-code-input"
                                 label="Add Promo Code"
-                                value={promoCode}
-                                onChange={(e) => setPromoCode(e.target.value)}
+                                value={tempPromoCode}
+                                onChange={(e) => setTempPromoCode(e.target.value)}
+                                fullWidth
+                                margin="dense"
                             />
                         )}
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button
-                        onClick={() => {
-                            handleClose();
-                        }}
-                    >
-                        Apply
-                    </Button>
+                    <Button onClick={handleApply}>Apply</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>

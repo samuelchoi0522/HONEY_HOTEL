@@ -1,19 +1,13 @@
 package com.honey_hotel.backend.controller;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.logging.Logger;
 
-import com.honey_hotel.backend.service.AccountService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.honey_hotel.backend.model.AppUser;
-import com.honey_hotel.backend.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import com.honey_hotel.backend.repository.*;
 

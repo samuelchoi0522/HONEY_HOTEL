@@ -9,7 +9,9 @@ import { SingleInputDateRangeField } from '@mui/x-date-pickers-pro/SingleInputDa
 import dayjs from 'dayjs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SetOccupancyDialog from './Set_Occupancy_Dialog.js';
-import styles from '../styles/CheckRatesBar.module.css'; // Import CSS module
+import SetRateDialog from './Set_Rate_Dialog.js';
+import styles from '../styles/CheckRatesBar.module.css';
+
 
 const hotelLocations = [
     { title: 'Brazos Bliss Hotel, Waco, Texas, USA' },
@@ -34,8 +36,16 @@ const hotelLocations = [
     { title: 'Northern Lights Inn, Tromsø, Norway' }
 ];
 
-
+// Define the theme with a palette that includes primary and secondary colors
 const dateRangePickerTheme = createTheme({
+    palette: {
+        primary: {
+            main: '#1976d2', // Set your desired primary color here
+        },
+        secondary: {
+            main: '#dc004e', // Set your desired secondary color here
+        },
+    },
     components: {
         MuiOutlinedInput: {
             styleOverrides: {
@@ -55,30 +65,61 @@ const dateRangePickerTheme = createTheme({
     },
 });
 
+
 const CheckRatesBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [dateRange, setDateRange] = useState([null, null]);
     const [rooms, setRooms] = useState(1);
-    const [adults, setAdults] = useState(2);
+    const [adults, setAdults] = useState(1);
     const [children, setChildren] = useState(0);
+    const [rateOption, setRateOption] = useState('Lowest Regular Rate'); // Default rate option
+    const [promoCode, setRatePromoCode] = useState('');
     const [dateRangeError, setDateRangeError] = useState(false);
     const [autocompleteWidth, setAutocompleteWidth] = useState(300); // State to control width
 
     const textRef = useRef(null);
 
+    const handleSetRate = (newOption, newPromoCode) => {
+        setRateOption(newOption);
+        setRatePromoCode(newPromoCode);
+    };
+
+    const handleSetOccupancy = (newRooms, newAdults, newChildren) => {
+        setRooms(newRooms);
+        setAdults(newAdults);
+        setChildren(newChildren);
+    };
+
+    // Set the initial values if booking details are passed from the previous page
     useEffect(() => {
         if (location.state?.bookingDetails) {
-            const { hotelLocation, startDate, endDate, rooms, adults, children } = location.state.bookingDetails;
+            const {
+                hotelLocation,
+                startDate,
+                endDate,
+                rooms: initialRooms,
+                adults: initialAdults,
+                children: initialChildren,
+                rateOption: initialRateOption,
+                promoCode: initialPromoCode,
+            } = location.state?.bookingDetails;
+
+            console.log("FIND HIVES: Received booking details from MODAL", location.state?.bookingDetails);
+
             const matchingHotel = hotelLocations.find(hotel => hotel.title === hotelLocation);
             setSelectedHotel(matchingHotel || null);
             setDateRange([startDate ? dayjs(startDate) : null, endDate ? dayjs(endDate) : null]);
-            setRooms(rooms || 1);
-            setAdults(adults || 2);
-            setChildren(children || 0);
+            setRooms(initialRooms || 1);
+            setAdults(initialAdults || 1);
+            setChildren(initialChildren || 0);
+            setRateOption(initialRateOption || 'Lowest Regular Rate');
+            setRatePromoCode(initialPromoCode || '');
         }
     }, [location.state]);
+
+
 
     useEffect(() => {
         // Adjust width based on the selected title's length
@@ -99,6 +140,8 @@ const CheckRatesBar = () => {
             rooms,
             adults,
             children,
+            rateOption,
+            promoCode,
         };
 
         fetch("http://localhost:8080/api/hives/find", {
@@ -114,63 +157,59 @@ const CheckRatesBar = () => {
             .catch(error => console.error("Error fetching available rooms:", error));
     };
 
-    const handleSetOccupancy = (newRooms, newAdults, newChildren) => {
-        setRooms(newRooms);
-        setAdults(newAdults);
-        setChildren(newChildren);
-    };
+
 
     const today = dayjs();
 
     return (
-        <div className={styles.checkRatesBar}>
-            <div className={styles.inputContainer}>
-                <Autocomplete
-                    options={hotelLocations}
-                    getOptionLabel={(option) => option.title}
-                    value={selectedHotel}
-                    onChange={(e, newValue) => setSelectedHotel(newValue)}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Find A Hotel Or Resort"
-                            variant="outlined"
-                            inputRef={textRef}
-                            sx={{
-                                
-                                '& .MuiInputLabel-root': {
-                                    color: 'white', // Set label color
-                                    fontFamily: 'Kaisei Tokumin, serif', // Set label font
-                                    fontSize: '1rem', // Set label font size
-                                    fontWeight: 'bold', // Optional: make it bold
-                                    fontStyle: 'italic', // Optional: make it italic
-                                    zIndex: 1,
-                                },
-                                '& .MuiOutlinedInput-root': {
-                                    height: 33,
-                                    color: '#FFFFFF', // Set input text color
-                                    '& .MuiInputBase-input': {
-                                        color: '#FFFFFFF', // Set text color inside the input
+        <ThemeProvider theme={dateRangePickerTheme}>
+            <div className={styles.checkRatesBar}>
+                <div className={styles.inputContainer}>
+                    <Autocomplete
+                        options={hotelLocations}
+                        getOptionLabel={(option) => option.title}
+                        value={selectedHotel}
+                        onChange={(e, newValue) => setSelectedHotel(newValue)}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Find A Hotel Or Resort"
+                                variant="outlined"
+                                inputRef={textRef}
+                                sx={{
+
+                                    '& .MuiInputLabel-root': {
+                                        color: 'white', // Set label color
+                                        fontFamily: 'Kaisei Tokumin, serif', // Set label font
+                                        fontSize: '1rem', // Set label font size
+                                        fontWeight: 'bold', // Optional: make it bold
+                                        fontStyle: 'italic', // Optional: make it italic
+                                        zIndex: 1,
                                     },
-                                },
-                                '& .MuiSvgIcon-root': {
-                                    color: '#FFFFFF', // Set icon color
-                                },
-                                width: autocompleteWidth,
+                                    '& .MuiOutlinedInput-root': {
+                                        height: 33,
+                                        color: '#FFFFFF', // Set input text color
+                                        '& .MuiInputBase-input': {
+                                            color: '#FFFFFFF', // Set text color inside the input
+                                        },
+                                    },
+                                    '& .MuiSvgIcon-root': {
+                                        color: '#FFFFFF', // Set icon color
+                                    },
+                                    width: autocompleteWidth,
 
-                                backgroundColor: '#363535',
-                                outline: 'none',
-                                color: '#FFFFFF',
-                                borderRadius: 0,
-                            }}
-                            className={styles.destinationInput}
-                        />
-                    )}
-                />
-            </div>
+                                    backgroundColor: '#363535',
+                                    outline: 'none',
+                                    color: '#FFFFFF',
+                                    borderRadius: 0,
+                                }}
+                                className={styles.destinationInput}
+                            />
+                        )}
+                    />
+                </div>
 
-            <div className={styles.inputContainer}>
-                <ThemeProvider theme={dateRangePickerTheme}>
+                <div className={styles.inputContainer}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateRangePicker
                             value={dateRange}
@@ -183,22 +222,46 @@ const CheckRatesBar = () => {
                             slots={{ field: SingleInputDateRangeField }}
                         />
                     </LocalizationProvider>
-                </ThemeProvider>
-            </div>
 
-            <div className={styles.inputContainer}>
-                <SetOccupancyDialog
-                    rooms={rooms}
-                    adults={adults}
-                    children={children}
-                    onSetOccupancy={handleSetOccupancy}
+
+                </div>
+
+                <SetOccupancyDialog onSetOccupancy={handleSetOccupancy} rooms={rooms} adults={adults} children={children} />
+                <SetRateDialog
+                    onSetRate={handleSetRate}
+                    customStyle={{
+                        background: 'none',
+                        color: 'black',
+                        boxShadow: 'none',
+                        textTransform: 'none',
+                        marginLeft: '0px',
+                        paddingRight: '40px',
+                        fontFamily: 'IBM Plex Sans, sans-serif',
+                        fontWeight: 800,
+                        fontSize: '0.755rem',
+                        textDecoration: 'none',
+                        textDecorationColor: 'transparent',
+                        letterSpacing: '0.1em',
+                        left: '-15px',
+                        '&:hover': {
+                            background: 'none',
+                            boxShadow: 'none',
+                            color: 'black',
+                            textDecoration: 'underline',
+                            textDecorationColor: 'black',
+                            transition: 'text-decoration-color 0.2s ease-in-out',
+                        }
+                    }}
+                    rateOption={rateOption}
+                    promoCode={promoCode}
                 />
+
+                <button className={styles.checkRatesButton} onClick={handleFindHivesClick}>
+                    CHECK RATES
+                </button>
             </div>
 
-            <button className={styles.checkRatesButton} onClick={handleFindHivesClick}>
-                CHECK RATES
-            </button>
-        </div>
+        </ThemeProvider>
     );
 };
 

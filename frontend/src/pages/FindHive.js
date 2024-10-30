@@ -65,7 +65,6 @@ const FindHive = () => {
 
     // Group rooms by category and then by roomType
     const groupedRooms = rooms.reduce((acc, room) => {
-        console.log('testing:', location.state?.bookingDetails, 'Room ID:', room.id);
         const categoryName = room.category ? room.category.categoryName : "Unknown Category";
         const roomType = room.roomType || "Unknown Room Type";
 

@@ -69,7 +69,7 @@ function Login() {
                     navigate("/checkout", { state: JSON.parse(reservationData) });
                     sessionStorage.removeItem("reservationData");
                 } else {
-                    navigate("/");
+                    navigate("/account");
                 }
             }, 2500);
         } else {
