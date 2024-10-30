@@ -18,7 +18,6 @@ export default function SetOccupancyDialog({ onSetOccupancy, rooms: initialRooms
     const [children, setChildren] = useState(initialChildren);
 
     useEffect(() => {
-        // Set initial values when dialog opens
         setRooms(initialRooms || 1);
         setAdults(initialAdults || 1);
         setChildren(initialChildren || 0);
@@ -93,7 +92,7 @@ export default function SetOccupancyDialog({ onSetOccupancy, rooms: initialRooms
                             aria-label="Adults"
                             value={adults}
                             min={1}
-                            max={rooms * 8} // Max guests based on room count
+                            max={rooms * 8}
                             step={1}
                             onChange={(event, value) => {
                                 setAdults(value);
@@ -108,7 +107,7 @@ export default function SetOccupancyDialog({ onSetOccupancy, rooms: initialRooms
                             aria-label="Children"
                             value={children}
                             min={0}
-                            max={rooms * 8 - adults} // Remaining capacity for children
+                            max={rooms * 8 - adults}
                             step={1}
                             onChange={(event, value) => {
                                 setChildren(value);
@@ -127,7 +126,6 @@ export default function SetOccupancyDialog({ onSetOccupancy, rooms: initialRooms
     );
 }
 
-// Custom NumberInput component
 const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
     return (
         <BaseNumberInput
@@ -152,7 +150,6 @@ const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
     );
 });
 
-// Styling components
 const honeyYellow = {
     100: '#fff9e6',
     200: '#fff2cc',

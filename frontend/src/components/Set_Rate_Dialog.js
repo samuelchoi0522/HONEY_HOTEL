@@ -33,7 +33,6 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
     const [tempPromoCode, setTempPromoCode] = useState(initialPromoCode);
 
     useEffect(() => {
-        // Set initial values when the dialog opens
         setTempSelectedOption(rateOption);
         setTempPromoCode(initialPromoCode);
     }, [rateOption, initialPromoCode]);
@@ -43,14 +42,12 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
     };
 
     const handleClose = () => {
-        // Reset to the initial values when Cancel is clicked
         setTempSelectedOption(selectedOption);
         setTempPromoCode(promoCode);
         setOpen(false);
     };
 
     const handleApply = () => {
-        // Set the selected values when Apply is clicked
         setSelectedOption(tempSelectedOption);
         setPromoCode(tempPromoCode);
         onSetRate(tempSelectedOption, tempPromoCode);
@@ -88,7 +85,7 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
                                 const newOption = e.target.value;
                                 setTempSelectedOption(newOption);
                                 if (newOption !== 'Promo Code') {
-                                    setTempPromoCode(''); // Reset promo code if a different option is selected
+                                    setTempPromoCode('');
                                 }
                             }}
                         >

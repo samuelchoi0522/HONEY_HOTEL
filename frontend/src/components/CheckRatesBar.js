@@ -36,7 +36,6 @@ const hotelLocations = [
     { title: 'Northern Lights Inn, Tromsø, Norway' }
 ];
 
-// Define the theme with a palette that includes primary and secondary colors
 const dateRangePickerTheme = createTheme({
     palette: {
         primary: {
@@ -74,10 +73,10 @@ const CheckRatesBar = () => {
     const [rooms, setRooms] = useState(1);
     const [adults, setAdults] = useState(1);
     const [children, setChildren] = useState(0);
-    const [rateOption, setRateOption] = useState('Lowest Regular Rate'); // Default rate option
+    const [rateOption, setRateOption] = useState('Lowest Regular Rate');
     const [promoCode, setRatePromoCode] = useState('');
     const [dateRangeError, setDateRangeError] = useState(false);
-    const [autocompleteWidth, setAutocompleteWidth] = useState(300); // State to control width
+    const [autocompleteWidth, setAutocompleteWidth] = useState(300);
 
     const textRef = useRef(null);
 
@@ -92,7 +91,6 @@ const CheckRatesBar = () => {
         setChildren(newChildren);
     };
 
-    // Set the initial values if booking details are passed from the previous page
     useEffect(() => {
         if (location.state?.bookingDetails) {
             const {
@@ -122,10 +120,9 @@ const CheckRatesBar = () => {
 
 
     useEffect(() => {
-        // Adjust width based on the selected title's length
         if (selectedHotel && textRef.current) {
-            const newWidth = textRef.current.scrollWidth + 40; // Add padding
-            setAutocompleteWidth(Math.min(Math.max(newWidth, 200), 500)); // Min 200px, Max 500px
+            const newWidth = textRef.current.scrollWidth + 40;
+            setAutocompleteWidth(Math.min(Math.max(newWidth, 200), 500));
         }
     }, [selectedHotel]);
 
@@ -179,22 +176,22 @@ const CheckRatesBar = () => {
                                 sx={{
 
                                     '& .MuiInputLabel-root': {
-                                        color: 'white', // Set label color
-                                        fontFamily: 'Kaisei Tokumin, serif', // Set label font
-                                        fontSize: '1rem', // Set label font size
-                                        fontWeight: 'bold', // Optional: make it bold
-                                        fontStyle: 'italic', // Optional: make it italic
+                                        color: 'white',
+                                        fontFamily: 'Kaisei Tokumin, serif',
+                                        fontSize: '1rem',
+                                        fontWeight: 'bold',
+                                        fontStyle: 'italic',
                                         zIndex: 1,
                                     },
                                     '& .MuiOutlinedInput-root': {
                                         height: 33,
-                                        color: '#FFFFFF', // Set input text color
+                                        color: '#FFFFFF',
                                         '& .MuiInputBase-input': {
-                                            color: '#FFFFFFF', // Set text color inside the input
+                                            color: '#FFFFFFF',
                                         },
                                     },
                                     '& .MuiSvgIcon-root': {
-                                        color: '#FFFFFF', // Set icon color
+                                        color: '#FFFFFF',
                                     },
                                     width: autocompleteWidth,
 

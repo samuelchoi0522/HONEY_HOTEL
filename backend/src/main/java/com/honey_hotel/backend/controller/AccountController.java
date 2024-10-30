@@ -17,14 +17,13 @@ import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 @RequestMapping("/api/account")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AccountController {
-    //If logged in, go to account page, if logged out, redirect to login page
     @Autowired
     private UserRepository userRepository;
 
     private static final Logger logger = Logger.getLogger(AccountController.class.getName());
 
     private AppUser getLoggedInUser(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // Get existing session, if any
+        HttpSession session = request.getSession(false);
         if (session == null) {
             logger.severe("No session found.");
             return null;
