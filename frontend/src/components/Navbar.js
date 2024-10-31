@@ -70,7 +70,6 @@ function Navbar() {
         if (isLoggedIn) {
             navigate("/account");
         } else {
-            alert("Please log in to access this page.");
             navigate("/login");
         }
     };

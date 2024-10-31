@@ -23,6 +23,8 @@ const RoomDetails = () => {
     } = location.state || {};
 
     const [reservedRoomIds, setReservedRoomIds] = useState([]);
+    const [numNights, setNumNights] = useState(1); // Initialize numNights with a default of 1
+
 
     const [bookingDetails, setBookingDetails] = useState({
         categoryName,
@@ -68,6 +70,14 @@ const RoomDetails = () => {
     );
 
     useEffect(() => {
+
+        if (startDate && endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            setNumNights(nights);
+        }
+
         console.log('FROM: /room-details: \n\nSelected Room Details:', {
             categoryName,
             roomType,
@@ -252,7 +262,7 @@ const RoomDetails = () => {
             ))}
 
 
-            <p style={{ color: 'black' }}>Subtotal: ${subtotal}</p>
+            <p style={{ color: 'black' }}>Subtotal: ${subtotal * numNights}</p>
 
             <button onClick={handleReserve}>Reserve</button>
         </div>

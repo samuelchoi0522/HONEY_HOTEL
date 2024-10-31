@@ -110,6 +110,11 @@ const Checkout = () => {
                     roomId: room.roomId,
                     startDate: checkInDate,
                     endDate: checkOutDate,
+                    adults,
+                    children,
+                    rateOption,
+                    promoCode,
+                    finalTotal
                 };
 
                 console.log("Room reservation payload:", reservationPayload);
