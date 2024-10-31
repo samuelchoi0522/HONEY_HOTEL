@@ -76,6 +76,10 @@ public class AccountController {
 
         user.setPassword(hashPassword(newPassword));
         userRepository.save(user);
+
+        HttpSession session = servletRequest.getSession();
+        session.setAttribute("user", user);
+
         return ResponseEntity.ok("Password Reset Successfully");
     }
 }
