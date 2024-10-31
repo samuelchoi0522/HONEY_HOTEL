@@ -11,6 +11,8 @@ import com.honey_hotel.backend.model.AppUser;
 import com.honey_hotel.backend.repository.UserRepository;
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 
+import java.util.Optional;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class RegistrationController {
@@ -20,12 +22,18 @@ public class RegistrationController {
 
     @PostMapping("/api/register")
     public ResponseEntity<?> registerUser(@RequestBody AppUser user) {
-        if (user.getTitle() == null || user.getFirstname() == null || user.getLastname() == null || user.getEmail() == null || user.getPassword() == null) {
+        if (user.getTitle() == null || user.getFirstname() == null || user.getLastname() == null
+                || user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.badRequest().body("A required field is missing.");
         }
-        user.setPassword(hashPassword(user.getPassword()));
+        Optional<AppUser> existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser.isPresent()) {
+            return ResponseEntity.badRequest().body("User with this email already exists.");
+        }
 
+        user.setPassword(hashPassword(user.getPassword()));
         userRepository.save(user);
+        
         return ResponseEntity.ok("User registered successfully");
     }
 }

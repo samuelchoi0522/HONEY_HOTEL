@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,11 @@ public class ReservationController {
         Long roomId = extractLongValue(reservationDetails, "roomId");
         String startDateString = (String) reservationDetails.get("startDate");
         String endDateString = (String) reservationDetails.get("endDate");
+        Integer adults = (Integer) reservationDetails.getOrDefault("adults", 1);
+        Integer children = (Integer) reservationDetails.getOrDefault("children", 0);
+        String promoCode = (String) reservationDetails.get("promoCode");
+        String rateOption = (String) reservationDetails.get("rateOption");
+        BigDecimal totalPrice = new BigDecimal((String) reservationDetails.get("finalTotal"));
 
         if (roomId == null || startDateString == null || endDateString == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Missing required fields"));
@@ -57,19 +63,16 @@ public class ReservationController {
             LocalDate checkInDate = LocalDate.parse(startDateString);
             LocalDate checkOutDate = LocalDate.parse(endDateString);
 
-            // Call the service to create the reservation and return the ID
-            Long reservationId = reservationService.createReservation(user, roomId, checkInDate, checkOutDate);
+            Long reservationId = reservationService.createReservation(
+                    user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption, totalPrice);
 
-            if (reservationId != null) {
-                // Return a JSON response with the reservation ID
-                return ResponseEntity.ok(Map.of("id", reservationId));
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "Failed to create reservation"));
-            }
+            return reservationId != null
+                    ? ResponseEntity.ok(Map.of("id", reservationId))
+                    : ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Map.of("error", "Failed to create reservation"));
         } catch (Exception e) {
             logger.severe("Error creating reservation: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid date format"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid data format"));
         }
     }
 
@@ -81,7 +84,23 @@ public class ReservationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
         }
 
-        List<Reservation> reservations = reservationService.getReservationsByUser(user);
+        List<Map<String, Object>> reservations = reservationService.getReservationsByUser(user).stream()
+                .map(reservation -> {
+                    Map<String, Object> reservationMap = new HashMap<>();
+                    reservationMap.put("roomType", reservation.getRoom().getRoomType());
+                    reservationMap.put("bedType", reservation.getRoom().getBedType());
+                    reservationMap.put("smokingAllowed", reservation.getRoom().isSmokingAllowed());
+                    reservationMap.put("checkInDate", reservation.getCheckInDate());
+                    reservationMap.put("checkOutDate", reservation.getCheckOutDate());
+                    reservationMap.put("adults", reservation.getAdults());
+                    reservationMap.put("children", reservation.getChildren());
+                    reservationMap.put("promoCode", reservation.getPromoCode());
+                    reservationMap.put("rateOption", reservation.getRateOption());
+                    reservationMap.put("totalPrice", reservation.getTotalPrice());
+                    return reservationMap;
+                })
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(reservations);
     }
 

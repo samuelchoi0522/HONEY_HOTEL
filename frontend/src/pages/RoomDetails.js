@@ -6,7 +6,6 @@ const RoomDetails = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Extract initial values from location state
     const {
         categoryName,
         roomType,
@@ -14,11 +13,19 @@ const RoomDetails = () => {
         startDate,
         endDate,
         roomId,
+        rooms,
+        adults,
+        children,
+        rateOption,
+        promoCode,
+        discountRate = 0,
         ...initialBookingDetails
     } = location.state || {};
 
-    // State to manage booking details
     const [reservedRoomIds, setReservedRoomIds] = useState([]);
+    const [numNights, setNumNights] = useState(1); // Initialize numNights with a default of 1
+
+
     const [bookingDetails, setBookingDetails] = useState({
         categoryName,
         roomType,
@@ -29,17 +36,70 @@ const RoomDetails = () => {
         roomId: roomId || roomOptions[0]?.id,
         checkInDate: startDate,
         checkOutDate: endDate,
+        rooms: rooms || 1,
+        adults: adults || 1,
+        children: children || 0,
+        rateOption: rateOption || 'Lowest Regular Rate',
+        promoCode: promoCode || '',
+        discountRate,
         ...initialBookingDetails,
     });
 
-    // Fetch reserved room IDs on component mount
+    const availableRoomOptions = roomOptions.filter(
+        option => !reservedRoomIds.includes(option.id)
+    );
+
+    const [selectedRooms, setSelectedRooms] = useState(
+        Array.from({ length: bookingDetails.rooms }, (_, i) => {
+            const roomOption = availableRoomOptions[i] || {};
+            const discountedPrice = roomOption.price ? roomOption.price * (1 - discountRate) : 0;
+            return {
+                roomId: roomOption.id || null,
+                categoryName: bookingDetails.categoryName,
+                roomType: bookingDetails.roomType,
+                selectedBedType: roomOption.bedType || bookingDetails.selectedBedType,
+                selectedSmoking: roomOption.smokingAllowed || bookingDetails.selectedSmoking,
+                selectedPriceCategory: roomOption.priceCategory || bookingDetails.selectedPriceCategory,
+                totalPrice: discountedPrice.toFixed(2), // Apply discount to totalPrice
+                checkInDate: bookingDetails.checkInDate,
+                checkOutDate: bookingDetails.checkOutDate,
+                adults: bookingDetails.adults,
+                children: bookingDetails.children,
+            };
+        })
+    );
+
     useEffect(() => {
+
+        if (startDate && endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            setNumNights(nights);
+        }
+
+        console.log('FROM: /room-details: \n\nSelected Room Details:', {
+            categoryName,
+            roomType,
+            roomOptions,
+            startDate,
+            endDate,
+            roomId,
+            rooms,
+            adults,
+            children,
+            rateOption,
+            promoCode,
+            discountRate,
+            ...initialBookingDetails
+        });
         const fetchReservedRooms = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/reservations/reserved-rooms?checkInDate=${bookingDetails.checkInDate}&checkOutDate=${bookingDetails.checkOutDate}`);
+                const response = await fetch(
+                    `http://localhost:8080/api/reservations/reserved-rooms?checkInDate=${bookingDetails.checkInDate}&checkOutDate=${bookingDetails.checkOutDate}`
+                );
                 if (response.ok) {
                     const reservedIds = await response.json();
-                    console.log("Reserved room IDs:", reservedIds); // Debug log
                     setReservedRoomIds(reservedIds);
                 } else {
                     console.error("Failed to fetch reserved room IDs");
@@ -52,13 +112,6 @@ const RoomDetails = () => {
         fetchReservedRooms();
     }, [bookingDetails.checkInDate, bookingDetails.checkOutDate]);
 
-
-    // Filter available room options by excluding reserved ones
-    const availableRoomOptions = roomOptions.filter(
-        option => !reservedRoomIds.includes(option.id)
-    );
-
-    // Get the filtered options based on current selection
     const filteredBedTypes = [...new Set(
         availableRoomOptions
             .filter(option =>
@@ -86,58 +139,74 @@ const RoomDetails = () => {
             .map(option => option.priceCategory)
     )];
 
-    // Update booking details when the user selects an option
-    const updateBookingDetails = (newBedType, newSmoking, newPriceCategory) => {
+    const updateBookingDetails = (index, field, value) => {
+        const updatedRooms = [...selectedRooms];
+
         const matchedOption = availableRoomOptions.find(option =>
-            option.bedType === newBedType &&
-            option.smokingAllowed === newSmoking &&
-            option.priceCategory === newPriceCategory
+            option.bedType === (field === 'selectedBedType' ? value : updatedRooms[index].selectedBedType) &&
+            option.smokingAllowed === (field === 'selectedSmoking' ? value : updatedRooms[index].selectedSmoking) &&
+            option.priceCategory === (field === 'selectedPriceCategory' ? value : updatedRooms[index].selectedPriceCategory)
         );
 
         if (matchedOption) {
-            setBookingDetails(prevDetails => ({
-                ...prevDetails,
-                selectedBedType: newBedType,
-                selectedSmoking: newSmoking,
-                selectedPriceCategory: newPriceCategory,
-                totalPrice: matchedOption.price,
+            updatedRooms[index] = {
+                ...updatedRooms[index],
+                [field]: value,
+                totalPrice: (matchedOption.price * (1 - discountRate)).toFixed(2), // Apply discount on price change
                 roomId: matchedOption.id,
-            }));
+            };
+
+            for (let i = 0; i < updatedRooms.length; i++) {
+                if (i !== index && updatedRooms[i].roomId === matchedOption.id) {
+                    const nextAvailableOption = availableRoomOptions.find(
+                        option => !updatedRooms.some(room => room.roomId === option.id)
+                    );
+
+                    if (nextAvailableOption) {
+                        updatedRooms[i] = {
+                            ...updatedRooms[i],
+                            roomId: nextAvailableOption.id,
+                            selectedBedType: nextAvailableOption.bedType,
+                            selectedSmoking: nextAvailableOption.smokingAllowed,
+                            selectedPriceCategory: nextAvailableOption.priceCategory,
+                            totalPrice: (nextAvailableOption.price * (1 - discountRate)).toFixed(2), // Apply discount
+                        };
+                    }
+                }
+            }
+
+            setSelectedRooms(updatedRooms);
         }
     };
 
-    // Handle changes for room option selections
-    const handleBedTypeChange = (e) => {
-        const newBedType = e.target.value;
-        updateBookingDetails(newBedType, bookingDetails.selectedSmoking, bookingDetails.selectedPriceCategory);
+    const handleRoomChange = (index, field, value) => {
+        updateBookingDetails(index, field, value);
     };
 
-    const handleSmokingChange = (e) => {
-        const newSmoking = e.target.value === 'true';
-        updateBookingDetails(bookingDetails.selectedBedType, newSmoking, bookingDetails.selectedPriceCategory);
-    };
-
-    const handlePriceCategoryChange = (e) => {
-        const newPriceCategory = e.target.value;
-        updateBookingDetails(bookingDetails.selectedBedType, bookingDetails.selectedSmoking, newPriceCategory);
-    };
-
-    // Handle reserve button click
     const handleReserve = () => {
-        if (reservedRoomIds.includes(bookingDetails.roomId)) {
-            alert("Selected room is already reserved. Please select a different option.");
-            return;
+        for (const room of selectedRooms) {
+            if (reservedRoomIds.includes(room.roomId)) {
+                alert("One of the selected rooms is alreafdy reserved. Please select a different option.");
+                return;
+            }
         }
 
-        console.log('Final booking details:', bookingDetails); // Debug log
-
-        // Navigate to AddVacationPackage and pass booking details
         navigate('/add-vacation-package', {
             state: {
-                ...bookingDetails,
+                selectedRooms,
+                checkInDate: bookingDetails.checkInDate,
+                checkOutDate: bookingDetails.checkOutDate,
+                rateOption: bookingDetails.rateOption,
+                promoCode: bookingDetails.promoCode,
+                adults: bookingDetails.adults,
+                children: bookingDetails.children,
+                totalPrice: bookingDetails.totalPrice,
             },
         });
     };
+
+    const subtotal = selectedRooms.reduce((acc, room) => acc + parseFloat(room.totalPrice), 0).toFixed(2);
+
 
     return (
         <div className="room-details">
@@ -145,44 +214,57 @@ const RoomDetails = () => {
             <p style={{ color: 'black' }}>Check-in Date: {bookingDetails.checkInDate}</p>
             <p style={{ color: 'black' }}>Check-out Date: {bookingDetails.checkOutDate}</p>
 
-            <div className="room-options">
-                <h3>Select Room Options:</h3>
+            {selectedRooms.map((room, index) => (
+                <div key={index} className="room-options">
+                    <h3>Room {index + 1} Options:</h3>
 
-                <div className="room-option">
-                    <label>Bed Type:</label>
-                    <select value={bookingDetails.selectedBedType} onChange={handleBedTypeChange}>
-                        {filteredBedTypes.map(bedType => (
-                            <option key={bedType} value={bedType}>{bedType}</option>
-                        ))}
-                    </select>
+                    <div className="room-option">
+                        <label>Bed Type:</label>
+                        <select
+                            value={room.selectedBedType}
+                            onChange={(e) => handleRoomChange(index, 'selectedBedType', e.target.value)}
+                        >
+                            {filteredBedTypes.map(bedType => (
+                                <option key={bedType} value={bedType}>{bedType}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="room-option">
+                        <label>Smoking Status:</label>
+                        <select
+                            value={room.selectedSmoking}
+                            onChange={(e) => handleRoomChange(index, 'selectedSmoking', e.target.value === 'true')}
+                        >
+                            {filteredSmokingStatuses.map(smokingAllowed => (
+                                <option key={smokingAllowed} value={smokingAllowed}>
+                                    {smokingAllowed ? 'Smoking' : 'Non-Smoking'}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="room-option">
+                        <label>Price Category:</label>
+                        <select
+                            value={room.selectedPriceCategory}
+                            onChange={(e) => handleRoomChange(index, 'selectedPriceCategory', e.target.value)}
+                        >
+                            {filteredPriceCategories.map(priceCategory => (
+                                <option key={priceCategory} value={priceCategory}>{priceCategory}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <p style={{ color: 'black' }}>Total: ${room.totalPrice}</p>
+                    <p style={{ color: 'black' }}>Room ID: {room.roomId}</p>
                 </div>
+            ))}
 
-                <div className="room-option">
-                    <label>Smoking Status:</label>
-                    <select value={bookingDetails.selectedSmoking} onChange={handleSmokingChange}>
-                        {filteredSmokingStatuses.map(smokingAllowed => (
-                            <option key={smokingAllowed} value={smokingAllowed}>
-                                {smokingAllowed ? 'Smoking' : 'Non-Smoking'}
-                            </option>
-                        ))}
-                    </select>
-                </div>
 
-                <div className="room-option">
-                    <label>Price Category:</label>
-                    <select value={bookingDetails.selectedPriceCategory} onChange={handlePriceCategoryChange}>
-                        {filteredPriceCategories.map(priceCategory => (
-                            <option key={priceCategory} value={priceCategory}>{priceCategory}</option>
-                        ))}
-                    </select>
-                </div>
-            </div>
+            <p style={{ color: 'black' }}>Subtotal: ${subtotal * numNights}</p>
 
-            <div className="total">
-                <h3>Total: ${bookingDetails.totalPrice}</h3>
-                <p style={{ color: 'black' }}>Room ID: {bookingDetails.roomId}</p> {/* Display updated Room ID */}
-                <button onClick={handleReserve}>Reserve</button>
-            </div>
+            <button onClick={handleReserve}>Reserve</button>
         </div>
     );
 };

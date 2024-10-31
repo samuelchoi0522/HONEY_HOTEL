@@ -58,12 +58,19 @@
     padding: 10px 20px;
     background-color: #000;
     color: #fff;
-    border: none;
+    border: 1.5px solid #000;
+    border-color: black;
     cursor: pointer;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 800;
     transition: background-color 0.3s ease;
     border-radius: 0;
 }
 
 .checkRatesButton:hover {
-    background-color: #555;
+    background-color: white;
+    color: black;
+    border-color: yellow;
 }

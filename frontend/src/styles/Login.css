@@ -53,6 +53,7 @@
     color: white;
     cursor: pointer;
     letter-spacing: 2px;
+    z-index: 1;
 }
 
 .signin-button:hover {

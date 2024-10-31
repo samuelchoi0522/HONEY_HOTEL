@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -35,26 +36,30 @@ public class ReservationService {
      * @param checkOutDate The check-out date
      * @return True if the reservation is created successfully, false otherwise
      */
-    public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate,
+            int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice) {
         try {
-            // Fetch the room by roomId
             Optional<Room> roomOpt = roomRepository.findById(roomId);
             if (roomOpt.isEmpty()) {
                 return null; // Room not found
             }
 
             Reservation reservation = new Reservation();
-            reservation.setUser(user); // Set the user directly
-            reservation.setRoom(roomOpt.get()); // Set the fetched Room
+            reservation.setUser(user);
+            reservation.setRoom(roomOpt.get());
             reservation.setCheckInDate(checkInDate);
             reservation.setCheckOutDate(checkOutDate);
+            reservation.setAdults(adults);
+            reservation.setChildren(children);
+            reservation.setPromoCode(promoCode);
+            reservation.setRateOption(rateOption);
+            reservation.setTotalPrice(totalPrice);
 
-            // Save the reservation and return its ID
             Reservation savedReservation = reservationRepository.save(reservation);
             return savedReservation.getId();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Return null on failure
+            return null;
         }
     }
 

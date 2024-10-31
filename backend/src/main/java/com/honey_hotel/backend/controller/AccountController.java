@@ -3,14 +3,11 @@ package com.honey_hotel.backend.controller;
 import java.util.*;
 import java.util.logging.Logger;
 
-import com.honey_hotel.backend.service.AccountService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.honey_hotel.backend.model.AppUser;
-import com.honey_hotel.backend.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import com.honey_hotel.backend.repository.*;
 
@@ -20,7 +17,6 @@ import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 @RequestMapping("/api/account")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AccountController {
-    //If logged in, go to account page, if logged out, redirect to login page
     @Autowired
     private UserRepository userRepository;
 
