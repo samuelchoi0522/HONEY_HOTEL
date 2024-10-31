@@ -43,8 +43,6 @@
     font-family: josefin sans;
 }
 
-.register-left form button {}
-
 .register-button {
     transition: ease-in-out 0.2s;
     padding: 12px;
@@ -82,4 +80,10 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
 }

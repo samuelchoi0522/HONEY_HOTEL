@@ -17,13 +17,16 @@ function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(""); // State to hold error messages
     const navigate = useNavigate();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrorMessage(""); // Clear any previous error messages
 
         const response = await fetch("http://localhost:8080/api/register", {
             method: "POST",
@@ -40,11 +43,9 @@ function Register() {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
+                body: JSON.stringify({ email, password }),
             });
+
             if (loginResponse.ok) {
                 alert("Registration and login successful!");
                 navigate("/");
@@ -52,9 +53,14 @@ function Register() {
                 alert("Registration successful, but automatic login failed. Please log in manually.");
                 navigate("/login");
             }
-        }
-        else {
-            alert("Registration failed. Please try again.");
+        } else {
+            const errorData = await response.text();
+
+            if (errorData === "User with this email already exists.") {
+                setErrorMessage("An account with this email already exists.");
+            } else {
+                setErrorMessage("Registration failed. Please try again.");
+            }
         }
     };
 
@@ -65,34 +71,20 @@ function Register() {
                 <p style={{ fontWeight: 100, textAlign: "center", fontSize: "1.6em", marginBottom: "60px" }}>Create an account to personalize your experience</p>
 
                 <form className="register-form" onSubmit={handleSubmit}>
-                    {/* add title dropdown */}
+                    {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Error message display */}
+
                     <div className="form-row">
                         <FormControl style={{ width: 100 }} variant="standard">
-                            <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                Title
-                            </InputLabel>
+                            <InputLabel variant="standard" htmlFor="uncontrolled-native">Title</InputLabel>
                             <NativeSelect
                                 onChange={(e) => setTitle(e.target.value)}
-                                inputProps={{
-                                    name: 'title',
-                                    id: 'uncontrolled-native',
-                                }}
+                                inputProps={{ name: 'title', id: 'uncontrolled-native' }}
                                 sx={{
-                                    '& .MuiNativeSelect-root': {
-                                        fontWeight: 'bold',
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                        color: 'black',
-                                    },
-                                    '& .MuiNativeSelect-icon': {
-                                        color: 'black',
-                                    },
-                                    '&:before': {
-                                        borderBottomColor: 'black',
-                                    },
-                                    '&:after': {
-                                        borderBottomColor: 'black',
-                                    },
+                                    '& .MuiNativeSelect-root': { fontWeight: 'bold' },
+                                    '& .MuiInputLabel-root': { color: 'black' },
+                                    '& .MuiNativeSelect-icon': { color: 'black' },
+                                    '&:before': { borderBottomColor: 'black' },
+                                    '&:after': { borderBottomColor: 'black' },
                                 }}
                             >
                                 <option value={"Mr"}>Mr</option>
@@ -103,7 +95,6 @@ function Register() {
                             </NativeSelect>
                         </FormControl>
 
-
                         <TextField
                             id="standard-basic"
                             label="First Name"
@@ -112,21 +103,15 @@ function Register() {
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             required
-                            type="first name"
                             sx={{
-                                '& label.Mui-focused': {
-                                    color: 'black',
-                                },
-                                '& .MuiInput-underline:after': {
-                                    borderBottomColor: 'black',
-                                },
-                                '& .MuiInputLabel-asterisk': {
-                                    color: 'red',
-                                },
+                                '& label.Mui-focused': { color: 'black' },
+                                '& .MuiInput-underline:after': { borderBottomColor: 'black' },
+                                '& .MuiInputLabel-asterisk': { color: 'red' },
                                 marginLeft: "20px"
                             }}
                         />
                     </div>
+
                     <TextField
                         id="standard-basic"
                         label="Last Name"
@@ -135,21 +120,14 @@ function Register() {
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         required
-                        type="last name"
                         sx={{
-                            '& label.Mui-focused': {
-                                color: 'black',
-                            },
-                            '& .MuiInput-underline:after': {
-                                borderBottomColor: 'black',
-                            },
-                            '& .MuiInputLabel-asterisk': {
-                                color: 'red',
-                            },
-
+                            '& label.Mui-focused': { color: 'black' },
+                            '& .MuiInput-underline:after': { borderBottomColor: 'black' },
+                            '& .MuiInputLabel-asterisk': { color: 'red' },
                             marginBottom: "20px"
                         }}
                     />
+
                     <TextField
                         id="standard-basic"
                         label="Email"
@@ -158,19 +136,13 @@ function Register() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        type="email"
                         sx={{
-                            '& label.Mui-focused': {
-                                color: 'black',
-                            },
-                            '& .MuiInput-underline:after': {
-                                borderBottomColor: 'black',
-                            },
-                            '& .MuiInputLabel-asterisk': {
-                                color: 'red',
-                            }
+                            '& label.Mui-focused': { color: 'black' },
+                            '& .MuiInput-underline:after': { borderBottomColor: 'black' },
+                            '& .MuiInputLabel-asterisk': { color: 'red' },
                         }}
                     />
+
                     <TextField
                         id="standard-password-input"
                         label="Password"
@@ -180,18 +152,11 @@ function Register() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        autoComplete="current-password"
                         style={{ marginTop: "20px", marginBottom: "30px" }}
                         sx={{
-                            '& label.Mui-focused': {
-                                color: 'black',
-                            },
-                            '& .MuiInput-underline:after': {
-                                borderBottomColor: 'black',
-                            },
-                            '& .MuiInputLabel-asterisk': {
-                                color: 'red',
-                            }
+                            '& label.Mui-focused': { color: 'black' },
+                            '& .MuiInput-underline:after': { borderBottomColor: 'black' },
+                            '& .MuiInputLabel-asterisk': { color: 'red' },
                         }}
                         InputProps={{
                             endAdornment: (
@@ -208,7 +173,6 @@ function Register() {
                     />
 
                     <button type="submit" className="register-button"><strong>CREATE PROFILE</strong></button>
-
                 </form>
             </div>
 
