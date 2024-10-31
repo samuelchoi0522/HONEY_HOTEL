@@ -18,6 +18,7 @@ const RoomDetails = () => {
         children,
         rateOption,
         promoCode,
+        discountRate = 0,
         ...initialBookingDetails
     } = location.state || {};
 
@@ -38,6 +39,7 @@ const RoomDetails = () => {
         children: children || 0,
         rateOption: rateOption || 'Lowest Regular Rate',
         promoCode: promoCode || '',
+        discountRate,
         ...initialBookingDetails,
     });
 
@@ -46,19 +48,23 @@ const RoomDetails = () => {
     );
 
     const [selectedRooms, setSelectedRooms] = useState(
-        Array.from({ length: bookingDetails.rooms }, (_, i) => ({
-            roomId: availableRoomOptions[i]?.id || null,
-            categoryName: bookingDetails.categoryName,
-            roomType: bookingDetails.roomType,
-            selectedBedType: availableRoomOptions[i]?.bedType || bookingDetails.selectedBedType,
-            selectedSmoking: availableRoomOptions[i]?.smokingAllowed || bookingDetails.selectedSmoking,
-            selectedPriceCategory: availableRoomOptions[i]?.priceCategory || bookingDetails.selectedPriceCategory,
-            totalPrice: availableRoomOptions[i]?.price || bookingDetails.totalPrice,
-            checkInDate: bookingDetails.checkInDate,
-            checkOutDate: bookingDetails.checkOutDate,
-            adults: bookingDetails.adults,
-            children: bookingDetails.children,
-        }))
+        Array.from({ length: bookingDetails.rooms }, (_, i) => {
+            const roomOption = availableRoomOptions[i] || {};
+            const discountedPrice = roomOption.price ? roomOption.price * (1 - discountRate) : 0;
+            return {
+                roomId: roomOption.id || null,
+                categoryName: bookingDetails.categoryName,
+                roomType: bookingDetails.roomType,
+                selectedBedType: roomOption.bedType || bookingDetails.selectedBedType,
+                selectedSmoking: roomOption.smokingAllowed || bookingDetails.selectedSmoking,
+                selectedPriceCategory: roomOption.priceCategory || bookingDetails.selectedPriceCategory,
+                totalPrice: discountedPrice.toFixed(2), // Apply discount to totalPrice
+                checkInDate: bookingDetails.checkInDate,
+                checkOutDate: bookingDetails.checkOutDate,
+                adults: bookingDetails.adults,
+                children: bookingDetails.children,
+            };
+        })
     );
 
     useEffect(() => {
@@ -74,6 +80,7 @@ const RoomDetails = () => {
             children,
             rateOption,
             promoCode,
+            discountRate,
             ...initialBookingDetails
         });
         const fetchReservedRooms = async () => {
@@ -135,7 +142,7 @@ const RoomDetails = () => {
             updatedRooms[index] = {
                 ...updatedRooms[index],
                 [field]: value,
-                totalPrice: matchedOption.price,
+                totalPrice: (matchedOption.price * (1 - discountRate)).toFixed(2), // Apply discount on price change
                 roomId: matchedOption.id,
             };
 
@@ -152,7 +159,7 @@ const RoomDetails = () => {
                             selectedBedType: nextAvailableOption.bedType,
                             selectedSmoking: nextAvailableOption.smokingAllowed,
                             selectedPriceCategory: nextAvailableOption.priceCategory,
-                            totalPrice: nextAvailableOption.price,
+                            totalPrice: (nextAvailableOption.price * (1 - discountRate)).toFixed(2), // Apply discount
                         };
                     }
                 }
@@ -183,11 +190,12 @@ const RoomDetails = () => {
                 promoCode: bookingDetails.promoCode,
                 adults: bookingDetails.adults,
                 children: bookingDetails.children,
+                totalPrice: bookingDetails.totalPrice,
             },
         });
     };
 
-    const subtotal = selectedRooms.reduce((acc, room) => acc + room.totalPrice, 0);
+    const subtotal = selectedRooms.reduce((acc, room) => acc + parseFloat(room.totalPrice), 0).toFixed(2);
 
 
     return (

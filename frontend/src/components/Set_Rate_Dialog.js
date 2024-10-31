@@ -31,6 +31,7 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
     const [promoCode, setPromoCode] = useState(initialPromoCode);
     const [tempSelectedOption, setTempSelectedOption] = useState(rateOption);
     const [tempPromoCode, setTempPromoCode] = useState(initialPromoCode);
+    const [promoCodeError, setPromoCodeError] = useState('');
 
     useEffect(() => {
         setTempSelectedOption(rateOption);
@@ -44,10 +45,43 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
     const handleClose = () => {
         setTempSelectedOption(selectedOption);
         setTempPromoCode(promoCode);
+        setPromoCodeError('');
         setOpen(false);
     };
 
     const handleApply = () => {
+        if (tempSelectedOption === 'Promo Code' && tempPromoCode) {
+            validatePromoCode(tempPromoCode);
+        } else {
+            applySelectedRate();
+        }
+    };
+
+    const validatePromoCode = async (code) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/promo/validate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ code }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.isValid) {
+                applySelectedRate(); // Apply the rate if the promo code is valid
+                setPromoCodeError(''); // Clear any previous error message
+            } else {
+                setPromoCodeError('Invalid promo code. Please try again.');
+            }
+        } catch (error) {
+            setPromoCodeError('Error validating promo code. Please try again later.');
+            console.error('Promo code validation error:', error);
+        }
+    };
+
+    const applySelectedRate = () => {
         setSelectedOption(tempSelectedOption);
         setPromoCode(tempPromoCode);
         onSetRate(tempSelectedOption, tempPromoCode);
@@ -86,6 +120,7 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
                                 setTempSelectedOption(newOption);
                                 if (newOption !== 'Promo Code') {
                                     setTempPromoCode('');
+                                    setPromoCodeError('');
                                 }
                             }}
                         >
@@ -121,9 +156,14 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
                                 id="outlined-promo-code-input"
                                 label="Add Promo Code"
                                 value={tempPromoCode}
-                                onChange={(e) => setTempPromoCode(e.target.value)}
+                                onChange={(e) => {
+                                    setTempPromoCode(e.target.value);
+                                    setPromoCodeError(''); // Clear error on input change
+                                }}
                                 fullWidth
                                 margin="dense"
+                                error={!!promoCodeError}
+                                helperText={promoCodeError}
                             />
                         )}
                     </div>

@@ -115,6 +115,10 @@ const AddVacationPackage = () => {
                         <p>Smoking: {room.selectedSmoking ? 'Yes' : 'No'}</p>
                         <p>Total Price: ${room.totalPrice}</p>
                         <p>Room Id: {room.roomId}</p>
+                        <p>Adults: {room.adults}</p>
+                        <p>Children: {room.children}</p>
+                        <p>Promo Code: {promoCode}</p>
+                        <p>Rate Option: {rateOption}</p>
                     </div>
                 ))}
 

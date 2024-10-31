@@ -7,8 +7,20 @@ const FindHive = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const rooms = Array.isArray(location.state?.rooms) ? location.state.rooms : [];
+    const bookingDetails = location.state?.bookingDetails || {};
+
+    const [promoDiscount, setPromoDiscount] = useState(0); // State to hold the promo code discount percentage
+
+    // Define the discount map
+    const discountMap = {
+        "Lowest Regular Rate": 0,
+        "AAA/CAA": 0.10,
+        "Senior Discount": 0.15,
+        "Government & Military": 0.20,
+    };
 
     useEffect(() => {
+        console.log("FROM: /find-hive: ", bookingDetails);
         const checkSession = async () => {
             try {
                 const response = await fetch("http://localhost:8080/api/reservations/check-session", {
@@ -29,16 +41,44 @@ const FindHive = () => {
         };
 
         checkSession();
-    }, [navigate]);
+
+        // Fetch promo code discount if rateOption is Promo Code
+        if (bookingDetails.rateOption === "Promo Code" && bookingDetails.promoCode) {
+            fetchPromoDiscount(bookingDetails.promoCode);
+        }
+    }, [navigate, bookingDetails.rateOption, bookingDetails.promoCode]);
+
+    // Function to fetch the promo code discount percentage
+    const fetchPromoDiscount = async (promoCode) => {
+        try {
+            const response = await fetch("http://localhost:8080/api/promo/validate", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: promoCode }),
+            });
+
+            const data = await response.json();
+            if (data.isValid) {
+                setPromoDiscount(data.discountPercentage / 100); // Set the promo discount (e.g., 50% => 0.50)
+            } else {
+                console.error("Invalid or expired promo code");
+                setPromoDiscount(0); // Set discount to 0 if invalid
+            }
+        } catch (error) {
+            console.error("Error fetching promo code discount:", error);
+        }
+    };
 
     const handleRoomCardClick = (categoryName, roomType, roomOptions) => {
-        const bookingDetails = location.state?.bookingDetails || {};
 
+        const discountRate = bookingDetails.rateOption === "Promo Code" ? promoDiscount : discountMap[bookingDetails.rateOption] || 0;
         const updatedBookingDetails = {
             ...bookingDetails,
             checkInDate: bookingDetails.startDate,
             checkOutDate: bookingDetails.endDate,
-            roomId: roomOptions[0].id
+            roomId: roomOptions[0].id,
+            discountRate
+            
         };
 
         navigate('/room-details', {
@@ -75,10 +115,15 @@ const FindHive = () => {
                         <h2 style={{ color: 'black' }}>{categoryName}</h2>
                         {Object.keys(groupedRooms[categoryName]).map(roomType => {
                             const representativeRoom = groupedRooms[categoryName][roomType][0];
+
+                            // Determine discount based on rateOption or promo code
+                            const discountRate = bookingDetails.rateOption === "Promo Code" ? promoDiscount : discountMap[bookingDetails.rateOption] || 0;
+                            const discountedPrice = (representativeRoom.price * (1 - discountRate)).toFixed(2);
+
                             return (
                                 <div key={roomType} className="room-card">
                                     <h3 style={{ color: 'black' }}>{roomType} Room</h3>
-                                    <p>Starting from: ${representativeRoom.price} / night</p>
+                                    <p>Starting from: ${discountedPrice} / night</p>
                                     <button
                                         onClick={() => handleRoomCardClick(categoryName, roomType, groupedRooms[categoryName][roomType])}
                                     >
