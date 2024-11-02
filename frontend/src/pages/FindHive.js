@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/FindHives.css';
 
+
 const FindHive = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -9,7 +10,7 @@ const FindHive = () => {
     const rooms = Array.isArray(location.state?.rooms) ? location.state.rooms : [];
     const bookingDetails = location.state?.bookingDetails || {};
 
-    const [promoDiscount, setPromoDiscount] = useState(0); // State to hold the promo code discount percentage
+    const [promoDiscount, setPromoDiscount] = useState(0);
 
     // Define the discount map
     const discountMap = {
@@ -18,6 +19,69 @@ const FindHive = () => {
         "Senior Discount": 0.15,
         "Government & Military": 0.20,
     };
+
+    // Define the image map for room categories and types
+    const imageMap = {
+        "Nature Retreat": {
+            "Single": "../uploads/NATURE_RETREAT_SINGLE_PHOTO.png",
+            "Double": "../uploads/NATURE_RETREAT_DOUBLE_PHOTO.jpg",
+            "Family": "../uploads/NATURE_RETREAT_FAMILY_PHOTO.jpg"
+        },
+        "Urban Elegance": {
+            "Suite": "../uploads/URBAN_ELEGANCE_SUITE_PHOTO.jpg",
+            "Deluxe": "../uploads/URBAN_ELEGANCE_DELUXE_PHOTO.jpg"
+        },
+        "Vintage Charm": {
+            "Standard": "../uploads/VINTAGE_CHARM_STANDARD_PHOTO.jpg",
+            "Deluxe": "../uploads/VINTAGE_CHARM_DELUXE_PHOTO.jpg"
+        }
+    };
+
+    const descriptionMap = {
+        "Nature Retreat": {
+            "Single": [
+                { icon: "/icons/bed_icon.png", text: "Twin, Full, Queen, King Beds" },
+                { icon: "/icons/smoking_icon.png", text: "Smoking And Non-Smoking" },
+                { icon: "/icons/occupancy_icon.png", text: "Up to 8 People" }
+            ],
+            "Double": [
+                { icon: "/icons/bed_icon.png", text: "Twin, Full, Queen, King Beds" },
+                { icon: "/icons/smoking_icon.png", text: "Smoking And Non-Smoking" },
+                { icon: "/icons/occupancy_icon.png", text: "Up to 8 People" }
+            ],
+            "Family": [
+                { icon: "/icons/bed_icon.png", text: "Twin, Full, Queen, King Beds" },
+                { icon: "/icons/smoking_icon.png", text: "Smoking And Non-Smoking" },
+                { icon: "/icons/occupancy_icon.png", text: "Up to 8 People" }
+            ]
+        },
+        "Urban Elegance": {
+            "Suite": [
+                { icon: "/icons/bed_icon.png", text: "Twin, Full, Queen, King Beds" },
+                { icon: "/icons/smoking_icon.png", text: "Smoking And Non-Smoking" },
+                { icon: "/icons/occupancy_icon.png", text: "Up to 8 People" }
+            ],
+            "Deluxe": [
+                { icon: "/icons/bed_icon.png", text: "Twin, Full, Queen, King Beds" },
+                { icon: "/icons/smoking_icon.png", text: "Smoking And Non-Smoking" },
+                { icon: "/icons/occupancy_icon.png", text: "Up to 8 People" }
+            ]
+        },
+        "Vintage Charm": {
+            "Standard": [
+                { icon: "/icons/bed_icon.png", text: "Twin, Full, Queen, King Beds" },
+                { icon: "/icons/smoking_icon.png", text: "Smoking And Non-Smoking" },
+                { icon: "/icons/occupancy_icon.png", text: "Up to 8 People" }
+            ],
+            "Deluxe": [
+                { icon: "/icons/bed_icon.png", text: "Twin, Full, Queen, King Beds" },
+                { icon: "/icons/smoking_icon.png", text: "Smoking And Non-Smoking" },
+                { icon: "/icons/occupancy_icon.png", text: "Up to 8 People" }
+            ]
+        }
+    };
+
+
 
     useEffect(() => {
         console.log("FROM: /find-hive: ", bookingDetails);
@@ -42,13 +106,11 @@ const FindHive = () => {
 
         checkSession();
 
-        // Fetch promo code discount if rateOption is Promo Code
         if (bookingDetails.rateOption === "Promo Code" && bookingDetails.promoCode) {
             fetchPromoDiscount(bookingDetails.promoCode);
         }
     }, [navigate, bookingDetails.rateOption, bookingDetails.promoCode]);
 
-    // Function to fetch the promo code discount percentage
     const fetchPromoDiscount = async (promoCode) => {
         try {
             const response = await fetch("http://localhost:8080/api/promo/validate", {
@@ -59,10 +121,10 @@ const FindHive = () => {
 
             const data = await response.json();
             if (data.isValid) {
-                setPromoDiscount(data.discountPercentage / 100); // Set the promo discount (e.g., 50% => 0.50)
+                setPromoDiscount(data.discountPercentage / 100);
             } else {
                 console.error("Invalid or expired promo code");
-                setPromoDiscount(0); // Set discount to 0 if invalid
+                setPromoDiscount(0);
             }
         } catch (error) {
             console.error("Error fetching promo code discount:", error);
@@ -70,7 +132,6 @@ const FindHive = () => {
     };
 
     const handleRoomCardClick = (categoryName, roomType, roomOptions) => {
-
         const discountRate = bookingDetails.rateOption === "Promo Code" ? promoDiscount : discountMap[bookingDetails.rateOption] || 0;
         const updatedBookingDetails = {
             ...bookingDetails,
@@ -78,7 +139,6 @@ const FindHive = () => {
             checkOutDate: bookingDetails.endDate,
             roomId: roomOptions[0].id,
             discountRate
-            
         };
 
         navigate('/room-details', {
@@ -108,33 +168,62 @@ const FindHive = () => {
     }, {});
 
     return (
-        <div>
-            <div className="room-list" style={{ marginTop: '200px' }}>
-                {Object.keys(groupedRooms).map(categoryName => (
-                    <div key={categoryName} className="room-category">
-                        <h2 style={{ color: 'black' }}>{categoryName}</h2>
-                        {Object.keys(groupedRooms[categoryName]).map(roomType => {
-                            const representativeRoom = groupedRooms[categoryName][roomType][0];
+        <div className="room-list" style={{ marginTop: '200px' }}>
+            {Object.keys(groupedRooms).map(categoryName => (
+                <div key={categoryName} className="room-category">
+                    <h2 className="category-name">{categoryName.toUpperCase()}</h2>
+                    {Object.keys(groupedRooms[categoryName]).map(roomType => {
+                        const representativeRoom = groupedRooms[categoryName][roomType][0];
 
-                            // Determine discount based on rateOption or promo code
-                            const discountRate = bookingDetails.rateOption === "Promo Code" ? promoDiscount : discountMap[bookingDetails.rateOption] || 0;
-                            const discountedPrice = (representativeRoom.price * (1 - discountRate)).toFixed(2);
+                        // Get image from imageMap or set a default
+                        const imageUrl = imageMap[categoryName]?.[roomType] || "../../public/uploads/default-photo.jpg";
 
-                            return (
-                                <div key={roomType} className="room-card">
-                                    <h3 style={{ color: 'black' }}>{roomType} Room</h3>
-                                    <p>Starting from: ${discountedPrice} / night</p>
-                                    <button
-                                        onClick={() => handleRoomCardClick(categoryName, roomType, groupedRooms[categoryName][roomType])}
-                                    >
-                                        Select Room
-                                    </button>
+                        const discountRate = bookingDetails.rateOption === "Promo Code" ? promoDiscount : discountMap[bookingDetails.rateOption] || 0;
+                        const discountedPrice = (representativeRoom.price * (1 - discountRate));
+
+                        return (
+                            <div key={roomType} className="room-card">
+                                <div className="room-content">
+                                    <img
+                                        src={imageUrl}
+                                        alt={`${roomType} room in ${categoryName}`}
+                                        className="room-image"
+                                    />
+                                    <div className="room-info-1">
+                                        <h3 className="room-name">
+                                            {roomType.toUpperCase()} ROOM
+                                        </h3>
+                                        <div className="room-description">
+                                            {descriptionMap[categoryName]?.[roomType]?.map((item, index) => (
+                                                <div key={index} className="description-line">
+                                                    <img src={item.icon} alt="icon" className="description-icon" />
+                                                    <span>{item.text}</span>
+                                                </div>
+                                            )) || <p>Description not available</p>}
+                                        </div>
+                                    </div>
                                 </div>
-                            );
-                        })}
-                    </div>
-                ))}
-            </div>
+                                <hr className="room-divider" />
+                                <div className="room-price-details">
+                                    <div className="room-info">
+                                        <p>Room Rate</p>
+                                        <a href="/cancellation-policy" className="cancellation-policy">Cancellation Policy</a>
+                                    </div>
+                                    <div className="room-bottom">
+                                        <span className="room-price">{discountedPrice} <span className='currency-label'>USD / NIGHT</span></span>
+                                        <button
+                                            onClick={() => handleRoomCardClick(categoryName, roomType, groupedRooms[categoryName][roomType])}
+                                            className="select-button"
+                                        >
+                                            Select Bed Options
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            ))}
         </div>
     );
 };
