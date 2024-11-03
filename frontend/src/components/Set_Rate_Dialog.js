@@ -153,7 +153,7 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
 
                         {tempSelectedOption === 'Promo Code' && (
                             <TextField
-                                id="outlined-promo-code-input"
+                                id="outlined-promo-code-input-1"
                                 label="Add Promo Code"
                                 value={tempPromoCode}
                                 onChange={(e) => {

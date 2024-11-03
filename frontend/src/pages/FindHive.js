@@ -179,7 +179,7 @@ const FindHive = () => {
                         const imageUrl = imageMap[categoryName]?.[roomType] || "../../public/uploads/default-photo.jpg";
 
                         const discountRate = bookingDetails.rateOption === "Promo Code" ? promoDiscount : discountMap[bookingDetails.rateOption] || 0;
-                        const discountedPrice = (representativeRoom.price * (1 - discountRate));
+                        const discountedPrice = Math.round(representativeRoom.price * (1 - discountRate));
 
                         return (
                             <div key={roomType} className="room-card">

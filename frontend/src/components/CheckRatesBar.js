@@ -37,14 +37,6 @@ const hotelLocations = [
 ];
 
 const dateRangePickerTheme = createTheme({
-    palette: {
-        primary: {
-            main: '#1976d2', // Set your desired primary color here
-        },
-        secondary: {
-            main: '#dc004e', // Set your desired secondary color here
-        },
-    },
     components: {
         MuiOutlinedInput: {
             styleOverrides: {
@@ -63,6 +55,28 @@ const dateRangePickerTheme = createTheme({
         },
     },
 });
+
+const setRateDialogTheme = createTheme({
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    fontFamily: 'IBM Plex Sans, sans-serif',
+                    fontSize: '1rem',
+                    color: '#000000',
+                    backgroundColor: 'white',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    height: '40px',
+                },
+                notchedOutline: {
+                    border: 'none', // Removes the outline border
+                }
+            },
+        },
+    },
+});
+
 
 
 const CheckRatesBar = () => {
@@ -150,8 +164,11 @@ const CheckRatesBar = () => {
             .then(data => {
                 const rooms = Array.isArray(data) ? data : [];
                 navigate('/find-hive', { state: { bookingDetails, rooms: data } });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             })
             .catch(error => console.error("Error fetching available rooms:", error));
+        
+        
     };
 
 
@@ -223,35 +240,39 @@ const CheckRatesBar = () => {
 
                 </div>
 
-                <SetOccupancyDialog onSetOccupancy={handleSetOccupancy} rooms={rooms} adults={adults} children={children} />
-                <SetRateDialog
-                    onSetRate={handleSetRate}
-                    customStyle={{
-                        background: 'none',
-                        color: 'black',
-                        boxShadow: 'none',
-                        textTransform: 'none',
-                        marginLeft: '0px',
-                        paddingRight: '40px',
-                        fontFamily: 'IBM Plex Sans, sans-serif',
-                        fontWeight: 800,
-                        fontSize: '0.755rem',
-                        textDecoration: 'none',
-                        textDecorationColor: 'transparent',
-                        letterSpacing: '0.1em',
-                        left: '-15px',
-                        '&:hover': {
+
+
+                <ThemeProvider theme={setRateDialogTheme}>
+                    <SetOccupancyDialog onSetOccupancy={handleSetOccupancy} rooms={rooms} adults={adults} children={children} />
+                    <SetRateDialog
+                        onSetRate={handleSetRate}
+                        customStyle={{
                             background: 'none',
-                            boxShadow: 'none',
                             color: 'black',
-                            textDecoration: 'underline',
-                            textDecorationColor: 'black',
-                            transition: 'text-decoration-color 0.2s ease-in-out',
-                        }
-                    }}
-                    rateOption={rateOption}
-                    promoCode={promoCode}
-                />
+                            boxShadow: 'none',
+                            textTransform: 'none',
+                            marginLeft: '0px',
+                            paddingRight: '40px',
+                            fontFamily: 'IBM Plex Sans, sans-serif',
+                            fontWeight: 800,
+                            fontSize: '0.755rem',
+                            textDecoration: 'none',
+                            textDecorationColor: 'transparent',
+                            letterSpacing: '0.1em',
+                            left: '-15px',
+                            '&:hover': {
+                                background: 'none',
+                                boxShadow: 'none',
+                                color: 'black',
+                                textDecoration: 'underline',
+                                textDecorationColor: 'black',
+                                transition: 'text-decoration-color 0.2s ease-in-out',
+                            }
+                        }}
+                        rateOption={rateOption}
+                        promoCode={promoCode}
+                    />
+                </ThemeProvider>
 
                 <button className={styles.checkRatesButton} onClick={handleFindHivesClick}>
                     CHECK RATES
