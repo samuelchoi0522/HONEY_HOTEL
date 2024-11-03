@@ -222,7 +222,7 @@ const StyledButton = styled('button')`
   border-radius: 999px;
   border-color: ${props => props.theme.palette.mode === 'dark' ? grey[800] : grey[200]};
   background: ${props => props.theme.palette.mode === 'dark' ? grey[900] : grey[50]};
-  color: ${props => props.theme.palette.mode === 'dark' ? grey[200] : grey[900]};
+   ${props => props.theme.palette.mode === 'dark' ? grey[200] : grey[900]};
   width: 32px;
   height: 32px;
   display: flex;

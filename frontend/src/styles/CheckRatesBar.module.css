@@ -31,13 +31,9 @@
     color: white;
     height: 33px;
     min-width: 300px;
-    /* Set minimum width */
     width: 400px;
-    /* Set desired width */
     max-width: 500px;
-    /* Set maximum width */
     padding-right: 50px;
-    /* Adjust padding to control icon spacing */
     border-radius: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.336);
     display: flex;
