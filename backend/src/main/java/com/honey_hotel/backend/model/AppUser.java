@@ -24,9 +24,8 @@ public class AppUser implements Serializable {
     private String firstname;
     private String lastname;
     private String email;
-    private String password_hash;  // Storing password hash
+    private String password_hash;
 
-    // Getters and Setters
     public String getTitle() {
         return title;
     }

@@ -19,11 +19,11 @@ public class Reservation {
     @Column(name = "check_out_date", nullable = false)
     private LocalDate checkOutDate;
 
-    @ManyToOne(fetch = FetchType.EAGER) // Eager fetch for Room
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @ManyToOne(fetch = FetchType.EAGER) // Eager fetch for User
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
 
@@ -42,7 +42,6 @@ public class Reservation {
     @Column(name = "total_price", precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
-    // Getters and setters
     public Long getId() {
         return id;
     }

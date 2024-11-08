@@ -30,12 +30,11 @@ const AccountPage = () => {
     };
   
     const [errorMessage, setErrorMessage] = useState('');
-    const [reservations, setReservations] = useState([]); // State for user's reservations
+    const [reservations, setReservations] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         const checkSession = async () => {
-            console.log("checking session");
             try {
                 const response = await fetch("http://localhost:8080/api/check-session", {
                     method: "POST",
@@ -45,7 +44,6 @@ const AccountPage = () => {
 
                 const data = await response.json();
                 if (response.ok && data.isLoggedIn) {
-                    console.log("User is logged in:", data);
                 } else {
                     navigate("/login");
                 }
@@ -64,7 +62,7 @@ const AccountPage = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setReservations(data); // Update reservations state with fetched data
+                    setReservations(data);
                 } else {
                     console.error("Failed to fetch reservations.");
                 }
@@ -112,7 +110,6 @@ const AccountPage = () => {
 
 
             const data = await response.text();
-            console.log(data.message);
 
             if (response.ok) {
                 alert("Password changed successfully!");

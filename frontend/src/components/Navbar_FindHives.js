@@ -13,7 +13,6 @@ function Navbar_FindHives() {
     useEffect(() => {
         //check if the user is logged in by fetching session data
         const checkSession = async () => {
-            console.log("checking session");
             try {
                 const response = await fetch("http://localhost:8080/api/check-session", {
                     method: "POST",
@@ -22,14 +21,11 @@ function Navbar_FindHives() {
                 });
 
                 const data = await response.json();
-                console.log(data);
 
                 if (response.ok && data.isLoggedIn) {
                     setIsLoggedIn(true);
-                    console.log("User is logged in:", data);    //debugging
                     setUserName(data.firstname.toUpperCase());
                 } else {
-                    console.log("No active session found.");    //debugging
                     setIsLoggedIn(false);
                 }
             } catch (error) {

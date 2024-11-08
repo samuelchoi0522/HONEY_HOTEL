@@ -21,15 +21,6 @@ const AddVacationPackage = () => {
     const isValidDate = (date) => date && !isNaN(new Date(date).getTime());
 
     useEffect(() => {
-        console.log('FROM: /add-vacation-package:', {
-            selectedRooms,
-            checkInDate,
-            checkOutDate,
-            rateOption,
-            promoCode,
-            adults,
-            children,
-        });
         const fetchActivities = async () => {
             if (!isValidDate(checkInDate) || !isValidDate(checkOutDate)) {
                 console.error('Invalid check-in or check-out date.');
@@ -83,9 +74,6 @@ const AddVacationPackage = () => {
             activityDate: selectedActivity ? dayjs(activityDate).format('YYYY-MM-DD') : null,
         };
 
-        console.log('FROM: /add-vacation-package: \n\nFinal Booking Details:', bookingDetails);
-
-        // Redirect to checkout page
         navigate('/checkout', { state: bookingDetails });
     };
 
@@ -96,7 +84,6 @@ const AddVacationPackage = () => {
 
 
     // TODO: Add sort by activity category
-
 
 
 

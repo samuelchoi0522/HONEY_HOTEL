@@ -158,8 +158,6 @@ const Modal = ({ open, handleClose }) => {
             promoCode: rateOption === 'Promo Code' ? ratePromoCode : ''
         };
 
-        console.log(hotelTitle, startDate, endDate, nights, rooms, adults, children, rateOption, ratePromoCode);
-
         fetch("http://localhost:8080/api/hives/find", {
             method: "POST",
             headers: {

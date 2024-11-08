@@ -12,7 +12,6 @@ const FindHive = () => {
 
     const [promoDiscount, setPromoDiscount] = useState(0);
 
-    // Define the discount map
     const discountMap = {
         "Lowest Regular Rate": 0,
         "AAA/CAA": 0.10,
@@ -20,7 +19,6 @@ const FindHive = () => {
         "Government & Military": 0.20,
     };
 
-    // Define the image map for room categories and types
     const imageMap = {
         "Nature Retreat": {
             "Single": "../uploads/NATURE_RETREAT_SINGLE_PHOTO.png",
@@ -84,7 +82,6 @@ const FindHive = () => {
 
 
     useEffect(() => {
-        console.log("FROM: /find-hive: ", bookingDetails);
         const checkSession = async () => {
             try {
                 const response = await fetch("http://localhost:8080/api/reservations/check-session", {
@@ -175,7 +172,6 @@ const FindHive = () => {
                     {Object.keys(groupedRooms[categoryName]).map(roomType => {
                         const representativeRoom = groupedRooms[categoryName][roomType][0];
 
-                        // Get image from imageMap or set a default
                         const imageUrl = imageMap[categoryName]?.[roomType] || "../../public/uploads/default-photo.jpg";
 
                         const discountRate = bookingDetails.rateOption === "Promo Code" ? promoDiscount : discountMap[bookingDetails.rateOption] || 0;

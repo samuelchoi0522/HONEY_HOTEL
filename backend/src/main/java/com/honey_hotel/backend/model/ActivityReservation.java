@@ -27,7 +27,6 @@ public class ActivityReservation {
     @Column(name = "reservation_date", nullable = false)
     private LocalDate reservationDate;
 
-    // Getters and setters
     public Long getId() {
         return id;
     }

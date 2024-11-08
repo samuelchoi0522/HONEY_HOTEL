@@ -70,7 +70,7 @@ const setRateDialogTheme = createTheme({
                     height: '40px',
                 },
                 notchedOutline: {
-                    border: 'none', // Removes the outline border
+                    border: 'none',
                 }
             },
         },
@@ -117,8 +117,6 @@ const CheckRatesBar = () => {
                 rateOption: initialRateOption,
                 promoCode: initialPromoCode,
             } = location.state?.bookingDetails;
-
-            console.log("FROM: /find-hive: \n\nReceived booking details from MODAL", location.state?.bookingDetails);
 
             const matchingHotel = hotelLocations.find(hotel => hotel.title === hotelLocation);
             setSelectedHotel(matchingHotel || null);

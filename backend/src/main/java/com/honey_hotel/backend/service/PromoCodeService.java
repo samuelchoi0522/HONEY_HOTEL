@@ -19,7 +19,6 @@ public class PromoCodeService {
 
         if (promoCode.isPresent()) {
             PromoCode foundCode = promoCode.get();
-            // Check if promo code is within its valid date range
             LocalDate today = LocalDate.now();
             if (!today.isBefore(foundCode.getCreationDate()) && !today.isAfter(foundCode.getExpirationDate())) {
                 return Optional.of(foundCode);

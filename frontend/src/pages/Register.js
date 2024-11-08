@@ -26,7 +26,7 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrorMessage(""); // Clear any previous error messages
+        setErrorMessage("");
 
         const response = await fetch("http://localhost:8080/api/register", {
             method: "POST",
@@ -74,7 +74,7 @@ function Register() {
                 <p style={{ fontWeight: 100, textAlign: "center", fontSize: "1.6em", marginBottom: "60px" }}>Create an account to personalize your experience</p>
 
                 <form className="register-form" onSubmit={handleSubmit}>
-                    {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Error message display */}
+                    {errorMessage && <p className="error-message">{errorMessage}</p>}
 
                     <div className="form-row">
                         <FormControl style={{ width: 100 }} variant="standard">

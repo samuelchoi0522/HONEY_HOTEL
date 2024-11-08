@@ -73,20 +73,19 @@ const Checkout = () => {
             const nights = Math.ceil((new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24));
             setNumNights(nights);
 
-            // Calculate the total cost of all selected rooms for the number of nights
             let basePrice = selectedRooms.reduce((acc, room) => acc + room.totalPrice * nights, 0);
             if (reservedActivity) {
                 basePrice += reservedActivity.price;
             }
 
-            const tax = basePrice * 0.06; // Assuming 6% tax
+            const tax = basePrice * 0.06;
             setFinalTotal((basePrice + tax).toFixed(2));
         }
     }, [checkInDate, checkOutDate, selectedRooms, reservedActivity]);
 
     const handleReserveRoom = async (data) => {
-        if (isSubmitting) return; // Prevent further submissions
-        setIsSubmitting(true); // Set flag to true on first call
+        if (isSubmitting) return;
+        setIsSubmitting(true);
 
         if (!isLoggedIn) {
             sessionStorage.setItem('reservationData', JSON.stringify(location.state));
@@ -102,9 +101,8 @@ const Checkout = () => {
         }
 
         try {
-            const reservationIds = []; // To keep track of all reservation IDs
+            const reservationIds = [];
 
-            // Reserve each selected room
             for (const room of selectedRooms) {
                 const reservationPayload = {
                     roomId: room.roomId,
@@ -116,8 +114,6 @@ const Checkout = () => {
                     promoCode,
                     finalTotal
                 };
-
-                console.log("Room reservation payload:", reservationPayload);
 
                 const reservationResponse = await fetch("http://localhost:8080/api/reservations", {
                     method: "POST",
@@ -135,20 +131,17 @@ const Checkout = () => {
                 }
 
                 const reservationData = await reservationResponse.json();
-                reservationIds.push(reservationData.id); // Store the reservation ID for future reference
+                reservationIds.push(reservationData.id);
             }
 
-            // Handle activity reservation after room reservations
             if (reservedActivity) {
                 const activityReservationPayload = {
-                    hotelReservationId: reservationIds[0], // Use the first reservation ID
+                    hotelReservationId: reservationIds[0],
                     activityId: reservedActivity.id,
                     reservationDate: activityDate,
                     checkInDate,
                     checkOutDate,
                 };
-
-                console.log("Activity reservation payload:", activityReservationPayload);
 
                 const activityResponse = await fetch("http://localhost:8080/api/reservations/activities", {
                     method: "POST",
@@ -172,7 +165,7 @@ const Checkout = () => {
             console.error("Error during reservation:", error);
             alert(`An error occurred while processing your reservation: ${error.message}`);
         } finally {
-            setIsSubmitting(false); // Reset the flag after reservation completes
+            setIsSubmitting(false);
         }
     };
 

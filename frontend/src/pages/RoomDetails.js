@@ -23,7 +23,7 @@ const RoomDetails = () => {
     } = location.state || {};
 
     const [reservedRoomIds, setReservedRoomIds] = useState([]);
-    const [numNights, setNumNights] = useState(1); // Initialize numNights with a default of 1
+    const [numNights, setNumNights] = useState(1);
 
 
     const [bookingDetails, setBookingDetails] = useState({
@@ -60,7 +60,7 @@ const RoomDetails = () => {
                 selectedBedType: roomOption.bedType || bookingDetails.selectedBedType,
                 selectedSmoking: roomOption.smokingAllowed || bookingDetails.selectedSmoking,
                 selectedPriceCategory: roomOption.priceCategory || bookingDetails.selectedPriceCategory,
-                totalPrice: discountedPrice.toFixed(2), // Apply discount to totalPrice
+                totalPrice: discountedPrice.toFixed(2),
                 checkInDate: bookingDetails.checkInDate,
                 checkOutDate: bookingDetails.checkOutDate,
                 adults: bookingDetails.adults,
@@ -77,22 +77,7 @@ const RoomDetails = () => {
             const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
             setNumNights(nights);
         }
-
-        console.log('FROM: /room-details: \n\nSelected Room Details:', {
-            categoryName,
-            roomType,
-            roomOptions,
-            startDate,
-            endDate,
-            roomId,
-            rooms,
-            adults,
-            children,
-            rateOption,
-            promoCode,
-            discountRate,
-            ...initialBookingDetails
-        });
+        
         const fetchReservedRooms = async () => {
             try {
                 const response = await fetch(
@@ -152,7 +137,7 @@ const RoomDetails = () => {
             updatedRooms[index] = {
                 ...updatedRooms[index],
                 [field]: value,
-                totalPrice: (matchedOption.price * (1 - discountRate)).toFixed(2), // Apply discount on price change
+                totalPrice: (matchedOption.price * (1 - discountRate)).toFixed(2),
                 roomId: matchedOption.id,
             };
 
@@ -166,10 +151,10 @@ const RoomDetails = () => {
                         updatedRooms[i] = {
                             ...updatedRooms[i],
                             roomId: nextAvailableOption.id,
-                            selectedBedType: nextAvailableOption.bedType,
+                            selectedBedType: nextAvailableOption.bedType, 
                             selectedSmoking: nextAvailableOption.smokingAllowed,
                             selectedPriceCategory: nextAvailableOption.priceCategory,
-                            totalPrice: (nextAvailableOption.price * (1 - discountRate)).toFixed(2), // Apply discount
+                            totalPrice: (nextAvailableOption.price * (1 - discountRate)).toFixed(2),
                         };
                     }
                 }

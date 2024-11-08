@@ -70,8 +70,8 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
             const data = await response.json();
 
             if (response.ok && data.isValid) {
-                applySelectedRate(); // Apply the rate if the promo code is valid
-                setPromoCodeError(''); // Clear any previous error message
+                applySelectedRate();
+                setPromoCodeError('');
             } else {
                 setPromoCodeError('Invalid promo code. Please try again.');
             }
@@ -158,7 +158,7 @@ export default function SetRateDialog({ onSetRate, customStyle, rateOption = 'Lo
                                 value={tempPromoCode}
                                 onChange={(e) => {
                                     setTempPromoCode(e.target.value);
-                                    setPromoCodeError(''); // Clear error on input change
+                                    setPromoCodeError('');
                                 }}
                                 fullWidth
                                 margin="dense"

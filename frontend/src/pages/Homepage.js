@@ -115,8 +115,6 @@ const Homepage = () => {
             promoCode: rateOption === 'Promo Code' ? ratePromoCode : ''
         };
 
-        console.log(hotelTitle, startDate, endDate, nights, rooms, adults, children, rateOption, ratePromoCode);
-
         fetch("http://localhost:8080/api/hives/find", {
             method: "POST",
             headers: {
@@ -142,7 +140,6 @@ const Homepage = () => {
     };
 
     useEffect(() => {
-        // Load Instagram's embed.js script
         const script = document.createElement('script');
         script.src = "https://www.instagram.com/embed.js";
         script.async = true;

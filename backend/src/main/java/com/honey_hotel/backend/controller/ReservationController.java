@@ -118,7 +118,7 @@ public class ReservationController {
 
             // Extract room IDs from reservations
             List<Long> reservedRoomIds = reservations.stream()
-                    .map(reservation -> reservation.getRoom().getId()) // Access the Room's ID
+                    .map(reservation -> reservation.getRoom().getId())
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(reservedRoomIds);
