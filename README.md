@@ -48,6 +48,12 @@ Once all dependencies and servers are running, the project should be viewable on
 
 ### To run this project locally:
 
+Initialize your PostgreSQL databse with the following command in the root directory.
+
+```sh
+psql -U admin -d honey_hotel_db -f ./init.sql
+```
+
 Install the dependencies and devDependencies and start the server on port :8080.
 
 ```sh
