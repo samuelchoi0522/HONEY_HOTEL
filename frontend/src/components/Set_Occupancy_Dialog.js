@@ -176,7 +176,7 @@ const grey = {
 
 const StyledInputRoot = styled('div')`
     font-family: 'IBM Plex Sans', sans-serif;
-    ont-weight: 400;
+    font-weight: 400;
     display: flex;
     justify-content: center;
     align-items: center;
