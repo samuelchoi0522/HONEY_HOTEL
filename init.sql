@@ -97,6 +97,16 @@ CREATE TABLE IF NOT EXISTS spring_session_attributes (
     CONSTRAINT spring_session_attributes_fk FOREIGN KEY (session_primary_id) REFERENCES spring_session (primary_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS password_reset_token (
+    id SERIAL PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    user_id BIGINT NOT NULL,
+    expiry_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT password_reset_token_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS password_reset_token_token_idx ON password_reset_token (token);
+
 
 INSERT INTO activities (name, price, category) VALUES
 ('Beachside Yoga', 50.00, 'Soothing'),
