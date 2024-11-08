@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -66,6 +66,29 @@ function Register() {
 
     //TODO: fix the title not being inputted into the database
 
+
+    useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const response = await fetch("http://localhost:8080/api/check-session", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.isLoggedIn) {
+                    navigate("/");
+                } else {
+                }
+            } catch (error) {
+                console.error("Error checking session:", error);
+            }
+        };
+
+        checkSession();
+    }, [navigate]);
 
     return (
         <div className="register-container">
