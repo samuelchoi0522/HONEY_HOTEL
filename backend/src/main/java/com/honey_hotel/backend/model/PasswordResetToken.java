@@ -1,4 +1,4 @@
-package com.honey_hotel.backend.entity;
+package com.honey_hotel.backend.model;
 
 import java.time.LocalDateTime;
 
@@ -8,8 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-
-import com.honey_hotel.backend.model.AppUser;
 
 @Entity
 public class PasswordResetToken {

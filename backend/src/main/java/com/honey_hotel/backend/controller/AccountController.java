@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.honey_hotel.backend.repository.*;
 
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/account")
@@ -35,9 +38,9 @@ public class AccountController {
         return user;
     }
 
-
     @RequestMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody Map<String, Object> request, HttpServletRequest servletRequest) {
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, Object> request,
+            HttpServletRequest servletRequest) {
         String oldPassword = (String) request.get("oldPassword");
         String newPassword = (String) request.get("newPassword");
         String confirmPassword = (String) request.get("confirmPassword");
@@ -66,7 +69,7 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Map.of("error", "Passwords do not match"));
         }
 
-        if (oldPassword.equals(newPassword)){
+        if (oldPassword.equals(newPassword)) {
             return ResponseEntity.status(401).body("Error: New password cannot be the same as old password");
         }
 

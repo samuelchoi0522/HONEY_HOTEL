@@ -203,7 +203,7 @@ function Register() {
                 </form>
             </div>
 
-            <div className="register-right" style={{ backgroundImage: "url('/uploads/LOGIN_LANDING_PHOTO.jpeg')" }}>
+            <div className="register-right" style={{ backgroundImage: "url('/uploads/REGISTER_LANDING_PHOTO.jpg')" }}>
             </div>
         </div>
     );

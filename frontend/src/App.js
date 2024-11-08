@@ -16,19 +16,30 @@ import RoomDetails from './pages/RoomDetails';
 import AddVacationPackage from './pages/AddVacationPackage';
 import Checkout from './pages/Checkout';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 import './styles/App.css';
 
 function Layout() {
     const location = useLocation();
 
-    const showNavbarAndFooter = location.pathname.toLowerCase() !== '/login' && location.pathname.toLowerCase() !== '/register' && location.pathname.toLowerCase() !== '/forgot-password';
-    const showNavbarForLoginAndRegisterAndForgotPassword = location.pathname.toLowerCase() === '/login' || location.pathname.toLowerCase() === '/register' || location.pathname.toLowerCase() === '/forgot-password';
+    const showNavbarAndFooter =
+        location.pathname.toLowerCase() !== '/login' &&
+        location.pathname.toLowerCase() !== '/register' &&
+        location.pathname.toLowerCase() !== '/forgot-password' &&
+        location.pathname.toLowerCase() !== '/reset-password';
+    
+    const showEmptyNavbar =
+        location.pathname.toLowerCase() === '/login' ||
+        location.pathname.toLowerCase() === '/register' ||
+        location.pathname.toLowerCase() === '/forgot-password' ||
+        location.pathname.toLowerCase() === '/reset-password';
+    
     const showNavbarForFindHive = location.pathname.toLowerCase() === '/find-hive';
     return (
         <div className="app-container">
             {showNavbarAndFooter && <Navbar />}
-            {showNavbarForLoginAndRegisterAndForgotPassword && <NavbarWhite />}
+            {showEmptyNavbar && <NavbarWhite />}
             {showNavbarForFindHive && <NavbarFindHives />}
             {showNavbarForFindHive && <CheckRatesBar />}
             <Routes>
@@ -42,6 +53,7 @@ function Layout() {
                 <Route path="/room-details" element={<RoomDetails />} />
                 <Route path="/add-vacation-package" element={<AddVacationPackage />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
             </Routes>
             {showNavbarAndFooter && <Footer />}
         </div>

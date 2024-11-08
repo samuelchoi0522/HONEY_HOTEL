@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.honey_hotel.backend.entity.PasswordResetToken;
 import com.honey_hotel.backend.model.AppUser;
+import com.honey_hotel.backend.model.PasswordResetToken;
 import com.honey_hotel.backend.repository.PasswordResetTokenRepository;
 import com.honey_hotel.backend.repository.UserRepository;
 

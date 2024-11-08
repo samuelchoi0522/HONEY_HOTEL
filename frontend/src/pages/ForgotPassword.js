@@ -58,8 +58,8 @@ function ForgotPassword() {
     };
 
     return (
-        <div className="signin-container">
-            <div className="signin-left">
+        <div className="register-container">
+            <div className="register-left">
                 <h2 style={{ fontWeight: 100, textAlign: "center", fontSize: "3em" }}>RESET PASSWORD</h2>
                 <p style={{ fontWeight: 100, textAlign: "center", fontSize: "1.3em", marginBottom: "40px", maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}>Enter the email associated with your account and we’ll
                     send you an email to reset your password</p>
@@ -116,15 +116,15 @@ function ForgotPassword() {
                         }}
                     />
 
-                    <button type="submit" className="signin-button"><strong>SUBMIT</strong></button>
+                    <button type="submit" className="sendemail-button"><strong>SUBMIT</strong></button>
 
-                    <p className="register-link" style={{ fontWeight: 100, fontSize: "1.2em" }}>
+                    <p className="rememberaccount-link" style={{ fontWeight: 100, fontSize: "1.2em" }}>
                         Remember your account? <Link to="/login">Login</Link>
                     </p>
                 </form>
             </div>
 
-            <div className="signin-right" style={{ backgroundImage: "url('/uploads/LOGIN_LANDING_PHOTO.jpeg')" }}>
+            <div className="register-right" style={{ backgroundImage: "url('/uploads/FORGOT_PASSWORD_LANDING_PHOTO.jpg')" }}>
             </div>
         </div>
     );
