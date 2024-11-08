@@ -17,7 +17,7 @@ function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(""); // State to hold error messages
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
     const handleClickShowPassword = () => {
@@ -64,6 +64,9 @@ function Register() {
         }
     };
 
+    //TODO: fix the title not being inputted into the database
+
+
     return (
         <div className="register-container">
             <div className="register-left">
@@ -79,6 +82,7 @@ function Register() {
                             <NativeSelect
                                 onChange={(e) => setTitle(e.target.value)}
                                 inputProps={{ name: 'title', id: 'uncontrolled-native' }}
+                                defaultValue={"Mr"}
                                 sx={{
                                     '& .MuiNativeSelect-root': { fontWeight: 'bold' },
                                     '& .MuiInputLabel-root': { color: 'black' },
