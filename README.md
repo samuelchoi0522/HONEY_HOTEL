@@ -48,6 +48,15 @@ Once all dependencies and servers are running, the project should be viewable on
 
 ### To run this project locally:
 
+Rename the .env.example file to .env, and replace the placeholder values to your environment variables.
+
+```sh
+DB_USERNAME=database_username
+DB_PASSWORD=database_password
+EMAIL_USERNAME=gmail_email
+EMAIL_PASSWORD=gmail_app_password
+```
+
 Initialize your PostgreSQL databse with the following command in the root directory.
 
 ```sh
