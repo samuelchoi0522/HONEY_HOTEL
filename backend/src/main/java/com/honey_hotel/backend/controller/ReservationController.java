@@ -56,6 +56,7 @@ public class ReservationController {
         String rateOption = (String) reservationDetails.get("rateOption");
         BigDecimal totalPrice = new BigDecimal((String) reservationDetails.get("finalTotal"));
         String bookingId = (String) reservationDetails.get("bookingId");
+        String photo_path = (String) reservationDetails.get("chosenPhoto");
 
         if (bookingId == null) {
             bookingId = UUID.randomUUID().toString();
@@ -71,7 +72,7 @@ public class ReservationController {
 
             Long reservationId = reservationService.createReservation(
                     user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption, totalPrice,
-                    bookingId);
+                    bookingId, photo_path);
 
             return reservationId != null
                     ? ResponseEntity.ok(Map.of("id", reservationId, "bookingId", bookingId))
@@ -94,6 +95,7 @@ public class ReservationController {
         List<Map<String, Object>> reservations = reservationService.getReservationsByUser(user).stream()
                 .map(reservation -> {
                     Map<String, Object> reservationMap = new HashMap<>();
+                    reservationMap.put("id", reservation.getId());
                     reservationMap.put("roomType", reservation.getRoom().getRoomType());
                     reservationMap.put("bedType", reservation.getRoom().getBedType());
                     reservationMap.put("smokingAllowed", reservation.getRoom().isSmokingAllowed());
@@ -105,6 +107,7 @@ public class ReservationController {
                     reservationMap.put("rateOption", reservation.getRateOption());
                     reservationMap.put("totalPrice", reservation.getTotalPrice());
                     reservationMap.put("bookingId", reservation.getBookingId());
+                    reservationMap.put("photo_path", reservation.getPhoto_path());
                     return reservationMap;
                 })
                 .collect(Collectors.toList());
