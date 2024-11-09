@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import '../styles/Checkout.css';
 import PaymentComponent from '../components/PaymentComponent';
+import { v4 as uuidv4 } from 'uuid';
 
 const Checkout = () => {
     const location = useLocation();
@@ -100,6 +101,8 @@ const Checkout = () => {
             return;
         }
 
+        const bookingId = uuidv4(); 
+
         try {
             const reservationIds = [];
 
@@ -112,7 +115,8 @@ const Checkout = () => {
                     children,
                     rateOption,
                     promoCode,
-                    finalTotal
+                    finalTotal,
+                    bookingId,
                 };
 
                 const reservationResponse = await fetch("http://localhost:8080/api/reservations", {

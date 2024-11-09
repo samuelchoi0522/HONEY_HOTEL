@@ -13,8 +13,6 @@ import com.honey_hotel.backend.repository.*;
 
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/account")

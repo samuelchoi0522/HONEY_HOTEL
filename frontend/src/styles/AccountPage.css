@@ -1,46 +1,79 @@
-.account-page {
-    color: black;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 100vh;
-    margin-top: 80px;
-}
-
-.form-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-
-.left-section {
-    width: 45%;
-    padding: 20px;
-}
-
-.right-section {
-    width: 45%;
-    padding: 20px;
-}
-
-.input-field {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
 .reservations-container {
-    background-color: #f5f5f5;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    width: 80%;
 }
 
 .booking-box {
-    background-color: #eaeaea;
-    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 20px;
     margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.booking-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.booking-info {
+    flex: 3;
+}
+
+.booking-info h4 {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.booking-info p {
+    color: #666;
+    margin: 5px 0;
+    font-size: 0.95em;
+}
+
+.room-details-container {
+    display: flex;
+    gap: 15px;
+}
+
+.room-details {
     padding: 10px;
+    border-left: 4px solid #ff8a65;
+    background-color: #fefefe;
+    border-radius: 8px;
+}
+
+.room-details p {
+    font-size: 0.9em;
+    color: #444;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.action-button {
+    font-size: 0.85em;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #f0f0f0;
 }

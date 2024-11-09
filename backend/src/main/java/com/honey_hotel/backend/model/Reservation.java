@@ -42,6 +42,9 @@ public class Reservation {
     @Column(name = "total_price", precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
+    @Column(name = "booking_id")
+    private String bookingId;
+
     public Long getId() {
         return id;
     }
@@ -120,5 +123,13 @@ public class Reservation {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(String bookingId) {
+        this.bookingId = bookingId;
     }
 }

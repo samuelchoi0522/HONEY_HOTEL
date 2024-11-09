@@ -52,6 +52,7 @@ function Navbar() {
             if (response.ok) {
                 setIsLoggedIn(false);
                 setUserName('');
+                localStorage.removeItem("isLoggedIn");
                 navigate("/");
             } else {
                 alert("Logout failed. Please try again.");

@@ -23,6 +23,7 @@ function Login() {
 
     useEffect(() => {
         const checkSession = async () => {
+            console.log("checking session");
             try {
                 const response = await fetch("http://localhost:8080/api/check-session", {
                     method: "POST",
@@ -31,10 +32,13 @@ function Login() {
                 });
 
                 const data = await response.json();
+                console.log(data);
 
                 if (response.ok && data.isLoggedIn) {
+                    console.log("User is logged in:", data);
                     navigate("/");
                 } else {
+                    console.log("No active session found.");
                 }
             } catch (error) {
                 console.error("Error checking session:", error);

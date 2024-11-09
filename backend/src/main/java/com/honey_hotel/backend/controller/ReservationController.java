@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -54,6 +55,11 @@ public class ReservationController {
         String promoCode = (String) reservationDetails.get("promoCode");
         String rateOption = (String) reservationDetails.get("rateOption");
         BigDecimal totalPrice = new BigDecimal((String) reservationDetails.get("finalTotal"));
+        String bookingId = (String) reservationDetails.get("bookingId");
+
+        if (bookingId == null) {
+            bookingId = UUID.randomUUID().toString();
+        }
 
         if (roomId == null || startDateString == null || endDateString == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Missing required fields"));
@@ -64,10 +70,11 @@ public class ReservationController {
             LocalDate checkOutDate = LocalDate.parse(endDateString);
 
             Long reservationId = reservationService.createReservation(
-                    user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption, totalPrice);
+                    user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption, totalPrice,
+                    bookingId);
 
             return reservationId != null
-                    ? ResponseEntity.ok(Map.of("id", reservationId))
+                    ? ResponseEntity.ok(Map.of("id", reservationId, "bookingId", bookingId))
                     : ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body(Map.of("error", "Failed to create reservation"));
         } catch (Exception e) {
@@ -97,6 +104,7 @@ public class ReservationController {
                     reservationMap.put("promoCode", reservation.getPromoCode());
                     reservationMap.put("rateOption", reservation.getRateOption());
                     reservationMap.put("totalPrice", reservation.getTotalPrice());
+                    reservationMap.put("bookingId", reservation.getBookingId());
                     return reservationMap;
                 })
                 .collect(Collectors.toList());
