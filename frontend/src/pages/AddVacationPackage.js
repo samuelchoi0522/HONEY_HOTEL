@@ -10,7 +10,7 @@ import '../styles/AddVacationPackage.css';
 const AddVacationPackage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { checkInDate, checkOutDate, selectedRooms, rooms, adults, children, rateOption, promoCode } = location.state || {};
+    const { checkInDate, checkOutDate, selectedRooms, rooms, adults, children, rateOption, promoCode, chosenPhoto } = location.state || {};
 
     const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,6 +21,7 @@ const AddVacationPackage = () => {
     const isValidDate = (date) => date && !isNaN(new Date(date).getTime());
 
     useEffect(() => {
+        console.log(location.state);
         const fetchActivities = async () => {
             if (!isValidDate(checkInDate) || !isValidDate(checkOutDate)) {
                 console.error('Invalid check-in or check-out date.');
@@ -72,6 +73,7 @@ const AddVacationPackage = () => {
                 category: selectedActivity.category,
             } : null,
             activityDate: selectedActivity ? dayjs(activityDate).format('YYYY-MM-DD') : null,
+            chosenPhoto
         };
 
         navigate('/checkout', { state: bookingDetails });

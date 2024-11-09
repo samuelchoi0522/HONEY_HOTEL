@@ -107,8 +107,11 @@ const AccountPage = () => {
                                     <h5>Rooms:</h5>
                                     {reservations.map((room, index) => (
                                         <div key={index} className="room-details">
-                                            <p><strong>Room Type:</strong> {room.roomType}</p>
-                                            <p><strong>Price:</strong> ${room.totalPrice}</p>
+                                            <img src={room.photo_path} alt={`${room.roomType} Room`} className="room-image" />
+                                            <p>{room.id}</p>
+                                            <p>{room.roomType} Room</p>
+                                            <p>{room.bedType} Bed</p>
+                                            <p>Total: ${room.totalPrice}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -129,8 +132,10 @@ const AccountPage = () => {
                                     <h5>Rooms:</h5>
                                     {reservations.map((room, index) => (
                                         <div key={index} className="room-details">
-                                            <p><strong>Room Type:</strong> {room.roomType}</p>
-                                            <p><strong>Price:</strong> ${room.totalPrice}</p>
+                                            <p>{room.roomType} Room</p>
+                                            <p><strong></strong></p>
+                                            <p><strong>Total:</strong> ${room.totalPrice}</p>
+                                            <p><strong></strong></p>
                                         </div>
                                     ))}
                                 </div>

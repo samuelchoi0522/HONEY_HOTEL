@@ -9,9 +9,11 @@
 
 .booking-box {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
     background-color: #ffffff;
+    color: black;
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 12px;
@@ -47,6 +49,7 @@
 }
 
 .room-details {
+    width: 100%;
     padding: 10px;
     border-left: 4px solid #ff8a65;
     background-color: #fefefe;

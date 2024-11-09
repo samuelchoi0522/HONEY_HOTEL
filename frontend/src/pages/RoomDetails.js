@@ -19,6 +19,7 @@ const RoomDetails = () => {
         rateOption,
         promoCode,
         discountRate = 0,
+        chosenPhoto,
         ...initialBookingDetails
     } = location.state || {};
 
@@ -42,6 +43,7 @@ const RoomDetails = () => {
         rateOption: rateOption || 'Lowest Regular Rate',
         promoCode: promoCode || '',
         discountRate,
+        chosenPhoto,
         ...initialBookingDetails,
     });
 
@@ -70,7 +72,7 @@ const RoomDetails = () => {
     );
 
     useEffect(() => {
-
+        console.log('bookingDetails:', bookingDetails);
         if (startDate && endDate) {
             const start = new Date(startDate);
             const end = new Date(endDate);
@@ -186,6 +188,8 @@ const RoomDetails = () => {
                 adults: bookingDetails.adults,
                 children: bookingDetails.children,
                 totalPrice: bookingDetails.totalPrice,
+                discountRate: bookingDetails.discountRate,
+                chosenPhoto: bookingDetails.chosenPhoto,
             },
         });
     };

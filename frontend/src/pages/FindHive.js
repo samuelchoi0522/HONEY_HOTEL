@@ -135,7 +135,8 @@ const FindHive = () => {
             checkInDate: bookingDetails.startDate,
             checkOutDate: bookingDetails.endDate,
             roomId: roomOptions[0].id,
-            discountRate
+            discountRate,
+            chosenPhoto: imageMap[categoryName]?.[roomType] || "../../public/uploads/default-photo.jpg"
         };
 
         navigate('/room-details', {

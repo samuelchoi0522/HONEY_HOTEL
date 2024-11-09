@@ -21,6 +21,7 @@ const Checkout = () => {
         promoCode,
         reservedActivity,
         activityDate,
+        chosenPhoto,
     } = location.state || {};
 
     const [finalTotal, setFinalTotal] = useState(0);
@@ -51,6 +52,7 @@ const Checkout = () => {
     });
 
     useEffect(() => {
+        console.log(location.state);
         const checkSession = async () => {
             try {
                 const response = await fetch("http://localhost:8080/api/check-session", {
@@ -101,7 +103,7 @@ const Checkout = () => {
             return;
         }
 
-        const bookingId = uuidv4(); 
+        const bookingId = uuidv4();
 
         try {
             const reservationIds = [];
@@ -117,6 +119,7 @@ const Checkout = () => {
                     promoCode,
                     finalTotal,
                     bookingId,
+                    chosenPhoto
                 };
 
                 const reservationResponse = await fetch("http://localhost:8080/api/reservations", {
