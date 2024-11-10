@@ -82,6 +82,8 @@ const FindHive = () => {
 
 
     useEffect(() => {
+
+        console.log(location.state);
         const checkSession = async () => {
             try {
                 const response = await fetch("http://localhost:8080/api/reservations/check-session", {

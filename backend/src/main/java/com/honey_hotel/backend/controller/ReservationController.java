@@ -46,7 +46,7 @@ public class ReservationController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "User not logged in"));
         }
-
+        String hotelLocation = (String) reservationDetails.get("hotelLocation");
         Long roomId = extractLongValue(reservationDetails, "roomId");
         String startDateString = (String) reservationDetails.get("startDate");
         String endDateString = (String) reservationDetails.get("endDate");
@@ -72,7 +72,7 @@ public class ReservationController {
 
             Long reservationId = reservationService.createReservation(
                     user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption, totalPrice,
-                    bookingId, photo_path);
+                    bookingId, photo_path, hotelLocation);
 
             return reservationId != null
                     ? ResponseEntity.ok(Map.of("id", reservationId, "bookingId", bookingId))
@@ -95,7 +95,8 @@ public class ReservationController {
         List<Map<String, Object>> reservations = reservationService.getReservationsByUser(user).stream()
                 .map(reservation -> {
                     Map<String, Object> reservationMap = new HashMap<>();
-                    reservationMap.put("id", reservation.getId());
+                    reservationMap.put("hotelLocation", reservation.getHotelLocation());
+                    reservationMap.put("id", reservation.getRoom().getId());
                     reservationMap.put("roomType", reservation.getRoom().getRoomType());
                     reservationMap.put("bedType", reservation.getRoom().getBedType());
                     reservationMap.put("smokingAllowed", reservation.getRoom().isSmokingAllowed());

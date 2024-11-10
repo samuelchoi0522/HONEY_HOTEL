@@ -48,6 +48,9 @@ public class Reservation {
     @Column(name = "chosen_photo_path")
     private String photo_path;
 
+    @Column(name = "hotel_location")
+    private String hotelLocation;
+
     public Long getId() {
         return id;
     }
@@ -142,5 +145,13 @@ public class Reservation {
 
     public void setPhoto_path(String photo_path) {
         this.photo_path = photo_path;
+    }
+
+    public String getHotelLocation() {
+        return hotelLocation;
+    }
+
+    public void setHotelLocation(String hotelLocation) {
+        this.hotelLocation = hotelLocation;
     }
 }

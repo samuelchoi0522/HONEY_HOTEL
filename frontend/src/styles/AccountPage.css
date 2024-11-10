@@ -1,82 +1,155 @@
-.reservations-container {
-    background-color: #fafafa;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
-    width: 80%;
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=PT+Serif+Caption:ital@0;1&display=swap');
+
+body {
+    font-family: "Montserrat", sans-serif;
 }
 
-.booking-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    background-color: #ffffff;
+.account-page {
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 40px;
     color: black;
+    font-family: "Montserrat", sans-serif;
+}
+
+.account-form-container {
+    max-width: 1400px;
+    width: 90%;
+    margin: auto;
+}
+
+/* Reservations Container */
+.account-reservations-container {
+    background-color: #E5E4E4;
     padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+}
+
+.account-reservations-container h3{
+    margin-left: 20px;
+    letter-spacing: 1px;
+}
+
+.account-booking-box {
+    display: flex;
+    width: 96%;
+    margin: 0 auto;
+    flex-direction: column;
+    background-color: #ffffff;
+    margin-top: 40px;
     margin-bottom: 20px;
-    border-radius: 12px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.467);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
+    position: relative;
 }
 
-.booking-box:hover {
+.account-booking-box:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-.booking-info {
-    flex: 3;
+.account-booking-info-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #D9D9D9;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding-top: 20px;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.467);
 }
 
-.booking-info h4 {
+.account-booking-info h4 {
     font-size: 1.2em;
-    color: #333;
     margin-bottom: 10px;
+    color: #333;
 }
 
-.booking-info p {
-    color: #666;
-    margin: 5px 0;
-    font-size: 0.95em;
-}
-
-.room-details-container {
+.account-room-details-container {
     display: flex;
     gap: 15px;
+    
 }
 
-.room-details {
-    width: 100%;
+.account-room-image {
+    width: 270px;
+    height: auto;
+    border-radius: 5px;
+    margin-left: 40px;
+    margin-top: 40px;
+    margin-right: 10px;
+}
+
+.account-room-details-text {
+    margin-top: 55px;
+    margin-left: 30px;
+    flex: 1;
+    font-size: 13px;
+    letter-spacing: 0.6px;
+    line-height: 9px;
     padding: 10px;
-    border-left: 4px solid #ff8a65;
-    background-color: #fefefe;
-    border-radius: 8px;
 }
 
-.room-details p {
+.account-room-details-text p {
     font-size: 0.9em;
-    color: #444;
 }
 
-.action-buttons {
+.account-action-buttons {
     display: flex;
-    flex-direction: column;
     gap: 10px;
-    align-items: center;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    justify-content: flex-end;
 }
 
-.action-button {
-    font-size: 0.85em;
+.account-action-button {
+    font-size: 0.75em;
+    letter-spacing: 1px;
     padding: 8px 16px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
+    border: 1.5px solid #000000;
     cursor: pointer;
+    background-color: #000000;
+    color: #ffffff;
     transition: background-color 0.3s ease;
 }
 
-.action-button:hover {
-    background-color: #f0f0f0;
+.account-action-button:hover {
+    background-color: #ffffff;
+    color: black;
+    border-color: #f0d10b;
+}
+
+.account-booking-id{
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    font-size: 0.7em;
+    color: #666;
+}
+
+.account-title{
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-top: 110px;
+    margin-left: 5%;
+    color: rgb(0, 0, 0);
+}
+
+.account-checkin-checkout {
+    display: flex;
+    gap: 70px;
+    margin-top: -1.3%;
+    margin-left: 1.5%;
+}
+
+.account-divider-line{
+    width: 92%;
+    margin: 0 auto;
+    border-bottom: 1px solid #ddd;
+    margin-top: 20px;
 }

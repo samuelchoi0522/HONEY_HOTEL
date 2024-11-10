@@ -10,7 +10,7 @@ import '../styles/AddVacationPackage.css';
 const AddVacationPackage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { checkInDate, checkOutDate, selectedRooms, rooms, adults, children, rateOption, promoCode, chosenPhoto } = location.state || {};
+    const { hotelLocation, checkInDate, checkOutDate, selectedRooms, rooms, adults, children, rateOption, promoCode, chosenPhoto } = location.state || {};
 
     const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -58,6 +58,7 @@ const AddVacationPackage = () => {
 
         // Prepare booking details for checkout
         const bookingDetails = {
+            hotelLocation,
             checkInDate,
             checkOutDate,
             selectedRooms,

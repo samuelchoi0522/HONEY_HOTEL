@@ -1,26 +1,36 @@
-/* AccountNavbar.css */
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=PT+Serif+Caption:ital@0;1&display=swap');
+
+body {
+    font-family: "Montserrat", sans-serif;
+}
 
 .nav-toolbar {
+    max-width: 1400px;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: transparent;
-    padding: 10px 20px;
+    justify-content: center;
+    padding: 15px 0;
+    width: 85%;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: -20px;
+    justify-content: space-between;
 }
 
 .nav-toolbar button {
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 1px;
     color: #333;
-    position: relative;
+    padding: 10px 20px;
     transition: color 0.3s ease;
 }
 
 .navbar-underline {
+max-width: 1400px;
     height: 2px;
     background-color: #ddd;
-    width: 100%;
-    margin-top: -2px;
+    width: 90%;
+    margin: 0 auto;
 }
 
 .active-tab {
@@ -31,12 +41,11 @@
 .active-tab::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     height: 2px;
     width: 60%;
     background-color: #ff8a65;
-    /* Matches active color */
     border-radius: 2px;
 }

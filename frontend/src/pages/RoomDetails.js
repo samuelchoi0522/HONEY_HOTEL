@@ -7,6 +7,7 @@ const RoomDetails = () => {
     const navigate = useNavigate();
 
     const {
+        hotelLocation,
         categoryName,
         roomType,
         roomOptions,
@@ -28,6 +29,7 @@ const RoomDetails = () => {
 
 
     const [bookingDetails, setBookingDetails] = useState({
+        hotelLocation,
         categoryName,
         roomType,
         selectedBedType: roomOptions[0]?.bedType,
@@ -56,6 +58,7 @@ const RoomDetails = () => {
             const roomOption = availableRoomOptions[i] || {};
             const discountedPrice = roomOption.price ? roomOption.price * (1 - discountRate) : 0;
             return {
+                hotelLocation: roomOption.hotelLocation || hotelLocation,
                 roomId: roomOption.id || null,
                 categoryName: bookingDetails.categoryName,
                 roomType: bookingDetails.roomType,
@@ -180,6 +183,7 @@ const RoomDetails = () => {
 
         navigate('/add-vacation-package', {
             state: {
+                hotelLocation: bookingDetails.hotelLocation,
                 selectedRooms,
                 checkInDate: bookingDetails.checkInDate,
                 checkOutDate: bookingDetails.checkOutDate,

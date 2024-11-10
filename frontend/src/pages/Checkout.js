@@ -11,6 +11,7 @@ const Checkout = () => {
     const navigate = useNavigate();
 
     const {
+        hotelLocation,
         checkInDate,
         checkOutDate,
         selectedRooms,
@@ -110,6 +111,7 @@ const Checkout = () => {
 
             for (const room of selectedRooms) {
                 const reservationPayload = {
+                    hotelLocation,
                     roomId: room.roomId,
                     startDate: checkInDate,
                     endDate: checkOutDate,

@@ -28,7 +28,7 @@ public class ReservationService {
     private RoomRepository roomRepository;
 
     public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate,
-            int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, String bookingId, String photo_path) {
+            int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, String bookingId, String photo_path, String hotelLocation) {
         try {
             Optional<Room> roomOpt = roomRepository.findById(roomId);
             if (roomOpt.isEmpty()) {
@@ -47,6 +47,7 @@ public class ReservationService {
             reservation.setTotalPrice(totalPrice);
             reservation.setBookingId(bookingId);
             reservation.setPhoto_path(photo_path);
+            reservation.setHotelLocation(hotelLocation);
 
             Reservation savedReservation = reservationRepository.save(reservation);
             return savedReservation.getId();
