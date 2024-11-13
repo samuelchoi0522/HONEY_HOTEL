@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api")
@@ -21,8 +20,6 @@ public class PasswordController {
 
     @Autowired
     private ValidateTokenService tokenService;
-
-    private Logger logger = Logger.getLogger(PasswordController.class.getName());
 
     // Token-based password reset endpoint
     @PostMapping("/reset-password")
