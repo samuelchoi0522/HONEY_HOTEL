@@ -17,6 +17,7 @@ import AddVacationPackage from './pages/AddVacationPackage';
 import Checkout from './pages/Checkout';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import AdminDashboard from './pages/AdminDashboard';
 
 import './styles/App.css';
 
@@ -54,6 +55,7 @@ function Layout() {
                 <Route path="/add-vacation-package" element={<AddVacationPackage />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/admin-dashboard" element={<AdminDashboard />} />
             </Routes>
             {showNavbarAndFooter && <Footer />}
         </div>

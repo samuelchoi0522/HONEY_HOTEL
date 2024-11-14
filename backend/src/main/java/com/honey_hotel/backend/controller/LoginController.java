@@ -44,6 +44,8 @@ public class LoginController {
             AppUser user = (AppUser) request.getSession().getAttribute("user");
             response.put("isLoggedIn", true);
             response.put("firstname", user.getFirstname());
+            response.put("lastname", user.getLastname());
+            response.put("email", user.getEmail());
         } else {
             response.put("isLoggedIn", false);
         }

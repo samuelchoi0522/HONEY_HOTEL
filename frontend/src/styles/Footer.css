@@ -4,7 +4,8 @@
 .footer {
     background-color: black;
     color: white;
-    padding: 10px 0;
+    padding-top: 10px;
+    padding-bottom: 1px;
     text-align: center;
 }
 
@@ -62,7 +63,8 @@
 
 .footer-bottom {
     text-align: left;
-    margin-top: 20px;
+    margin-top: 40px;
+    margin-left: 10px;
     font-size: 10px;
     color: #666;
 }

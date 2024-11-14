@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.honey_hotel.backend.repository.*;
 
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/api/account")
