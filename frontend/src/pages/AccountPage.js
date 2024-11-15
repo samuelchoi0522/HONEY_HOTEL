@@ -312,7 +312,7 @@ const AccountPage = () => {
                                         }}
                                         sx={{
                                             "& .MuiFilledInput-root": {
-                                                borderRadius: "0px", // Change to desired radius
+                                                borderRadius: "0px",
                                                 overflow: "hidden",
                                                 width: "300px",
                                             },
@@ -345,22 +345,37 @@ const AccountPage = () => {
                                 </div>
                             </div>
 
-                            <div className="account-settings-text-field-container">
-                                <TextField
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    disabled={!isEmailEditable}
-                                    variant='filled'
-                                    size='small'
-                                />
-                                <button
-                                    type="button"
-                                    className="account-settings-change-button"
-                                    onClick={() => setIsEmailEditable(!isEmailEditable)}
-                                >
-                                    Change Email
-                                </button>
+                            <div className='account-settings-email'>
+                                <p>EMAIL</p>
+                                <div className="account-settings-text-field-container">
+                                    <TextField
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        disabled={!isEmailEditable}
+                                        variant='filled'
+                                        size='small'
+                                        inputProps={{
+                                            style: {
+                                                padding: '10px',
+                                            },
+                                        }}
+                                        sx={{
+                                            "& .MuiFilledInput-root": {
+                                                borderRadius: "0px", // Change to desired radius
+                                                overflow: "hidden",
+                                                width: "300px",
+                                            },
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="account-settings-change-button"
+                                        onClick={() => setIsEmailEditable(!isEmailEditable)}
+                                    >
+                                        Change Email
+                                    </button>
+                                </div>
                             </div>
 
                             {isPasswordEditable ? (
@@ -430,32 +445,46 @@ const AccountPage = () => {
                                     />
                                 </form>
                             ) : (
-                                <div className="account-settings-text-field-container">
-                                    <TextField
-                                        type="password"
-                                        value="********"
-                                        variant='filled'
-                                        size='small'
-                                        disabled
-                                    />
-                                    <button
-                                        type="button"
-                                        className="account-settings-change-button"
-                                        onClick={() => setIsPasswordEditable(true)}
-                                    >
-                                        Change Password
-                                    </button>
+                                <div className="account-settings-password">
+                                    <p>PASSWORD</p>
+                                    <div className="account-settings-text-field-container">
+                                        <TextField
+                                            type="password"
+                                            value="********"
+                                            variant='filled'
+                                            size='small'
+                                            disabled
+                                            inputProps={{
+                                                style: {
+                                                    padding: '10px',
+                                                },
+                                            }}
+                                            sx={{
+                                                "& .MuiFilledInput-root": {
+                                                    borderRadius: "0px", // Change to desired radius
+                                                    overflow: "hidden",
+                                                    width: "300px",
+                                                },
+                                            }}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="account-settings-change-button"
+                                            onClick={() => setIsPasswordEditable(true)}
+                                        >
+                                            Change Password
+                                        </button>
+                                    </div>
                                 </div>
                             )}
-
-                            <Button
-                                className="account-settings-save-button"
-                                variant="contained"
-                                onClick={handleSave}
-                                disabled={!hasChanges}
-                            >
-                                Save Profile
-                            </Button>
+                            <div className="account-settings-save-button-container">
+                                <button
+                                    className={`account-settings-save-button ${hasChanges ? "has-changes" : ""}`}
+                                    onClick={hasChanges ? handleSave : null}
+                                >
+                                    Save Profile
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}

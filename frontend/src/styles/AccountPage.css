@@ -246,3 +246,54 @@ body {
     margin-bottom: 10px;
     margin-left: 85px;
 }
+
+.account-settings-email{
+    margin-top: 10px;
+}
+
+.account-settings-email p {
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.account-settings-password{
+    margin-top: 10px;
+}
+
+.account-settings-password p {
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.account-settings-save-button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 20px;
+}
+.account-settings-save-button {
+    background-color: black;
+    color: white;
+    width: 110px;
+    padding: 10px;
+    cursor: not-allowed;
+    opacity: 0.6;
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+}
+
+.account-settings-save-button.has-changes {
+    cursor: pointer;
+    opacity: 1;
+    padding: 8.5px;
+    background-color: black;
+    border: 1.5px solid #000000;
+}
+
+.account-settings-save-button.has-changes:hover {
+    background-color: white;
+    color: black;
+    border-color: #f0d10b;
+}
