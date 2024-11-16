@@ -48,7 +48,8 @@ Once all dependencies and servers are running, the project should be viewable on
 
 ### To run this project locally:
 
-Rename the .env.example file to .env, and replace the placeholder values to your environment variables.
+Rename the .env.example file in the backend and frontend directories to .env, and replace the placeholder values to your environment variables.
+You must have the .env file for the app to compile and run.
 
 ```sh
 DB_USERNAME=database_username
