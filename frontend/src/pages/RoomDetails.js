@@ -181,6 +181,10 @@ const RoomDetails = () => {
             }
         }
 
+        const roomPrices = selectedRooms.map(room => parseFloat(room.totalPrice * numNights * 1.06));
+        const totalPrice = roomPrices.reduce((acc, price) => acc + price, 0).toFixed(2);
+
+
         navigate('/add-vacation-package', {
             state: {
                 hotelLocation: bookingDetails.hotelLocation,
@@ -194,6 +198,8 @@ const RoomDetails = () => {
                 totalPrice: bookingDetails.totalPrice,
                 discountRate: bookingDetails.discountRate,
                 chosenPhoto: bookingDetails.chosenPhoto,
+                totalPrice,
+                roomPrices,
             },
         });
     };

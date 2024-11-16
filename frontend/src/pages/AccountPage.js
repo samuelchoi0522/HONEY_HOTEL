@@ -34,7 +34,7 @@ const AccountPage = () => {
         const checkSession = async () => {
             console.log("checking session");
             try {
-                const response = await fetch("http://localhost:8080/api/check-session", {
+                const response = await fetch("http://localhost:8080/auth/check-session", {
                     method: "POST",
                     credentials: "include",
                     headers: { 'Content-Type': 'application/json' }
@@ -214,6 +214,9 @@ const AccountPage = () => {
                                             <p>CHECK-OUT <br></br><strong>{new Date(reservations[0].checkOutDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong></p>
                                         </div>
                                         <p className="account-booking-id">Booking ID: {bookingId}</p>
+                                        <p className="account-total-price">
+                                            Total: <span style={{ color: "black", fontWeight: "bold" }}>${reservations.reduce((total, room) => total + parseFloat(room.roomPrice || 0), 0).toFixed(2)}</span>
+                                        </p>
                                     </div>
 
 
@@ -226,7 +229,7 @@ const AccountPage = () => {
                                                     <p>{room.hotelLocation.toUpperCase()}</p>
                                                     <p>{room.roomType.toUpperCase()} ROOM</p>
                                                     <p>{room.bedType.toUpperCase()} BED</p>
-                                                    <p>TOTAL: ${room.totalPrice}</p>
+                                                    <p>TOTAL: ${room.roomPrice}</p>
                                                 </div>
                                             </div>
 
@@ -272,7 +275,7 @@ const AccountPage = () => {
                                                     <p>{room.hotelLocation.toUpperCase()}</p>
                                                     <p>{room.roomType.toUpperCase()} ROOM</p>
                                                     <p>{room.bedType.toUpperCase()} BED</p>
-                                                    <p>TOTAL: ${room.totalPrice}</p>
+                                                    <p>TOTAL: ${room.roomPrice}</p>
                                                 </div>
                                             </div>
 

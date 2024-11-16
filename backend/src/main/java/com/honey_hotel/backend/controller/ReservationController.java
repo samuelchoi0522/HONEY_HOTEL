@@ -54,9 +54,17 @@ public class ReservationController {
         Integer children = (Integer) reservationDetails.getOrDefault("children", 0);
         String promoCode = (String) reservationDetails.get("promoCode");
         String rateOption = (String) reservationDetails.get("rateOption");
-        BigDecimal totalPrice = new BigDecimal((String) reservationDetails.get("finalTotal"));
+
+        // Parse roomPrice and totalPrice
+        BigDecimal roomPrice = reservationDetails.get("roomPrice") != null
+                ? new BigDecimal(reservationDetails.get("roomPrice").toString())
+                : BigDecimal.ZERO;
+        BigDecimal totalPrice = reservationDetails.get("totalPrice") != null
+                ? new BigDecimal(reservationDetails.get("totalPrice").toString())
+                : BigDecimal.ZERO;
+
         String bookingId = (String) reservationDetails.get("bookingId");
-        String photo_path = (String) reservationDetails.get("chosenPhoto");
+        String photoPath = (String) reservationDetails.get("chosenPhoto");
 
         if (bookingId == null) {
             bookingId = UUID.randomUUID().toString();
@@ -70,9 +78,10 @@ public class ReservationController {
             LocalDate checkInDate = LocalDate.parse(startDateString);
             LocalDate checkOutDate = LocalDate.parse(endDateString);
 
+            // Pass roomPrice and totalPrice to the service layer
             Long reservationId = reservationService.createReservation(
-                    user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption, totalPrice,
-                    bookingId, photo_path, hotelLocation);
+                    user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption,
+                    totalPrice, roomPrice, bookingId, photoPath, hotelLocation);
 
             return reservationId != null
                     ? ResponseEntity.ok(Map.of("id", reservationId, "bookingId", bookingId))
@@ -106,6 +115,7 @@ public class ReservationController {
                     reservationMap.put("children", reservation.getChildren());
                     reservationMap.put("promoCode", reservation.getPromoCode());
                     reservationMap.put("rateOption", reservation.getRateOption());
+                    reservationMap.put("roomPrice", reservation.getRoomPrice());
                     reservationMap.put("totalPrice", reservation.getTotalPrice());
                     reservationMap.put("bookingId", reservation.getBookingId());
                     reservationMap.put("photo_path", reservation.getPhoto_path());

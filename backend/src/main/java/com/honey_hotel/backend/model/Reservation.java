@@ -42,6 +42,9 @@ public class Reservation {
     @Column(name = "total_price", precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
+    @Column(name = "room_price", precision = 10, scale = 2)
+    private BigDecimal roomPrice;
+
     @Column(name = "booking_id")
     private String bookingId;
 
@@ -129,6 +132,14 @@ public class Reservation {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public BigDecimal getRoomPrice() {
+        return roomPrice;
+    }
+
+    public void setRoomPrice(BigDecimal roomPrice) {
+        this.roomPrice = roomPrice;
     }
 
     public String getBookingId() {

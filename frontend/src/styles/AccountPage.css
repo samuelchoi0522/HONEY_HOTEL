@@ -27,7 +27,7 @@ body {
     margin-top: 40px;
 }
 
-.account-reservations-container h3{
+.account-reservations-container h3 {
     margin-left: 20px;
     letter-spacing: 1px;
 }
@@ -73,7 +73,7 @@ body {
 .account-room-details-container {
     display: flex;
     gap: 15px;
-    
+
 }
 
 .account-room-image {
@@ -124,7 +124,7 @@ body {
     border-color: #f0d10b;
 }
 
-.account-booking-id{
+.account-booking-id {
     position: absolute;
     top: 5px;
     right: 20px;
@@ -132,7 +132,7 @@ body {
     color: #666;
 }
 
-.account-title{
+.account-title {
     font-size: 1.5em;
     font-weight: 700;
     margin-top: 110px;
@@ -147,7 +147,7 @@ body {
     margin-left: 1.5%;
 }
 
-.account-divider-line{
+.account-divider-line {
     width: 92%;
     margin: 0 auto;
     border-bottom: 1px solid #ddd;
@@ -215,7 +215,7 @@ body {
     margin-top: 20px;
 }
 
-.account-settings-bottom-container{
+.account-settings-bottom-container {
     background-color: white;
     margin-top: 40px;
     margin-left: 20px;
@@ -225,12 +225,12 @@ body {
     padding: 30px;
 }
 
-.account-settings-first-name{
+.account-settings-first-name {
     margin-top: -20px;
     width: 200px;
 }
 
-.account-settings-first-name p{
+.account-settings-first-name p {
     font-size: 0.9em;
     font-weight: 600;
     margin-bottom: 10px;
@@ -247,7 +247,7 @@ body {
     margin-left: 85px;
 }
 
-.account-settings-email{
+.account-settings-email {
     margin-top: 10px;
 }
 
@@ -257,7 +257,7 @@ body {
     margin-bottom: 10px;
 }
 
-.account-settings-password{
+.account-settings-password {
     margin-top: 10px;
 }
 
@@ -273,6 +273,7 @@ body {
     width: 100%;
     margin-top: 20px;
 }
+
 .account-settings-save-button {
     background-color: black;
     color: white;
@@ -296,4 +297,12 @@ body {
     background-color: white;
     color: black;
     border-color: #f0d10b;
+}
+
+.account-total-price {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    font-size: 0.8em;
+    color: #666;
 }

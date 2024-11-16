@@ -16,6 +16,7 @@ const Checkout = () => {
         checkOutDate,
         selectedRooms,
         rooms,
+        roomPrices,
         adults,
         children,
         rateOption,
@@ -56,7 +57,7 @@ const Checkout = () => {
         console.log(location.state);
         const checkSession = async () => {
             try {
-                const response = await fetch("http://localhost:8080/api/check-session", {
+                const response = await fetch("http://localhost:8080/auth/check-session", {
                     method: "POST",
                     credentials: "include",
                     headers: { 'Content-Type': 'application/json' },
@@ -104,12 +105,16 @@ const Checkout = () => {
             return;
         }
 
-        const bookingId = uuidv4();
+        const bookingId = uuidv4(); // Generate a unique booking ID
 
         try {
             const reservationIds = [];
 
-            for (const room of selectedRooms) {
+            // Iterate over selectedRooms to create a reservation for each room
+            for (let i = 0; i < selectedRooms.length; i++) {
+                const room = selectedRooms[i];
+                const roomPrice = roomPrices[i]; // Get the corresponding room price
+
                 const reservationPayload = {
                     hotelLocation,
                     roomId: room.roomId,
@@ -119,9 +124,10 @@ const Checkout = () => {
                     children,
                     rateOption,
                     promoCode,
-                    finalTotal,
+                    totalPrice: roomPrice * numNights, // Total price for this room
+                    roomPrice, // Individual room price per night
                     bookingId,
-                    chosenPhoto
+                    chosenPhoto,
                 };
 
                 const reservationResponse = await fetch("http://localhost:8080/api/reservations", {
@@ -177,7 +183,6 @@ const Checkout = () => {
             setIsSubmitting(false);
         }
     };
-
 
     return (
         <div className="checkout-page">

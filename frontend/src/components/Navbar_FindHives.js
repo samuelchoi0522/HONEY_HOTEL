@@ -14,7 +14,7 @@ function Navbar_FindHives() {
         //check if the user is logged in by fetching session data
         const checkSession = async () => {
             try {
-                const response = await fetch("http://localhost:8080/api/check-session", {
+                const response = await fetch("http://localhost:8080/auth/check-session", {
                     method: "POST",
                     credentials: "include",
                     headers: { 'Content-Type': 'application/json' }
@@ -38,7 +38,7 @@ function Navbar_FindHives() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/logout", {
+            const response = await fetch("http://localhost:8080/auth/logout", {
                 method: "POST",
                 credentials: "include",
             });

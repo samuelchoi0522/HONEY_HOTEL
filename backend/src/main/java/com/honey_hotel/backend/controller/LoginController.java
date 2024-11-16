@@ -21,7 +21,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @PostMapping("/api/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<?> loginUser(@RequestBody AppUser user, HttpServletRequest request) {
         if (user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.badRequest().body("A required field is missing.");
@@ -37,7 +37,7 @@ public class LoginController {
         return ResponseEntity.ok("Login successful!");
     }
 
-    @PostMapping("/api/check-session")
+    @PostMapping("/auth/check-session")
     public ResponseEntity<?> checkSession(HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         if (loginService.isUserLoggedIn(request)) {
@@ -52,7 +52,7 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/api/logout")
+    @PostMapping("/auth/logout")
     public ResponseEntity<?> logoutUser(HttpServletRequest request) {
         loginService.invalidateSession(request);
         return ResponseEntity.ok("Logout successful.");
