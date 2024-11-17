@@ -40,46 +40,28 @@ const AccountPage = () => {
                     headers: { 'Content-Type': 'application/json' }
                 });
 
-                const data = await response.json();
-                console.log(data);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
 
-                if (response.ok && data.isLoggedIn) {
-                    formData.firstName = data.firstname;
-                    formData.lastName = data.lastname;
-                    formData.email = data.email;
+                    if (data.isLoggedIn) {
+                        setFormData((prevData) => ({
+                            ...prevData,
+                            firstName: data.firstname,
+                            lastName: data.lastname,
+                            email: data.email,
+                        }));
+                    } else {
+                        console.log("No active session found.");
+                        navigate("/login");
+                    }
                 } else {
-                    console.log("No active session found.");
-                    navigate("/login");
+                    console.error("Failed to verify session.");
                 }
             } catch (error) {
                 console.error("Error checking session:", error);
             }
         };
-
-        const getUserInfo = async () => {
-            console.log("getting user info");
-            try {
-                const response = await fetch("http://localhost:8080/api/account", {
-                    method: "GET",
-                    credentials: "include",
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setFormData({
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        email: data.email,
-                    });
-                } else {
-                    console.error("Failed to fetch user info.");
-                }
-            } catch (error) {
-                console.error("Error fetching user info:", error);
-            }
-        };
-
 
         const fetchReservations = async () => {
             try {
@@ -102,8 +84,7 @@ const AccountPage = () => {
 
         checkSession();
         fetchReservations();
-        getUserInfo();
-    }, []);
+    }, [navigate]);
 
     const groupedReservations = reservations.reduce((acc, reservation) => {
         const { bookingId } = reservation;
@@ -111,11 +92,6 @@ const AccountPage = () => {
         acc[bookingId].push(reservation);
         return acc;
     }, {});
-
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -148,6 +124,36 @@ const AccountPage = () => {
             setFormData({ oldPassword: '', password: '', confirmPassword: '' });
         } catch (error) {
             setErrorMessage('An unexpected error occurred.');
+        }
+    };
+
+    const handleCancelRoom = async (roomId, bookingId) => {
+        console.log("Canceling room with roomId:", roomId, "and bookingId:", bookingId);
+        try {
+            const response = await fetch(`http://localhost:8080/api/reservations/cancel`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ roomId, bookingId }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Failed to cancel the room:", errorText);
+                alert("Failed to cancel the room. Please try again.");
+                return;
+            }
+
+            alert("Room canceled successfully!");
+
+            setReservations((prevReservations) =>
+                prevReservations.filter(
+                    (reservation) => !(reservation.roomId === roomId && reservation.bookingId === bookingId)
+                )
+            );
+        } catch (error) {
+            console.error("Error canceling room:", error);
+            alert("An unexpected error occurred. Please try again.");
         }
     };
 
@@ -235,7 +241,12 @@ const AccountPage = () => {
 
                                             {/* Action Buttons for each room */}
                                             <div className="account-action-buttons">
-                                                <button className="account-action-button">CANCEL ROOM</button>
+                                                <button
+                                                    className="account-action-button"
+                                                    onClick={() => handleCancelRoom(room.roomId, room.bookingId)}
+                                                >
+                                                    CANCEL ROOM
+                                                </button>
                                                 <button className="account-action-button">REQUEST EARLY CHECK-IN</button>
                                             </div>
 
@@ -338,7 +349,7 @@ const AccountPage = () => {
                                         }}
                                         sx={{
                                             "& .MuiFilledInput-root": {
-                                                borderRadius: "0px", // Change to desired radius
+                                                borderRadius: "0px",
                                                 overflow: "hidden",
                                                 width: "300px",
                                                 marginLeft: "85px",
@@ -365,7 +376,7 @@ const AccountPage = () => {
                                         }}
                                         sx={{
                                             "& .MuiFilledInput-root": {
-                                                borderRadius: "0px", // Change to desired radius
+                                                borderRadius: "0px",
                                                 overflow: "hidden",
                                                 width: "300px",
                                             },
@@ -464,7 +475,7 @@ const AccountPage = () => {
                                             }}
                                             sx={{
                                                 "& .MuiFilledInput-root": {
-                                                    borderRadius: "0px", // Change to desired radius
+                                                    borderRadius: "0px",
                                                     overflow: "hidden",
                                                     width: "300px",
                                                 },

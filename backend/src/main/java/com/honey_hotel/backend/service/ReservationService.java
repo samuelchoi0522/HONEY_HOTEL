@@ -104,6 +104,25 @@ public class ReservationService {
         return false;
     }
 
+    public boolean cancelRoom(AppUser user, Long roomId, String bookingId) {
+        try {
+            Optional<Reservation> reservationOpt = reservationRepository.findByRoomIdAndBookingIdAndUser(
+                    roomId, bookingId, user.getId());
+
+            if (reservationOpt.isPresent()) {
+                Reservation reservation = reservationOpt.get();
+
+                reservationRepository.delete(reservation);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean isUserLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
