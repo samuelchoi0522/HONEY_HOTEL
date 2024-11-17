@@ -35,7 +35,6 @@ Honey Hotel requires [Java](https://www.java.com/en/) v22, [PostgreSQL](https://
 ### To run this project using docker:
 
 Ensure that you have docker installed:
-```sh
 docker -v
 ```
 

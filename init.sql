@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS reservations (
     booking_id VARCHAR(36),
     chosen_photo_path VARCHAR(255),
     hotel_location VARCHAR(255),
+    room_price NUMERIC(10, 2),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (room_id) REFERENCES rooms(id)
 );

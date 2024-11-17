@@ -105,7 +105,7 @@ public class ReservationController {
                 .map(reservation -> {
                     Map<String, Object> reservationMap = new HashMap<>();
                     reservationMap.put("hotelLocation", reservation.getHotelLocation());
-                    reservationMap.put("id", reservation.getRoom().getId());
+                    reservationMap.put("roomId", reservation.getRoom().getId());
                     reservationMap.put("roomType", reservation.getRoom().getRoomType());
                     reservationMap.put("bedType", reservation.getRoom().getBedType());
                     reservationMap.put("smokingAllowed", reservation.getRoom().isSmokingAllowed());
@@ -237,6 +237,36 @@ public class ReservationController {
         } catch (Exception e) {
             logger.severe("Error creating activity reservation: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Internal server error");
+        }
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<String> cancelRoom(@RequestBody Map<String, Object> cancelDetails,
+            HttpServletRequest request) {
+        AppUser user = getLoggedInUser(request);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
+        }
+
+        Long roomId = extractLongValue(cancelDetails, "roomId");
+        String bookingId = (String) cancelDetails.get("bookingId");
+
+        if (roomId == null || bookingId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error: Missing roomId or bookingId in the request body");
+        }
+
+        try {
+            boolean roomCanceled = reservationService.cancelRoom(user, roomId, bookingId);
+
+            return roomCanceled
+                    ? ResponseEntity.ok("Room canceled successfully!")
+                    : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Failed to cancel the room");
+        } catch (Exception e) {
+            logger.severe("Error canceling room: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: Internal server error");
         }
     }
 
