@@ -167,9 +167,10 @@ const AccountPage = () => {
         try {
             if (hasChanges) {
                 if (formData.firstName || formData.lastName) {
-                    await fetch('/api/update-name', {
+                    await fetch('http://localhost:8080/api/account/update-name', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
                         body: JSON.stringify({
                             firstName: formData.firstName,
                             lastName: formData.lastName,
@@ -178,22 +179,25 @@ const AccountPage = () => {
                 }
 
                 if (isEmailEditable) {
-                    await fetch('/api/update-email', {
+                    await fetch('http://localhost:8080/api/account/update-email', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
                         body: JSON.stringify({ email: formData.email }),
                     });
                 }
 
                 if (isPasswordEditable) {
-                    await fetch('/api/update-password', {
+                    await fetch('http://localhost:8080/api/account/reset-password', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
                         body: JSON.stringify({ password: formData.password }),
                     });
                 }
 
                 alert("Profile updated successfully!");
+                window.location.reload();
                 setHasChanges(false);
                 setIsEmailEditable(false);
                 setIsPasswordEditable(false);
@@ -387,13 +391,14 @@ const AccountPage = () => {
                                         className="account-settings-change-button"
                                         onClick={() => setIsEmailEditable(!isEmailEditable)}
                                     >
-                                        Change Email
+                                        {isEmailEditable ? "Cancel" : "Change Email"}
                                     </button>
                                 </div>
                             </div>
 
                             {isPasswordEditable ? (
-                                <form onSubmit={handleSave}>
+                                <form className="account-reset_password-text-fields" onSubmit={handleSave}>
+                                    <p>PASSWORD</p>
                                     <TextField
                                         label="Old Password"
                                         type={showOldPassword ? "text" : "password"}
@@ -413,6 +418,13 @@ const AccountPage = () => {
                                                     </IconButton>
                                                 </InputAdornment>
                                             ),
+                                        }}
+                                        sx={{
+                                            "& .MuiFilledInput-root": {
+                                                borderRadius: "0px",
+                                                overflow: "hidden",
+                                                width: "300px",
+                                            },
                                         }}
                                     />
                                     <TextField
@@ -435,6 +447,13 @@ const AccountPage = () => {
                                                 </InputAdornment>
                                             ),
                                         }}
+                                        sx={{
+                                            "& .MuiFilledInput-root": {
+                                                borderRadius: "0px",
+                                                overflow: "hidden",
+                                                width: "300px",
+                                            },
+                                        }}
                                     />
                                     <TextField
                                         label="Confirm Password"
@@ -456,7 +475,21 @@ const AccountPage = () => {
                                                 </InputAdornment>
                                             ),
                                         }}
+                                        sx={{
+                                            "& .MuiFilledInput-root": {
+                                                borderRadius: "0px",
+                                                overflow: "hidden",
+                                                width: "300px",
+                                            },
+                                        }}
                                     />
+                                    <button
+                                        type="button"
+                                        className="account-settings-change-button"
+                                        onClick={() => setIsPasswordEditable(false)} // Set back to non-editable state
+                                    >
+                                        Cancel
+                                    </button>
                                 </form>
                             ) : (
                                 <div className="account-settings-password">

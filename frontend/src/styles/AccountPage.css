@@ -306,3 +306,23 @@ body {
     font-size: 0.8em;
     color: #666;
 }
+
+.account-reset_password-text-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.account-reset_password-text-fields .MuiTextField-root {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 0;
+}
+
+.account-reset_password-text-fields p {
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
