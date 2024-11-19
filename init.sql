@@ -109,6 +109,11 @@ CREATE TABLE IF NOT EXISTS password_reset_token (
     CONSTRAINT password_reset_token_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS admin_access (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
 CREATE UNIQUE INDEX IF NOT EXISTS password_reset_token_token_idx ON password_reset_token (token);
 
 
@@ -394,3 +399,6 @@ INSERT INTO users (email, firstname, lastname, password_hash, title) VALUES
 -- Insert initial data into 'promo_codes'
 INSERT INTO promo_codes (name, discount_percentage, creation_date, expiration_date, is_active) VALUES
 ('ERNESTO50', 50.00, '2024-10-30', '2026-12-31', TRUE);
+
+INSERT INTO admin_access (email) VALUES
+('honeyhotel@gmail.com');
