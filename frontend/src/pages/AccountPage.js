@@ -80,12 +80,7 @@ const AccountPage = () => {
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data.length, "reservations fetched.");
-                    if (data.length <= 1) {
-                        setReservations([]);
-                    }
-                    else {
-                        setReservations(data);
-                    }
+                    setReservations(data);
                 } else {
                     console.error("Failed to fetch reservations.");
                     setReservations([]);
@@ -224,6 +219,13 @@ const AccountPage = () => {
         }
     };
 
+    const upcomingReservations = reservations.filter((reservation) =>
+        new Date(reservation.checkInDate) >= new Date()
+    );
+    const pastReservations = reservations.filter((reservation) =>
+        new Date(reservation.checkOutDate) < new Date()
+    );
+
     return (
         <div className="account-page">
             <AccountNavbar setSelectedView={setSelectedView} />
@@ -235,67 +237,65 @@ const AccountPage = () => {
                             <div className="account-loader-container">
                                 <ThreeDots color="#000000" height={40} width={40} className="account-loader" />
                             </div>
+                        ) : upcomingReservations.length === 0 ? (
+                            <div className="account-error-box">
+                                <img
+                                    src="../icons/warning_icon.png"
+                                    alt="No upcoming reservations"
+                                    className="account-error-icon"
+                                />
+                                <p>No upcoming reservations found.<br /> Please make a reservation to view it here.</p>
+                            </div>
                         ) : (
-                            reservations.length === 0 ? (
-                                <div className="account-error-box">
-                                    <img
-                                        src="../icons/warning_icon.png"
-                                        alt="No upcoming reservations"
-                                        className="account-error-icon"
-                                    />
-                                    <p>No upcoming reservations found.<br></br> Please make a reservation to view it here.</p>
-                                </div>
-                            ) : (
-                                Object.entries(groupedReservations).map(([bookingId, reservations]) => (
-                                    new Date(reservations[0].checkOutDate) >= new Date() && (
-                                        <div className="account-booking-box" key={bookingId}>
-                                            {/* Booking Details Section */}
-                                            <div className="account-booking-info-top">
-                                                <div className="account-checkin-checkout">
-                                                    <p style={{ paddingLeft: "20px" }}>
-                                                        CHECK-IN <br />
-                                                        <strong>{new Date(reservations[0].checkInDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong>
-                                                    </p>
-                                                    <p>
-                                                        CHECK-OUT <br />
-                                                        <strong>{new Date(reservations[0].checkOutDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong>
-                                                    </p>
-                                                </div>
-                                                <p className="account-booking-id">Booking ID: {bookingId}</p>
-                                                <p className="account-total-price">
-                                                    Total: <span style={{ color: "black", fontWeight: "bold" }}>
-                                                        ${reservations.reduce((total, room) => total + parseFloat(room.roomPrice || 0), 0).toFixed(2)}
-                                                    </span>
+                            Object.entries(groupedReservations).map(([bookingId, reservations]) => (
+                                new Date(reservations[0].checkOutDate) >= new Date() && (
+                                    <div className="account-booking-box" key={bookingId}>
+                                        {/* Booking Details Section */}
+                                        <div className="account-booking-info-top">
+                                            <div className="account-checkin-checkout">
+                                                <p style={{ paddingLeft: "20px" }}>
+                                                    CHECK-IN <br />
+                                                    <strong>{new Date(reservations[0].checkInDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong>
+                                                </p>
+                                                <p>
+                                                    CHECK-OUT <br />
+                                                    <strong>{new Date(reservations[0].checkOutDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong>
                                                 </p>
                                             </div>
-                                            {/* Room Details */}
-                                            {reservations.map((room, index) => (
-                                                <div key={index}>
-                                                    <div className="account-room-details-container">
-                                                        <img src={room.photo_path} alt={`${room.roomType} Room`} className="account-room-image" />
-                                                        <div className="account-room-details-text">
-                                                            <p>{room.hotelLocation.toUpperCase()}</p>
-                                                            <p>{room.roomType.toUpperCase()} ROOM</p>
-                                                            <p>{room.bedType.toUpperCase()} BED</p>
-                                                            <p>TOTAL: ${room.roomPrice}</p>
-                                                        </div>
-                                                    </div>
-                                                    {/* Action Buttons for each room */}
-                                                    <div className="account-action-buttons">
-                                                        <button
-                                                            className="account-action-button"
-                                                            onClick={() => handleCancelRoom(room.roomId, room.bookingId)}
-                                                        >
-                                                            CANCEL ROOM
-                                                        </button>
-                                                        <button className="account-action-button">REQUEST EARLY CHECK-IN</button>
-                                                    </div>
-                                                    {/* Divider between rooms if not the last room */}
-                                                    {index < reservations.length - 1 && <hr className="account-divider-line" />}
-                                                </div>
-                                            ))}
+                                            <p className="account-booking-id">Booking ID: {bookingId}</p>
+                                            <p className="account-total-price">
+                                                Total: <span style={{ color: "black", fontWeight: "bold" }}>
+                                                    ${reservations.reduce((total, room) => total + parseFloat(room.roomPrice || 0), 0).toFixed(2)}
+                                                </span>
+                                            </p>
                                         </div>
-                                    )
+                                        {/* Room Details */}
+                                        {reservations.map((room, index) => (
+                                            <div key={index}>
+                                                <div className="account-room-details-container">
+                                                    <img src={room.photo_path} alt={`${room.roomType} Room`} className="account-room-image" />
+                                                    <div className="account-room-details-text">
+                                                        <p>{room.hotelLocation.toUpperCase()}</p>
+                                                        <p>{room.roomType.toUpperCase()} ROOM</p>
+                                                        <p>{room.bedType.toUpperCase()} BED</p>
+                                                        <p>TOTAL: ${room.roomPrice}</p>
+                                                    </div>
+                                                </div>
+                                                {/* Action Buttons for each room */}
+                                                <div className="account-action-buttons">
+                                                    <button
+                                                        className="account-action-button"
+                                                        onClick={() => handleCancelRoom(room.roomId, room.bookingId)}
+                                                    >
+                                                        CANCEL ROOM
+                                                    </button>
+                                                    <button className="account-action-button">REQUEST EARLY CHECK-IN</button>
+                                                </div>
+                                                {/* Divider between rooms if not the last room */}
+                                                {index < reservations.length - 1 && <hr className="account-divider-line" />}
+                                            </div>
+                                        ))}
+                                    </div>
                                 ))
                             )
                         )}
@@ -311,54 +311,52 @@ const AccountPage = () => {
                             <div className="account-loader-container">
                                 <ThreeDots color="#000000" height={40} width={40} className="account-loader" />
                             </div>
+                        ) : pastReservations.length === 0 ? (
+                            <div className="account-error-box">
+                                <img
+                                    src="../icons/warning_icon.png"
+                                    alt="No past reservations"
+                                    className="account-error-icon"
+                                />
+                                <p>No past reservations found.</p>
+                            </div>
                         ) : (
-                            reservations.length === 0 ? (
-                                <div className="account-error-box">
-                                    <img
-                                        src="../icons/warning_icon.png"
-                                        alt="No upcoming reservations"
-                                        className="account-error-icon"
-                                    />
-                                    <p>No upcoming reservations found.<br></br> Please make a reservation to view it here.</p>
-                                </div>
-                            ) : (
-                                Object.entries(groupedReservations).map(([bookingId, reservations]) => (
-                                    new Date(reservations[0].checkOutDate) < new Date() && (
-                                        <div className="account-booking-box" key={bookingId}>
-                                            {/* Booking Details Section */}
-                                            <div className="account-booking-info-top">
-                                                <div className="account-checkin-checkout">
-                                                    <p style={{ paddingLeft: "20px" }}>CHECK-IN <br /><strong>{new Date(reservations[0].checkInDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong></p>
-                                                    <p>CHECK-OUT <br /><strong>{new Date(reservations[0].checkOutDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong></p>
-                                                </div>
-                                                <p className="account-booking-id">Booking ID: {bookingId}</p>
+                            Object.entries(groupedReservations).map(([bookingId, reservations]) => (
+                                new Date(reservations[0].checkOutDate) < new Date() && (
+                                    <div className="account-booking-box" key={bookingId}>
+                                        {/* Booking Details Section */}
+                                        <div className="account-booking-info-top">
+                                            <div className="account-checkin-checkout">
+                                                <p style={{ paddingLeft: "20px" }}>CHECK-IN <br /><strong>{new Date(reservations[0].checkInDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong></p>
+                                                <p>CHECK-OUT <br /><strong>{new Date(reservations[0].checkOutDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong></p>
                                             </div>
-
-                                            {/* Room Details */}
-                                            {reservations.map((room, index) => (
-                                                <div key={index}>
-                                                    <div className="account-room-details-container">
-                                                        <img src={room.photo_path} alt={`${room.roomType} Room`} className="account-room-image" />
-                                                        <div className="account-room-details-text">
-                                                            <p>{room.hotelLocation.toUpperCase()}</p>
-                                                            <p>{room.roomType.toUpperCase()} ROOM</p>
-                                                            <p>{room.bedType.toUpperCase()} BED</p>
-                                                            <p>TOTAL: ${room.roomPrice}</p>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Action Buttons for each room */}
-                                                    <div className="account-action-buttons">
-                                                        <button className="account-action-button">VIEW RECEIPT</button>
-                                                        <button className="account-action-button">BOOK AGAIN</button>
-                                                    </div>
-
-                                                    {/* Divider between rooms if not the last room */}
-                                                    {index < reservations.length - 1 && <hr className="account-divider-line" />}
-                                                </div>
-                                            ))}
+                                            <p className="account-booking-id">Booking ID: {bookingId}</p>
                                         </div>
-                                    )
+
+                                        {/* Room Details */}
+                                        {reservations.map((room, index) => (
+                                            <div key={index}>
+                                                <div className="account-room-details-container">
+                                                    <img src={room.photo_path} alt={`${room.roomType} Room`} className="account-room-image" />
+                                                    <div className="account-room-details-text">
+                                                        <p>{room.hotelLocation.toUpperCase()}</p>
+                                                        <p>{room.roomType.toUpperCase()} ROOM</p>
+                                                        <p>{room.bedType.toUpperCase()} BED</p>
+                                                        <p>TOTAL: ${room.roomPrice}</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Action Buttons for each room */}
+                                                <div className="account-action-buttons">
+                                                    <button className="account-action-button">VIEW RECEIPT</button>
+                                                    <button className="account-action-button">BOOK AGAIN</button>
+                                                </div>
+
+                                                {/* Divider between rooms if not the last room */}
+                                                {index < reservations.length - 1 && <hr className="account-divider-line" />}
+                                            </div>
+                                        ))}
+                                    </div>
                                 ))
                             ))}
                     </div>
