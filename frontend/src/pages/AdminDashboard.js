@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { DateRangePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import AdminNavbar from "../components/AdminNavbar";
 import "../styles/AdminDashboard.css";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { TextField } from "@mui/material";
+
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const [bookings, setBookings] = useState([]);
+    const [filteredBookings, setFilteredBookings] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedTab, setSelectedTab] = useState("Bookings");
+    const [statusFilter, setStatusFilter] = useState("");
+    const [dateRange, setDateRange] = useState([null, null]);
 
     const handleNavbarSelect = (item) => {
         setSelectedTab(item);
@@ -50,6 +57,31 @@ const AdminDashboard = () => {
         return "UNKNOWN";
     };
 
+    const applyFilters = () => {
+        let filtered = bookings;
+
+        // Filter by status
+        if (statusFilter) {
+            filtered = filtered.filter((booking) => getStatus(booking) === statusFilter.toUpperCase());
+        }
+
+        // Filter by date range
+        if (dateRange[0] && dateRange[1]) {
+            const startDate = new Date(dateRange[0]);
+            const endDate = new Date(dateRange[1]);
+            filtered = filtered.filter((booking) => {
+                const checkInDate = new Date(booking.checkInDate);
+                const checkOutDate = new Date(booking.checkOutDate);
+                return (
+                    (checkInDate >= startDate && checkInDate <= endDate) ||
+                    (checkOutDate >= startDate && checkOutDate <= endDate)
+                );
+            });
+        }
+
+        setFilteredBookings(filtered);
+    };
+
     useEffect(() => {
         if (selectedTab === "Bookings") {
             const fetchAdminDashboardData = async () => {
@@ -72,7 +104,8 @@ const AdminDashboard = () => {
 
                     // Access reservations array
                     const bookingsData = data.reservations || [];
-                    setBookings(bookingsData); // Set state correctly
+                    setBookings(bookingsData);
+                    setFilteredBookings(bookingsData);
                 } catch (error) {
                     console.error("Error fetching admin dashboard:", error);
                 } finally {
@@ -85,8 +118,8 @@ const AdminDashboard = () => {
     }, [selectedTab, navigate]);
 
     useEffect(() => {
-        console.log("Updated Bookings State:", bookings);
-    }, [bookings]);
+        applyFilters();
+    }, [statusFilter, dateRange]);
 
     return (
         <div className="admin-dashboard">
@@ -97,16 +130,53 @@ const AdminDashboard = () => {
                     {selectedTab === "Bookings" && (
                         <>
                             <div className="dashboard-controls">
-                                <select className="dashboard-status-filter">
-                                    <option value="">STATUS</option>
+                                <select
+                                    className="dashboard-status-filter"
+                                    value={statusFilter}
+                                    onChange={(e) => setStatusFilter(e.target.value)}
+                                >
+                                    <option value="">Show All</option>
+                                    <option value="upcoming">Upcoming</option>
                                     <option value="checked-in">Checked In</option>
                                     <option value="checked-out">Checked Out</option>
+                                    <option value="cancelled">Cancelled</option>
+                                    <option value="past-checkout">Past Checkout</option>
                                 </select>
-                                <input
-                                    type="text"
-                                    className="dashboard-date-filter"
-                                    placeholder="Check In - Check Out"
-                                />
+
+                                <LocalizationProvider
+                                    dateAdapter={AdapterDayjs}
+                                    localeText={{
+                                        start: "Check-In",
+                                        end: "Check-Out",
+                                    }}
+                                >
+                                    <DateRangePicker
+                                        value={dateRange}
+                                        onChange={(newValue) => setDateRange(newValue)}
+                                        renderInput={(startProps, endProps) => (
+                                            <div style={{ display: "flex", gap: "10px" }}>
+                                                <TextField
+                                                    {...startProps}
+                                                    placeholder="Check-In"
+                                                    inputProps={{
+                                                        ...startProps.inputProps,
+                                                        placeholder: "Check-In",
+                                                    }}
+                                                />
+                                                <TextField
+                                                    {...endProps}
+                                                    placeholder="Check-Out"
+                                                    inputProps={{
+                                                        ...endProps.inputProps,
+                                                        placeholder: "Check-Out",
+                                                    }}
+                                                    className="dashboard-date-filter"
+                                                />
+                                            </div>
+                                        )}
+                                    />
+                                </LocalizationProvider>
+
                             </div>
                             <div className="dashboard-bookings-table">
                                 <div className="dashboard-table-header">
@@ -119,13 +189,14 @@ const AdminDashboard = () => {
                                 </div>
                                 {isLoading ? (
                                     <div className="dashboard-loading">Loading...</div>
-                                ) : bookings.length > 0 ? (
-                                    bookings.map((booking, index) => (
+                                ) : filteredBookings.length > 0 ? (
+                                    filteredBookings.map((booking, index) => (
                                         <div className="dashboard-table-row" key={booking.id || index}>
                                             {/* Status */}
                                             <div
-                                                className={`dashboard-status ${getStatus(booking).toLowerCase().replace(" ", "-")
-                                                    }`}
+                                                className={`dashboard-status ${getStatus(booking)
+                                                    .toLowerCase()
+                                                    .replace(" ", "-")}`}
                                             >
                                                 {getStatus(booking)}
                                             </div>

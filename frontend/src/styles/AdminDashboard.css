@@ -1,5 +1,5 @@
 .admin-dashboard {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
@@ -35,6 +35,7 @@
     color: #333;
     font-weight: bold;
     transition: all 0.2s ease-in-out;
+    height: 40px;
 }
 
 .dashboard-status-filter:hover,
@@ -56,6 +57,7 @@
 /* Table Header */
 .dashboard-table-header {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 15px;
     background-color: #f8f8f8;
@@ -63,11 +65,15 @@
     font-size: 14px;
     text-transform: uppercase;
     color: #000;
+    gap: 10px;
 }
 
 .dashboard-table-column {
     flex: 1;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 10px;
     white-space: nowrap;
 }
@@ -75,7 +81,7 @@
 /* Table Rows */
 .dashboard-table-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 15px;
     border-bottom: 1px solid #eee;
@@ -86,37 +92,83 @@
     background-color: #f9f9f9;
 }
 
-.dashboard-status {
-    padding: 6px 12px;
-    border-radius: 20px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
-    width: auto;
-    text-transform: uppercase;
-}
-
-.dashboard-status.checked-in {
-    background-color: #4caf50;
-    color: #fff;
-}
-
-.dashboard-status.checked-out {
-    background-color: #f44336;
-    color: #fff;
-}
-
-/* Text Columns */
+/* Individual Columns */
+.dashboard-status,
 .dashboard-customer-name,
 .dashboard-checkin-checkout,
-.dashboard-hotel-location,
-.dashboard-total {
-    text-align: center;
-    font-size: 14px;
+.dashboard-total,
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 10px;
+}
+
+.dashboard-hotel-location {
+    display: flex;
+    justify-content: flex-start;
+    /* Align content to the start */
+    align-items: center;
+    flex: 1;
+    white-space: nowrap;
+    /* Prevent wrapping */
+    overflow: hidden;
+    /* Hide overflowing content */
+    text-overflow: ellipsis;
+    /* Show ellipsis if content overflows */
+    padding: 10px;
+}
+
+/* Specific Status Styling */
+.dashboard-status {
+    padding: 6px 12px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    width: 100%;
+    max-width: 150px;
+    text-transform: uppercase;
+    border: 2px solid transparent;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: auto;
+}
+
+.dashboard-status.checked-in {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.dashboard-status.checked-out {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.dashboard-status.upcoming {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+
+.dashboard-status.cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.dashboard-status.past-checkout {
+    background-color: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
 }
 
 /* Actions */
@@ -150,4 +202,12 @@
     font-size: 16px;
     color: #999;
     margin: 20px 0;
+}
+
+.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root{
+    height: 40px;
+}
+
+.css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root{
+    top: -7px !important;
 }
