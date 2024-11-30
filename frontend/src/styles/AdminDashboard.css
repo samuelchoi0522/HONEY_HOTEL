@@ -1,0 +1,153 @@
+.admin-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Title */
+.dashboard-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #000;
+}
+
+/* Controls (Filter Section) */
+.dashboard-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.dashboard-status-filter,
+.dashboard-date-filter {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    width: auto;
+    background: #fff;
+    color: #333;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+}
+
+.dashboard-status-filter:hover,
+.dashboard-date-filter:hover {
+    border-color: #000;
+    outline: none;
+}
+
+/* Bookings Table */
+.dashboard-bookings-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Table Header */
+.dashboard-table-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #f8f8f8;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #000;
+}
+
+.dashboard-table-column {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+/* Table Rows */
+.dashboard-table-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s ease-in-out;
+}
+
+.dashboard-table-row:hover {
+    background-color: #f9f9f9;
+}
+
+.dashboard-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    width: auto;
+    text-transform: uppercase;
+}
+
+.dashboard-status.checked-in {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.dashboard-status.checked-out {
+    background-color: #f44336;
+    color: #fff;
+}
+
+/* Text Columns */
+.dashboard-customer-name,
+.dashboard-checkin-checkout,
+.dashboard-hotel-location,
+.dashboard-total {
+    text-align: center;
+    font-size: 14px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Actions */
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-action-view,
+.dashboard-action-menu {
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.dashboard-action-view:hover,
+.dashboard-action-menu:hover {
+    color: #000;
+    transform: scale(1.1);
+}
+
+/* No Bookings */
+.dashboard-no-bookings,
+.dashboard-loading {
+    text-align: center;
+    font-size: 16px;
+    color: #999;
+    margin: 20px 0;
+}

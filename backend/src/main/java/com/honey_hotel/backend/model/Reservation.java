@@ -54,6 +54,9 @@ public class Reservation {
     @Column(name = "hotel_location")
     private String hotelLocation;
 
+    @Column(name = "checked_in")
+    private boolean checkedIn;
+
     public Long getId() {
         return id;
     }
@@ -164,5 +167,13 @@ public class Reservation {
 
     public void setHotelLocation(String hotelLocation) {
         this.hotelLocation = hotelLocation;
+    }
+
+    public boolean isCheckedIn() {
+        return checkedIn;
+    }
+
+    public void setCheckedIn(boolean checkedIn) {
+        this.checkedIn = checkedIn;
     }
 }

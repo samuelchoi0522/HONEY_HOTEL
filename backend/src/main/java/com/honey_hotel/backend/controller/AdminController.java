@@ -1,8 +1,9 @@
 package com.honey_hotel.backend.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.honey_hotel.backend.model.AppUser;
+import com.honey_hotel.backend.model.Reservation;
+import com.honey_hotel.backend.service.AdminAccessService;
+import com.honey_hotel.backend.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.honey_hotel.backend.model.AppUser;
-import com.honey_hotel.backend.service.AdminAccessService;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -23,6 +25,9 @@ public class AdminController {
 
     @Autowired
     private AdminAccessService adminAccessService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @GetMapping("/dashboard")
     public ResponseEntity<?> getAdminDashboard(HttpServletRequest request) {
@@ -38,8 +43,9 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
         }
 
+        List<Reservation> reservations = reservationService.getAllReservations();
         Map<String, Object> dashboardData = new HashMap<>();
-        dashboardData.put("message", "Welcome to the admin dashboard!");
+        dashboardData.put("reservations", reservations);
         return ResponseEntity.ok(dashboardData);
     }
 
