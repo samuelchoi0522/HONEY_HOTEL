@@ -15,6 +15,11 @@ import com.honey_hotel.backend.model.BookingDetails;
 import com.honey_hotel.backend.model.Room;
 import com.honey_hotel.backend.service.FindHivesService;
 
+/**
+ Find Hives controller class to break down complicated tasks with an array of simpler function calls
+ @author Samuel Choi
+ @version 4.0 (Oct 26 2024)
+ */
 @RestController
 @RequestMapping("/api/hives")
 public class FindHivesController {
@@ -22,6 +27,12 @@ public class FindHivesController {
     @Autowired
     private FindHivesService findHivesService;
 
+    /**
+     * Finds available rooms based on the given hotel location, start date, and end date
+     *
+     * @param bookingDetails booking details containing the hotel location, start date, and end date
+     * @return ResponseEntity containing a list of available rooms or an error message if the date format is invalid
+     */
     @PostMapping("/find")
     public ResponseEntity<?> findRooms(@RequestBody BookingDetails bookingDetails) {
         try {

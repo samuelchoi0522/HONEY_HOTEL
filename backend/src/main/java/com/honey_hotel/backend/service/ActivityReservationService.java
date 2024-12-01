@@ -12,15 +12,29 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ Service class for activity reservation web directory
+ @author Samuel Choi
+ @version 1.0 (Oct 26 2024)
+ */
 @Service
 public class ActivityReservationService {
 
+    /**
+     * Repository of all activity reservations
+     */
     @Autowired
     private ActivityReservationRepository activityReservationRepository;
 
+    /**
+     * Repository of all reservations
+     */
     @Autowired
     private ReservationRepository reservationRepository;
 
+    /**
+     * Repository of all activities
+     */
     @Autowired
     private ActivitiesRepository activitiesRepository;
 

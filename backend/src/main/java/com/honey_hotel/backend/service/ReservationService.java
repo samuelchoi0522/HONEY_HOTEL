@@ -17,12 +17,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ Service class for reservations
+ @author Samuel Choi
+ @version 2.0 (Oct 26 2024)
+ */
+
 @Service
 public class ReservationService {
 
+    /**
+     * Repository of all reservations
+     */
     @Autowired
     private ReservationRepository reservationRepository;
 
+    /**
+     * Respository of all rooms
+     */
     @Autowired
     private RoomRepository roomRepository;
 

@@ -18,6 +18,11 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ Reservation controller class to break down complicated tasks with an array of simpler function calls
+ @author Samuel Choi
+ @version 2.0 (Oct 26 2024)
+ */
 @RestController
 @RequestMapping("/api/reservations")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -37,6 +42,15 @@ public class ReservationController {
     }
 
     // Create a new reservation
+    /**
+     * Create a new reservation
+     * Handles the creation of new hotel reservations
+     * Checks for logged-in users, validates provided reservation details, and calls service to create the reservation
+     *
+     * @param reservationDetails map containing roomId, startDate, and endDate for the reservation
+     * @param request HTTP request containing the session
+     * @return ResponseEntity indicating success or failure, with reservation ID if successful
+     */
     @PostMapping
     public ResponseEntity<Map<String, Object>> createReservation(@RequestBody Map<String, Object> reservationDetails,
             HttpServletRequest request) {
@@ -74,6 +88,12 @@ public class ReservationController {
     }
 
     // Fetch all reservations for the logged-in user
+    /**
+     * Fetch all reservations for the logged-in user
+     *
+     * @param request HTTP request containing the session
+     * @return List of the user's reservations or an error if the user is not logged in
+     */
     @GetMapping
     public ResponseEntity<?> getUserReservations(HttpServletRequest request) {
         AppUser user = getLoggedInUser(request);
@@ -85,6 +105,13 @@ public class ReservationController {
         return ResponseEntity.ok(reservations);
     }
 
+    /**
+     * Get the IDs of rooms that are reserved for a given date range of a logged-in user
+     *
+     * @param checkInDateString start date of the check-in range
+     * @param checkOutDateString rnd date of the check-out range
+     * @return List of reserved room IDs or an error message if the dates are invalid
+     */
     @GetMapping("/reserved-rooms")
     public ResponseEntity<List<Long>> getReservedRoomIds(
             @RequestParam("checkInDate") String checkInDateString,
@@ -110,6 +137,14 @@ public class ReservationController {
     }
 
     // Update an existing reservation
+    /**
+     * Update an existing reservation with various modifications
+     *
+     * @param reservationId ID of the reservation to be updated
+     * @param reservationDetails map containing the new startDate and endDate
+     * @param request HTTP request containing the session
+     * @return ResponseEntity indicating success or failure
+     */
     @PutMapping("/{reservationId}")
     public ResponseEntity<String> updateReservation(@PathVariable Long reservationId,
             @RequestBody Map<String, Object> reservationDetails,
@@ -143,6 +178,13 @@ public class ReservationController {
     }
 
     // Delete an existing reservation
+    /**
+     * Delete an existing reservation through its ID
+     *
+     * @param reservationId ID of the reservation to be deleted
+     * @param request HTTP request containing the session
+     * @return ResponseEntity indicating success or failure
+     */
     @DeleteMapping("/{reservationId}")
     public ResponseEntity<String> deleteReservation(@PathVariable Long reservationId, HttpServletRequest request) {
         AppUser user = getLoggedInUser(request);
@@ -158,6 +200,13 @@ public class ReservationController {
     }
 
     // Create an activity reservation associated with a hotel reservation
+    /**
+     * Create an activity reservation associated with a hotel reservation
+     *
+     * @param activityDetails map containing the hotelReservationId, activityId, and reservationDate
+     * @param request HTTP request containing the session
+     * @return ResponseEntity indicating success or failure of the activity reservation
+     */
     @PostMapping("/activities")
     public ResponseEntity<String> createActivityReservation(@RequestBody Map<String, Object> activityDetails,
             HttpServletRequest request) {
@@ -200,6 +249,12 @@ public class ReservationController {
     }
 
     // Check user session
+    /**
+     * Web directory used to check if a user is currently logged in
+     *
+     * @param request HTTP request object used to check the session state
+     * @return ResponseEntity containing the login status and user's first name if logged in
+     */
     @PostMapping("/check-session")
     public ResponseEntity<?> checkSession(HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
