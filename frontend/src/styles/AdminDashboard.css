@@ -13,6 +13,7 @@
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
+    margin-top: 120px;
     color: #000;
 }
 
@@ -106,6 +107,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 10px;
+}
+
+.dashboard-user-name,
+.dashboard-user-email,
+.dashboard-user-status,
+.dashboard-actions {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    white-space: nowrap;
 }
 
 .dashboard-hotel-location {
@@ -204,10 +218,10 @@
     margin: 20px 0;
 }
 
-.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root{
+.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root {
     height: 40px;
 }
 
-.css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root{
+.css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root {
     top: -7px !important;
 }
