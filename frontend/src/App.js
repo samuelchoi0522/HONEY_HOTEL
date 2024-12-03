@@ -10,7 +10,6 @@ import NavbarFindHives from './components/Navbar_FindHives';
 import CheckRatesBar from './components/CheckRatesBar';
 import Footer from './components/Footer';
 import AccountPage from './pages/AccountPage'
-import Reservation from './pages/Reservation';
 import FindHive from './pages/FindHive';
 import RoomDetails from './pages/RoomDetails';
 import AddVacationPackage from './pages/AddVacationPackage';
@@ -50,7 +49,6 @@ function Layout() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/find-hive" element={<FindHive />} />
-                <Route path="/reservation" element={<Reservation />} />
                 <Route path="/room-details" element={<RoomDetails />} />
                 <Route path="/add-vacation-package" element={<AddVacationPackage />} />
                 <Route path="/checkout" element={<Checkout />} />
