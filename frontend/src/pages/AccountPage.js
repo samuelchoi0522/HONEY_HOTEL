@@ -103,40 +103,6 @@ const AccountPage = () => {
         return acc;
     }, {});
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrorMessage('');
-
-        if (formData.password !== formData.confirmPassword) {
-            setErrorMessage('Passwords do not match.');
-            return;
-        }
-
-        try {
-            const response = await fetch("http://localhost:8080/api/account/reset-password", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                credentials: "include",
-                body: JSON.stringify({
-                    oldPassword: formData.oldPassword,
-                    newPassword: formData.password,
-                    confirmPassword: formData.confirmPassword,
-                }),
-            });
-
-            if (!response.ok) {
-                const errorResponse = await response.text();
-                setErrorMessage(errorResponse);
-                return;
-            }
-
-            alert("Password changed successfully!");
-            setFormData({ oldPassword: '', password: '', confirmPassword: '' });
-        } catch (error) {
-            setErrorMessage('An unexpected error occurred.');
-        }
-    };
-
     const handleCancelRoom = async (roomId, bookingId) => {
         console.log("Canceling room with roomId:", roomId, "and bookingId:", bookingId);
         try {
@@ -200,12 +166,30 @@ const AccountPage = () => {
                 }
 
                 if (isPasswordEditable) {
-                    await fetch('http://localhost:8080/api/account/reset-password', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                        body: JSON.stringify({ password: formData.password }),
-                    });
+                    setErrorMessage('');
+                    try {
+                        const response = await fetch("http://localhost:8080/api/account/reset-password", {
+                            method: "POST",
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: "include",
+                            body: JSON.stringify({
+                                oldPassword: formData.oldPassword,
+                                newPassword: formData.password,
+                                confirmPassword: formData.confirmPassword,
+                            }),
+                        });
+
+                        if (!response.ok) {
+                            const errorResponse = await response.text();
+                            setErrorMessage(errorResponse);
+                            return;
+                        }
+
+                        alert("Password changed successfully!");
+                        setFormData({ oldPassword: '', password: '', confirmPassword: '' });
+                    } catch (error) {
+                        setErrorMessage('An unexpected error occurred.');
+                    }
                 }
 
                 alert("Profile updated successfully!");
