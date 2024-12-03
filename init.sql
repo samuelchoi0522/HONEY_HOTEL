@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS reservations (
     chosen_photo_path VARCHAR(255),
     hotel_location VARCHAR(255),
     room_price NUMERIC(10, 2),
+    checked_in BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (room_id) REFERENCES rooms(id)
 );
@@ -110,6 +111,11 @@ CREATE TABLE IF NOT EXISTS password_reset_token (
 );
 
 CREATE TABLE IF NOT EXISTS admin_access (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS clerk_access (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE
 );
@@ -394,11 +400,11 @@ INSERT INTO roomtypes (id, type_name) VALUES
 
 -- Insert initial data into 'users'
 INSERT INTO users (email, firstname, lastname, password_hash, title) VALUES
-('honeyhotel@gmail.com', 'Honey', 'Hotel', 'ca18b07032cb2ff53855bf1d73fe4f3ac6d71f78b207ec9fc4be8b5ad25b6ee4', NULL);
+('honeyhotelinfo@gmail.com', 'Honey', 'Hotel', 'ca18b07032cb2ff53855bf1d73fe4f3ac6d71f78b207ec9fc4be8b5ad25b6ee4', NULL);
 
 -- Insert initial data into 'promo_codes'
 INSERT INTO promo_codes (name, discount_percentage, creation_date, expiration_date, is_active) VALUES
 ('ERNESTO50', 50.00, '2024-10-30', '2026-12-31', TRUE);
 
 INSERT INTO admin_access (email) VALUES
-('honeyhotel@gmail.com');
+('honeyhotelinfo@gmail.com');
