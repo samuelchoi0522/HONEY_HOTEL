@@ -27,16 +27,3 @@ public class AdminAccessService {
         adminAccessRepository.deleteById(id);
     }
 }
-
-    public boolean checkIfExists(Long id) {
-        return adminAccessRepository.existsById(id);
-    }
-
-    public boolean checkEmail(String email) {
-        return adminAccessRepository.existsByEmail(email);
-    }
-
-    public void removeAdmin(Long id) {
-        adminAccessRepository.deleteById(id);
-    }
-}
