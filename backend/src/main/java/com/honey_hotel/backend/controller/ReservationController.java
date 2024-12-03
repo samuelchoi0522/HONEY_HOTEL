@@ -28,10 +28,10 @@ public class ReservationController {
     private static final Logger logger = Logger.getLogger(ReservationController.class.getName());
 
     @Autowired
-    private ReservationService reservationService;
+    public ReservationService reservationService;
 
     @Autowired
-    private ActivityReservationService activityReservationService;
+    public ActivityReservationService activityReservationService;
 
     // Helper method to get the logged-in user from the session
     private AppUser getLoggedInUser(HttpServletRequest request) {
