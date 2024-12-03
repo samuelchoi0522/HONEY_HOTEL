@@ -15,7 +15,6 @@ public class RoomTest {
 
     @BeforeEach
     void setUp() {
-        // Initialize RoomCategory and Room objects
         category = new RoomCategory();
         category.setId(1L);
         category.setCategoryName("Luxury");
