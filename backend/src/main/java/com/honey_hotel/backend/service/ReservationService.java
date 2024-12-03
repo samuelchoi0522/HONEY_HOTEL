@@ -1,22 +1,25 @@
 package com.honey_hotel.backend.service;
 
-import com.honey_hotel.backend.model.AppUser;
-import com.honey_hotel.backend.model.Reservation;
-import com.honey_hotel.backend.model.Room;
-import com.honey_hotel.backend.repository.ReservationRepository;
-import com.honey_hotel.backend.repository.RoomRepository;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.honey_hotel.backend.model.AppUser;
+import com.honey_hotel.backend.model.Reservation;
+import com.honey_hotel.backend.model.Room;
+import com.honey_hotel.backend.repository.AdminAccessRepository;
+import com.honey_hotel.backend.repository.ClerkAccessRepository;
+import com.honey_hotel.backend.repository.ReservationRepository;
+import com.honey_hotel.backend.repository.RoomRepository;
+import com.honey_hotel.backend.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ReservationService {
@@ -27,9 +30,20 @@ public class ReservationService {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AdminAccessRepository adminAccessRepository;
+
+    @Autowired
+    private ClerkAccessRepository clerkAccessRepository;
+
+
+
     public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate,
-            int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, BigDecimal roomPrice,
-            String bookingId, String photo_path, String hotelLocation) {
+                                  int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, BigDecimal roomPrice,
+                                  String bookingId, String photo_path, String hotelLocation) {
         try {
             Optional<Room> roomOpt = roomRepository.findById(roomId);
             if (roomOpt.isEmpty()) {
@@ -158,8 +172,4 @@ public class ReservationService {
         }
         return false;
     }
-
 }
-
-
-

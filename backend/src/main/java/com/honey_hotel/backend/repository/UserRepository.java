@@ -10,4 +10,9 @@ import com.honey_hotel.backend.model.AppUser;
 @Repository
 public interface UserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByEmail(String email);
+
+    void deleteById(Long id);
+
+    boolean existsById(Long id);
+
 }
