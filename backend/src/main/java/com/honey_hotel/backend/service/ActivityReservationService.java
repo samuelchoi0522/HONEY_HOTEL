@@ -38,15 +38,6 @@ public class ActivityReservationService {
     @Autowired
     private ActivitiesRepository activitiesRepository;
 
-    /**
-     * Creates an activity reservation.
-     *
-     * @param user               The user making the reservation (AppUser object).
-     * @param hotelReservationId The ID of the associated hotel reservation.
-     * @param activityId         The ID of the activity to be reserved.
-     * @param activityDate       The date of the activity reservation.
-     * @return True if the reservation was created successfully, false otherwise.
-     */
     public boolean createActivityReservation(AppUser user, Long hotelReservationId, Integer activityId,
             LocalDate activityDate) {
         try {
@@ -56,7 +47,7 @@ public class ActivityReservationService {
 
             // Check if both reservation and activity exist
             if (reservation == null || activity == null) {
-                return false; // Either reservation or activity not found
+                return false;
             }
 
             // Create a new ActivityReservation instance

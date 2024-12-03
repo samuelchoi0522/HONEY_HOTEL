@@ -11,10 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -31,10 +33,10 @@ public class ReservationController {
     private static final Logger logger = Logger.getLogger(ReservationController.class.getName());
 
     @Autowired
-    private ReservationService reservationService;
+    public ReservationService reservationService;
 
     @Autowired
-    private ActivityReservationService activityReservationService;
+    public ActivityReservationService activityReservationService;
 
     // Helper method to get the logged-in user from the session
     private AppUser getLoggedInUser(HttpServletRequest request) {
@@ -58,10 +60,29 @@ public class ReservationController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "User not logged in"));
         }
-
+        String hotelLocation = (String) reservationDetails.get("hotelLocation");
         Long roomId = extractLongValue(reservationDetails, "roomId");
         String startDateString = (String) reservationDetails.get("startDate");
         String endDateString = (String) reservationDetails.get("endDate");
+        Integer adults = (Integer) reservationDetails.getOrDefault("adults", 1);
+        Integer children = (Integer) reservationDetails.getOrDefault("children", 0);
+        String promoCode = (String) reservationDetails.get("promoCode");
+        String rateOption = (String) reservationDetails.get("rateOption");
+
+        // Parse roomPrice and totalPrice
+        BigDecimal roomPrice = reservationDetails.get("roomPrice") != null
+                ? new BigDecimal(reservationDetails.get("roomPrice").toString())
+                : BigDecimal.ZERO;
+        BigDecimal totalPrice = reservationDetails.get("totalPrice") != null
+                ? new BigDecimal(reservationDetails.get("totalPrice").toString())
+                : BigDecimal.ZERO;
+
+        String bookingId = (String) reservationDetails.get("bookingId");
+        String photoPath = (String) reservationDetails.get("chosenPhoto");
+
+        if (bookingId == null) {
+            bookingId = UUID.randomUUID().toString();
+        }
 
         if (roomId == null || startDateString == null || endDateString == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Missing required fields"));
@@ -71,19 +92,18 @@ public class ReservationController {
             LocalDate checkInDate = LocalDate.parse(startDateString);
             LocalDate checkOutDate = LocalDate.parse(endDateString);
 
-            // Call the service to create the reservation and return the ID
-            Long reservationId = reservationService.createReservation(user, roomId, checkInDate, checkOutDate);
+            // Pass roomPrice and totalPrice to the service layer
+            Long reservationId = reservationService.createReservation(
+                    user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption,
+                    totalPrice, roomPrice, bookingId, photoPath, hotelLocation);
 
-            if (reservationId != null) {
-                // Return a JSON response with the reservation ID
-                return ResponseEntity.ok(Map.of("id", reservationId));
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "Failed to create reservation"));
-            }
+            return reservationId != null
+                    ? ResponseEntity.ok(Map.of("id", reservationId, "bookingId", bookingId))
+                    : ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(Map.of("error", "Failed to create reservation"));
         } catch (Exception e) {
             logger.severe("Error creating reservation: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid date format"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid data format"));
         }
     }
 
@@ -101,7 +121,28 @@ public class ReservationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
         }
 
-        List<Reservation> reservations = reservationService.getReservationsByUser(user);
+        List<Map<String, Object>> reservations = reservationService.getReservationsByUser(user).stream()
+                .map(reservation -> {
+                    Map<String, Object> reservationMap = new HashMap<>();
+                    reservationMap.put("hotelLocation", reservation.getHotelLocation());
+                    reservationMap.put("roomId", reservation.getRoom().getId());
+                    reservationMap.put("roomType", reservation.getRoom().getRoomType());
+                    reservationMap.put("bedType", reservation.getRoom().getBedType());
+                    reservationMap.put("smokingAllowed", reservation.getRoom().isSmokingAllowed());
+                    reservationMap.put("checkInDate", reservation.getCheckInDate());
+                    reservationMap.put("checkOutDate", reservation.getCheckOutDate());
+                    reservationMap.put("adults", reservation.getAdults());
+                    reservationMap.put("children", reservation.getChildren());
+                    reservationMap.put("promoCode", reservation.getPromoCode());
+                    reservationMap.put("rateOption", reservation.getRateOption());
+                    reservationMap.put("roomPrice", reservation.getRoomPrice());
+                    reservationMap.put("totalPrice", reservation.getTotalPrice());
+                    reservationMap.put("bookingId", reservation.getBookingId());
+                    reservationMap.put("photo_path", reservation.getPhoto_path());
+                    return reservationMap;
+                })
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(reservations);
     }
 
@@ -126,7 +167,7 @@ public class ReservationController {
 
             // Extract room IDs from reservations
             List<Long> reservedRoomIds = reservations.stream()
-                    .map(reservation -> reservation.getRoom().getId()) // Access the Room's ID
+                    .map(reservation -> reservation.getRoom().getId())
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(reservedRoomIds);
@@ -245,6 +286,36 @@ public class ReservationController {
         } catch (Exception e) {
             logger.severe("Error creating activity reservation: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Internal server error");
+        }
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<String> cancelRoom(@RequestBody Map<String, Object> cancelDetails,
+            HttpServletRequest request) {
+        AppUser user = getLoggedInUser(request);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
+        }
+
+        Long roomId = extractLongValue(cancelDetails, "roomId");
+        String bookingId = (String) cancelDetails.get("bookingId");
+
+        if (roomId == null || bookingId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error: Missing roomId or bookingId in the request body");
+        }
+
+        try {
+            boolean roomCanceled = reservationService.cancelRoom(user, roomId, bookingId);
+
+            return roomCanceled
+                    ? ResponseEntity.ok("Room canceled successfully!")
+                    : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Failed to cancel the room");
+        } catch (Exception e) {
+            logger.severe("Error canceling room: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: Internal server error");
         }
     }
 

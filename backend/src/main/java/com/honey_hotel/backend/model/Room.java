@@ -51,9 +51,12 @@ public class Room {
      */
     private double price;
 
+<<<<<<< HEAD
     /**
      * The price category of the room (e.g., economy, comfort)
      */
+=======
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     @Column(name = "price_category")
     private String priceCategory;
 
@@ -63,16 +66,19 @@ public class Room {
     @Column(name = "room_type_id", nullable = false)
     private int roomTypeId;
 
+<<<<<<< HEAD
     /**
      * A static array of room type names mapped to room type IDs
      */
+=======
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     private static final String[] ROOM_TYPE_NAMES = {
-            "Single", // ID 1
-            "Double", // ID 2
-            "Family", // ID 3
-            "Suite", // ID 4
-            "Deluxe", // ID 5
-            "Standard" // ID 6
+            "Single",
+            "Double",
+            "Family",
+            "Suite",
+            "Deluxe",
+            "Standard"
     };
 
     /////// room id

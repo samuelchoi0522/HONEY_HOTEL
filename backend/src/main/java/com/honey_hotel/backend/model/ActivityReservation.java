@@ -47,12 +47,15 @@ public class ActivityReservation {
     @Column(name = "reservation_date", nullable = false)
     private LocalDate reservationDate;
 
+<<<<<<< HEAD
     // Getters and setters
     /**
      * Gets the unique identifier of the activity reservation
      *
      * @return activity reservation ID
      */
+=======
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     public Long getId() {
         return id;
     }

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -38,82 +39,56 @@ public class ReservationService {
     @Autowired
     private RoomRepository roomRepository;
 
-    /**
-     * Create a new reservation
-     *
-     * @param user         The user making the reservation
-     * @param roomId       The ID of the room to be reserved
-     * @param checkInDate  The check-in date
-     * @param checkOutDate The check-out date
-     * @return True if the reservation is created successfully, false otherwise
-     */
-    public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate,
+            int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, BigDecimal roomPrice,
+            String bookingId, String photo_path, String hotelLocation) {
         try {
-            // Fetch the room by roomId
             Optional<Room> roomOpt = roomRepository.findById(roomId);
             if (roomOpt.isEmpty()) {
-                return null; // Room not found
+                return null;
             }
 
             Reservation reservation = new Reservation();
-            reservation.setUser(user); // Set the user directly
-            reservation.setRoom(roomOpt.get()); // Set the fetched Room
+            reservation.setUser(user);
+            reservation.setRoom(roomOpt.get());
             reservation.setCheckInDate(checkInDate);
             reservation.setCheckOutDate(checkOutDate);
+            reservation.setAdults(adults);
+            reservation.setChildren(children);
+            reservation.setPromoCode(promoCode);
+            reservation.setRateOption(rateOption);
+            reservation.setTotalPrice(totalPrice);
+            reservation.setRoomPrice(roomPrice);
+            reservation.setBookingId(bookingId);
+            reservation.setPhoto_path(photo_path);
+            reservation.setHotelLocation(hotelLocation);
 
-            // Save the reservation and return its ID
             Reservation savedReservation = reservationRepository.save(reservation);
             return savedReservation.getId();
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // Return null on failure
+            return null;
         }
     }
 
-    /**
-     * Retrieve reservations for a specific user
-     *
-     * @param user The user for whom reservations are retrieved
-     * @return List of reservations
-     */
     public List<Reservation> getReservationsByUser(AppUser user) {
         return reservationRepository.findByUserId(user.getId());
     }
 
-    /**
-     * Retrieve all reservations
-     *
-     * @return List of all reservations
-     */
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
 
-    /**
-     * Retrieve all reserved room IDs
-     *
-     * @return List of reserved room IDs
-     */
     public List<Long> getReservedRoomIds() {
         return reservationRepository.findAll().stream()
                 .map(reservation -> reservation.getRoom().getId())
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Update an existing reservation
-     *
-     * @param reservationId The ID of the reservation to update
-     * @param user          The user making the update
-     * @param checkInDate   The new check-in date
-     * @param checkOutDate  The new check-out date
-     * @return True if the update is successful, false otherwise
-     */
     public boolean updateReservation(Long reservationId, AppUser user, LocalDate checkInDate, LocalDate checkOutDate) {
         Optional<Reservation> reservationOpt = reservationRepository.findById(reservationId);
         if (reservationOpt.isPresent()) {
             Reservation reservation = reservationOpt.get();
-            // Ensure the reservation belongs to the user
             if (!reservation.getUser().getId().equals(user.getId())) {
                 return false;
             }
@@ -129,18 +104,10 @@ public class ReservationService {
         return reservationRepository.findReservationsInRange(checkInDate, checkOutDate);
     }
 
-    /**
-     * Delete an existing reservation
-     *
-     * @param reservationId The ID of the reservation to delete
-     * @param user          The user making the deletion
-     * @return True if the deletion is successful, false otherwise
-     */
     public boolean deleteReservation(Long reservationId, AppUser user) {
         Optional<Reservation> reservationOpt = reservationRepository.findById(reservationId);
         if (reservationOpt.isPresent()) {
             Reservation reservation = reservationOpt.get();
-            // Ensure the reservation belongs to the user
             if (!reservation.getUser().getId().equals(user.getId())) {
                 return false;
             }
@@ -150,12 +117,25 @@ public class ReservationService {
         return false;
     }
 
-    /**
-     * Check if a user is logged in by inspecting the session
-     *
-     * @param request The HTTP request
-     * @return True if the user is logged in, false otherwise
-     */
+    public boolean cancelRoom(AppUser user, Long roomId, String bookingId) {
+        try {
+            Optional<Reservation> reservationOpt = reservationRepository.findByRoomIdAndBookingIdAndUser(
+                    roomId, bookingId, user.getId());
+
+            if (reservationOpt.isPresent()) {
+                Reservation reservation = reservationOpt.get();
+
+                reservationRepository.delete(reservation);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean isUserLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -164,4 +144,34 @@ public class ReservationService {
         }
         return false;
     }
+
+    public Reservation checkInReservation(Long id) {
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        if (reservation != null) {
+            reservation.setCheckedIn(true);
+            return reservationRepository.save(reservation);
+        }
+        return null;
+    }
+
+    public Reservation checkOutReservation(Long id) {
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        if (reservation != null) {
+            reservation.setCheckedIn(false);
+            return reservationRepository.save(reservation);
+        }
+        return null;
+    }
+
+    public boolean deleteReservation(Long id) {
+        if (reservationRepository.existsById(id)) {
+            reservationRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 }
+
+
+

@@ -53,6 +53,7 @@ public class AppUser implements Serializable {
      * The email address of user
      */
     private String email;
+<<<<<<< HEAD
 
     /**
      * The hashed password for the user
@@ -65,6 +66,10 @@ public class AppUser implements Serializable {
      *
      * @return user title
      */
+=======
+    private String password_hash;
+
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     public String getTitle() {
         return title;
     }

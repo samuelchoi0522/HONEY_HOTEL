@@ -23,6 +23,7 @@ Honey Hotel uses a number of open-source projects to work properly:
 - [JUnit] - Unit testing library
 - [Java] - Backend development
 - [PostgreSQL] - SQL Database
+- [Docker] - Containerization platform
 
 And of course, Honey Hotel is accessible with a [public repository][dill]
  on GitHub.
@@ -46,6 +47,22 @@ docker-compose up --build
 Once all dependencies and servers are running, the project should be viewable on localhost:3000.
 
 ### To run this project locally:
+
+Rename the .env.example file in the backend and frontend directories to .env, and replace the placeholder values to your environment variables.
+You must have the .env file for the app to compile and run.
+
+```sh
+DB_USERNAME=database_username
+DB_PASSWORD=database_password
+EMAIL_USERNAME=gmail_email
+EMAIL_PASSWORD=gmail_app_password
+```
+
+Initialize your PostgreSQL databse with the following command in the root directory.
+
+```sh
+psql -U admin -d honey_hotel_db -f ./init.sql
+```
 
 Install the dependencies and devDependencies and start the server on port :8080.
 
@@ -75,3 +92,4 @@ npm start
    [JUnit]: <https://junit.org/junit5/>
    [Java]: <https://www.java.com/en/>
    [PostgreSQL]: <https://www.postgresql.org/>
+   [Docker]: <https://www.docker.com/>

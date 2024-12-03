@@ -26,8 +26,19 @@ CREATE TABLE IF NOT EXISTS reservations (
     id SERIAL PRIMARY KEY,
     check_in_date DATE NOT NULL,
     check_out_date DATE NOT NULL,
-    room_id INT NOT NULL,
-    user_id INT NOT NULL
+    room_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    adults INTEGER NOT NULL DEFAULT 1,
+    children INTEGER NOT NULL DEFAULT 0,
+    promo_code VARCHAR(50),
+    rate_option VARCHAR(50),
+    total_price NUMERIC(10, 2),
+    booking_id VARCHAR(36),
+    chosen_photo_path VARCHAR(255),
+    hotel_location VARCHAR(255),
+    room_price NUMERIC(10, 2),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (room_id) REFERENCES rooms(id)
 );
 
 CREATE TABLE IF NOT EXISTS roomcategories (
@@ -53,15 +64,23 @@ CREATE TABLE IF NOT EXISTS roomtypes (
 
 CREATE TABLE IF NOT EXISTS activityreservations (
     id SERIAL PRIMARY KEY,
-    user_id INT,
-    activity_id INT,
-    hotel_reservation_id INT,
-    reservation_date DATE,
-    check_in_date DATE,
-    check_out_date DATE,
+    user_id BIGINT NOT NULL,
+    activity_id INTEGER NOT NULL,
+    hotel_reservation_id BIGINT NOT NULL,
+    reservation_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (activity_id) REFERENCES activities(id),
     FOREIGN KEY (hotel_reservation_id) REFERENCES reservations(id)
+);
+
+
+CREATE TABLE IF NOT EXISTS promo_codes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    discount_percentage NUMERIC(5, 2) NOT NULL,
+    creation_date DATE NOT NULL,
+    expiration_date DATE NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS spring_session (
@@ -81,6 +100,21 @@ CREATE TABLE IF NOT EXISTS spring_session_attributes (
     PRIMARY KEY (session_primary_id, attribute_name),
     CONSTRAINT spring_session_attributes_fk FOREIGN KEY (session_primary_id) REFERENCES spring_session (primary_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS password_reset_token (
+    id SERIAL PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    user_id BIGINT NOT NULL,
+    expiry_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    CONSTRAINT password_reset_token_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS admin_access (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS password_reset_token_token_idx ON password_reset_token (token);
 
 
 INSERT INTO activities (name, price, category) VALUES
@@ -360,4 +394,11 @@ INSERT INTO roomtypes (id, type_name) VALUES
 
 -- Insert initial data into 'users'
 INSERT INTO users (email, firstname, lastname, password_hash, title) VALUES
-('jaedolc@gmail.com', 'Sam', 'Choi', 'sBcIpBO+3vuIEewzXze6VBV1tZuIF0iHywCRC27IopE=', NULL);
+('honeyhotel@gmail.com', 'Honey', 'Hotel', 'ca18b07032cb2ff53855bf1d73fe4f3ac6d71f78b207ec9fc4be8b5ad25b6ee4', NULL);
+
+-- Insert initial data into 'promo_codes'
+INSERT INTO promo_codes (name, discount_percentage, creation_date, expiration_date, is_active) VALUES
+('ERNESTO50', 50.00, '2024-10-30', '2026-12-31', TRUE);
+
+INSERT INTO admin_access (email) VALUES
+('honeyhotel@gmail.com');

@@ -31,13 +31,9 @@
     color: white;
     height: 33px;
     min-width: 300px;
-    /* Set minimum width */
     width: 400px;
-    /* Set desired width */
     max-width: 500px;
-    /* Set maximum width */
     padding-right: 50px;
-    /* Adjust padding to control icon spacing */
     border-radius: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.336);
     display: flex;
@@ -58,12 +54,19 @@
     padding: 10px 20px;
     background-color: #000;
     color: #fff;
-    border: none;
+    border: 1.5px solid #000;
+    border-color: black;
     cursor: pointer;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 800;
     transition: background-color 0.3s ease;
     border-radius: 0;
 }
 
 .checkRatesButton:hover {
-    background-color: #555;
+    background-color: white;
+    color: black;
+    border-color: yellow;
 }

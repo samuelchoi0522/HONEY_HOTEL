@@ -3,14 +3,11 @@ package com.honey_hotel.backend.controller;
 import java.util.*;
 import java.util.logging.Logger;
 
-import com.honey_hotel.backend.service.AccountService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.honey_hotel.backend.model.AppUser;
-import com.honey_hotel.backend.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import com.honey_hotel.backend.repository.*;
 
@@ -25,8 +22,11 @@ import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 @RequestMapping("/api/account")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AccountController {
+<<<<<<< HEAD
     //If logged in, go to account page, if logged out, redirect to login page
 
+=======
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     @Autowired
     private UserRepository userRepository;
 
@@ -45,6 +45,7 @@ public class AccountController {
         return user;
     }
 
+<<<<<<< HEAD
     /**
      * Resets the user's password
      * Validates the old password, checks if the new password matches confirmation, and updates the password
@@ -54,8 +55,11 @@ public class AccountController {
      * @param servletRequest HttpServletRequest to manage the session
      * @return a ResponseEntity indicating the result of the password reset attempt
      */
+=======
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     @RequestMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody Map<String, Object> request, HttpServletRequest servletRequest) {
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, Object> request,
+            HttpServletRequest servletRequest) {
         String oldPassword = (String) request.get("oldPassword");
         String newPassword = (String) request.get("newPassword");
         String confirmPassword = (String) request.get("confirmPassword");
@@ -84,7 +88,7 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Map.of("error", "Passwords do not match"));
         }
 
-        if (oldPassword.equals(newPassword)){
+        if (oldPassword.equals(newPassword)) {
             return ResponseEntity.status(401).body("Error: New password cannot be the same as old password");
         }
 
@@ -95,5 +99,49 @@ public class AccountController {
         session.setAttribute("user", user);
 
         return ResponseEntity.ok("Password Reset Successfully");
+    }
+
+    @PostMapping("/update-name")
+    public ResponseEntity<?> updateName(@RequestBody Map<String, String> request, HttpServletRequest servletRequest) {
+        AppUser user = getLoggedInUser(servletRequest);
+        if (user == null) {
+            return ResponseEntity.status(401).body("Error: User is not authenticated");
+        }
+
+        logger.info("Updating name for user: " + user.getEmail());
+
+        String firstName = request.get("firstName");
+        String lastName = request.get("lastName");
+
+        logger.info("New name: " + firstName + " " + lastName);
+
+        user.setFirstname(firstName);
+        user.setLastname(lastName);
+
+        userRepository.save(user);
+
+        HttpSession session = servletRequest.getSession();
+        session.setAttribute("user", user);
+
+        logger.info("Name updated successfully");
+        return ResponseEntity.ok("Name updated successfully");
+    }
+
+    @PostMapping("/update-email")
+    public ResponseEntity<?> updateEmail(@RequestBody Map<String, String> request, HttpServletRequest servletRequest) {
+        AppUser user = getLoggedInUser(servletRequest);
+        if (user == null) {
+            return ResponseEntity.status(401).body("Error: User is not authenticated");
+        }
+
+        String email = request.get("email");
+
+        user.setEmail(email);
+        userRepository.save(user);
+
+        HttpSession session = servletRequest.getSession();
+        session.setAttribute("user", user);
+        
+        return ResponseEntity.ok("Email updated successfully");
     }
 }

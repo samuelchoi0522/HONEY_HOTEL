@@ -3,6 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=PT+Serif Caption:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700;800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=PT+Serif+Caption:ital@0;1&display=swap');
 
 :root {
     --image-0: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACmSURBVHgBrc/BDcIwDAXQn1IkjjkiBSSzASOQEZiQERghK7ABufTee9uYT1ElDkkQCF9syXl2DPwrxMlx7+TumHP9JqvWiAbo2Qw5aFDaJmLTgKAsE+C7Lt4+ohqckezkVIJTguURF1AusJWtyKQIxXXPsfoqV8CV6dBig15H+KIxsEa5idEozsuc6k0jb2oMhMDH95u+AUVUA/M3s2sGPgZsDvwcD69eSZnjg5LSAAAAAElFTkSuQmCC);
@@ -11,7 +12,12 @@
     --ratio: calc(var(--custom-width) / var(--design-width));
 }
 
-/* VIDEO PLAYER */
+.check-rates-bar{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
 .video-container {
     position: relative;
     top: 100px;
@@ -31,7 +37,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.7;
+    opacity: 0.3;
     transition: opacity 1s ease-out;
 }
 
@@ -60,7 +66,6 @@
     background: linear-gradient(transparent, black);
 }
 
-/* NAVIGATION SYSTEM ON HOMEPAGE */
 .navigation-bar {
     position: absolute;
     top: 80%;
@@ -238,7 +243,7 @@
 }
 
 .nav-line1 {
-    width: 85%; /* Full width to align hover box */
+    width: 85%;
     margin: 0 auto;
     height: 0.5px;
     background-color: white;
@@ -249,8 +254,141 @@
     position: absolute;
     bottom: 0;
     height: 4px;
-    width: 17%; /* 80% divided by 5 items = 16% for each item */
-    max-width: 17%; /* Cap the hover box width to match nav item */
+    width: 17%;
+    max-width: 17%;
     background-color: #fff;
     transition: left 0.3s ease;
+}
+
+.title{
+    font-family: Montaga;
+    font-size: 2em;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 40px;
+    z-index: 1;
+}
+
+.explore-honey-hotel {
+    position: absolute;
+    top: 280px;
+    left: 300px;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    max-width: 80%;
+    text-align: center;
+}
+
+.explore-honey-hotel-title {
+    font-family: Montaga;
+    font-size: 2.8em;
+    font-weight: 100;
+    margin-bottom: 20px;
+    text-align: left;
+    line-height: 1;
+    letter-spacing: 0.1em;
+}
+
+.homepage-destination-input .MuiOutlinedInput-root {
+    height: 30px;
+    width: 300px;
+}
+
+
+.homepage-destination-input .MuiInputLabel-root {
+    top: -31%;
+    color: #ffffff96;
+    font-family: Pt Serif Caption;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.homepage-destination-input .MuiInputLabel-root.Mui-focused {
+    color: #FFD700;
+}
+
+.homepage-destination-input .MuiOutlinedInput-notchedOutline {
+    border: 1.5px solid #ffffff73;
+}
+
+.homepage-destination-input .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #FFD700;
+}
+
+.homepage-destination-input .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #FFD700;
+}
+
+.homepage-date-range-picker {
+    padding-top: 20px !important;
+    padding-bottom: 10px !important;
+}
+
+.homepage-date-range-picker .MuiInputBase-root {
+    height: 30px;
+    width: 300px;
+    font-family: Pt Serif Caption;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.homepage-date-range-picker .MuiInputLabel-root {
+    top: -31%;
+    color: #ffffff96;
+    font-family: Pt Serif Caption;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.homepage-date-range-picker .MuiInputLabel-root.Mui-focused {
+    color: #FFD700;
+}
+
+.homepage-date-range-picker .MuiOutlinedInput-notchedOutline {
+    border: 1.5px solid #ffffff73;
+}
+
+.homepage-date-range-picker .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #FFD700;
+}
+
+.homepage-date-range-picker .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #FFD700;
+}
+
+.homepage-occupancy{
+    margin-left: -63%;
+    color: white;
+}
+
+.check-rates-button{
+    background-color: #000000;
+    color: #ffffff;;
+    margin-top: 10px;
+    cursor: pointer;
+    border: 1.5px solid #000000;
+    transition: ease-in-out 0.2s;
+    width: 300px;
+    height: 30px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 800;
+}
+
+.check-rates-button:hover{
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #f0d10b
+}
+
+.homepage-occupancy .MuiButton-root{
+    color: white;
+}
+
+.homepage-occupancy .MuiButton-root:hover{
+    color: white;
+    text-decoration: none;
 }

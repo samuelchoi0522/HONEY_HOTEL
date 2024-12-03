@@ -25,7 +25,7 @@ function Login() {
         const checkSession = async () => {
             console.log("checking session");
             try {
-                const response = await fetch("http://localhost:8080/api/check-session", {
+                const response = await fetch("http://localhost:8080/auth/check-session", {
                     method: "POST",
                     credentials: "include",
                     headers: { 'Content-Type': 'application/json' }
@@ -51,7 +51,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch("http://localhost:8080/api/login", {
+        const response = await fetch("http://localhost:8080/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -69,7 +69,7 @@ function Login() {
                     navigate("/checkout", { state: JSON.parse(reservationData) });
                     sessionStorage.removeItem("reservationData");
                 } else {
-                    navigate("/");
+                    navigate("/account");
                 }
             }, 2500);
         } else {

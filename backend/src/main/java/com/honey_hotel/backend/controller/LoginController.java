@@ -26,6 +26,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+<<<<<<< HEAD
     /**
      * Login web directory that allows user to enter user credentials to log in
      *
@@ -34,6 +35,9 @@ public class LoginController {
      * @return ResponseEntity indicating whether login was successful or not
      */
     @PostMapping("/api/login")
+=======
+    @PostMapping("/auth/login")
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     public ResponseEntity<?> loginUser(@RequestBody AppUser user, HttpServletRequest request) {
         if (user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.badRequest().body("A required field is missing.");
@@ -49,6 +53,7 @@ public class LoginController {
         return ResponseEntity.ok("Login successful!");
     }
 
+<<<<<<< HEAD
     /**
      * Web directory used to check if a user is currently logged in
      *
@@ -56,18 +61,24 @@ public class LoginController {
      * @return ResponseEntity containing the login status and user's first name if logged in
      */
     @PostMapping("/api/check-session")
+=======
+    @PostMapping("/auth/check-session")
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     public ResponseEntity<?> checkSession(HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         if (loginService.isUserLoggedIn(request)) {
             AppUser user = (AppUser) request.getSession().getAttribute("user");
             response.put("isLoggedIn", true);
             response.put("firstname", user.getFirstname());
+            response.put("lastname", user.getLastname());
+            response.put("email", user.getEmail());
         } else {
             response.put("isLoggedIn", false);
         }
         return ResponseEntity.ok(response);
     }
 
+<<<<<<< HEAD
     /**
      * Web directory to log out a user by invalidating their credentials
      *
@@ -75,6 +86,9 @@ public class LoginController {
      * @return ResponseEntity indicating if logout was successful
      */
     @PostMapping("/api/logout")
+=======
+    @PostMapping("/auth/logout")
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     public ResponseEntity<?> logoutUser(HttpServletRequest request) {
         loginService.invalidateSession(request);
         return ResponseEntity.ok("Logout successful.");

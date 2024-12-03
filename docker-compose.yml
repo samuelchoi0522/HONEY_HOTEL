@@ -5,6 +5,8 @@ services:
     container_name: backend_container
     ports:
       - "8080:8080"
+    env_file:
+      - ./backend/.env
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/honey_hotel_db
       - SPRING_DATASOURCE_USERNAME=admin
@@ -17,6 +19,8 @@ services:
     container_name: frontend_container
     ports:
       - "3000:80"
+    env_file:
+      - ./frontend/.env
     depends_on:
       - backend
 

@@ -11,11 +11,16 @@ import com.honey_hotel.backend.model.AppUser;
 import com.honey_hotel.backend.repository.UserRepository;
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 
+<<<<<<< HEAD
 /**
  Registration controller class to break down complicated tasks with an array of simpler function calls
  @author Samuel Choi
  @version 3.0 (Oct 2 2024)
  */
+=======
+import java.util.Optional;
+
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class RegistrationController {
@@ -31,12 +36,18 @@ public class RegistrationController {
      */
     @PostMapping("/api/register")
     public ResponseEntity<?> registerUser(@RequestBody AppUser user) {
-        if (user.getTitle() == null || user.getFirstname() == null || user.getLastname() == null || user.getEmail() == null || user.getPassword() == null) {
+        if (user.getTitle() == null || user.getFirstname() == null || user.getLastname() == null
+                || user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.badRequest().body("A required field is missing.");
         }
-        user.setPassword(hashPassword(user.getPassword()));
+        Optional<AppUser> existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser.isPresent()) {
+            return ResponseEntity.badRequest().body("User with this email already exists.");
+        }
 
+        user.setPassword(hashPassword(user.getPassword()));
         userRepository.save(user);
+        
         return ResponseEntity.ok("User registered successfully");
     }
 }

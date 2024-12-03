@@ -4,39 +4,45 @@ import { useForm, FormProvider } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import '../styles/Checkout.css';
 import PaymentComponent from '../components/PaymentComponent';
+import { v4 as uuidv4 } from 'uuid';
 
 const Checkout = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
     const {
+        hotelLocation,
         checkInDate,
         checkOutDate,
-        categoryName,
-        roomType,
-        selectedBedType,
-        selectedSmoking,
-        totalPrice,
-        roomId,
+        selectedRooms,
+        rooms,
+        roomPrices,
+        adults,
+        children,
+        rateOption,
+        promoCode,
         reservedActivity,
         activityDate,
+        chosenPhoto,
     } = location.state || {};
 
     const [finalTotal, setFinalTotal] = useState(0);
     const [numNights, setNumNights] = useState(0);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
 
     const methods = useForm({
         defaultValues: {
             payment: {
                 checkInDate,
                 checkOutDate,
-                categoryName,
-                roomType,
-                selectedBedType,
-                selectedSmoking,
-                totalPrice,
-                roomId,
+                selectedRooms,
+                rooms,
+                adults,
+                children,
+                rateOption,
+                promoCode,
                 reservedActivity,
                 activityDate,
                 cardnumber: '',
@@ -48,9 +54,10 @@ const Checkout = () => {
     });
 
     useEffect(() => {
+        console.log(location.state);
         const checkSession = async () => {
             try {
-                const response = await fetch("http://localhost:8080/api/check-session", {
+                const response = await fetch("http://localhost:8080/auth/check-session", {
                     method: "POST",
                     credentials: "include",
                     headers: { 'Content-Type': 'application/json' },
@@ -66,78 +73,90 @@ const Checkout = () => {
         checkSession();
     }, []);
 
-    // Calculate total price and number of nights
     useEffect(() => {
         if (checkInDate && checkOutDate) {
             const nights = Math.ceil((new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24));
             setNumNights(nights);
 
-            let basePrice = totalPrice * nights;
+            let basePrice = selectedRooms.reduce((acc, room) => acc + room.totalPrice * nights, 0);
             if (reservedActivity) {
                 basePrice += reservedActivity.price;
             }
 
-            const tax = basePrice * 0.06; // Assuming 6% tax
+            const tax = basePrice * 0.06;
             setFinalTotal((basePrice + tax).toFixed(2));
         }
-    }, [checkInDate, checkOutDate, totalPrice, reservedActivity]);
+    }, [checkInDate, checkOutDate, selectedRooms, reservedActivity]);
 
-
-    
     const handleReserveRoom = async (data) => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+
         if (!isLoggedIn) {
             sessionStorage.setItem('reservationData', JSON.stringify(location.state));
             navigate('/login');
+            setIsSubmitting(false);
             return;
         }
 
-        if (!roomId || !checkInDate || !checkOutDate) {
+        if (selectedRooms.some(room => !room.roomId || !checkInDate || !checkOutDate)) {
             alert("Please fill in all required fields.");
+            setIsSubmitting(false);
             return;
         }
+
+        const bookingId = uuidv4(); // Generate a unique booking ID
 
         try {
-            const reservationPayload = {
-                roomId,
-                startDate: checkInDate,
-                endDate: checkOutDate,
-            };
+            const reservationIds = [];
 
-            console.log("Room reservation payload:", reservationPayload);
+            // Iterate over selectedRooms to create a reservation for each room
+            for (let i = 0; i < selectedRooms.length; i++) {
+                const room = selectedRooms[i];
+                const roomPrice = roomPrices[i]; // Get the corresponding room price
 
-            const reservationResponse = await fetch("http://localhost:8080/api/reservations", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(reservationPayload),
-            });
+                const reservationPayload = {
+                    hotelLocation,
+                    roomId: room.roomId,
+                    startDate: checkInDate,
+                    endDate: checkOutDate,
+                    adults,
+                    children,
+                    rateOption,
+                    promoCode,
+                    totalPrice: roomPrice * numNights, // Total price for this room
+                    roomPrice, // Individual room price per night
+                    bookingId,
+                    chosenPhoto,
+                };
 
-            if (!reservationResponse.ok) {
-                const errorText = await reservationResponse.text();
-                console.error("Error response:", errorText);
-                throw new Error(errorText || "Failed to create reservation");
-            }
+                const reservationResponse = await fetch("http://localhost:8080/api/reservations", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reservationPayload),
+                });
 
-            const reservationData = await reservationResponse.json();
-            console.log("Room reservation response:", reservationData);
+                if (!reservationResponse.ok) {
+                    const errorText = await reservationResponse.text();
+                    console.error("Error response:", errorText);
+                    throw new Error(errorText || "Failed to create reservation");
+                }
 
-            const hotelReservationId = reservationData?.id;
-            if (!hotelReservationId) {
-                throw new Error("Failed to retrieve hotel reservation ID.");
+                const reservationData = await reservationResponse.json();
+                reservationIds.push(reservationData.id);
             }
 
             if (reservedActivity) {
                 const activityReservationPayload = {
-                    hotelReservationId,
+                    hotelReservationId: reservationIds[0],
                     activityId: reservedActivity.id,
                     reservationDate: activityDate,
                     checkInDate,
                     checkOutDate,
                 };
-
-                console.log("Activity reservation payload:", activityReservationPayload);
 
                 const activityResponse = await fetch("http://localhost:8080/api/reservations/activities", {
                     method: "POST",
@@ -160,26 +179,31 @@ const Checkout = () => {
         } catch (error) {
             console.error("Error during reservation:", error);
             alert(`An error occurred while processing your reservation: ${error.message}`);
+        } finally {
+            setIsSubmitting(false);
         }
     };
-
-
-
 
     return (
         <div className="checkout-page">
             <h2 style={{ color: 'black' }}>Complete Booking</h2>
             <div className="booking-details">
                 <h3>Room Details</h3>
-                <p><strong>Category:</strong> {categoryName}</p>
-                <p><strong>Room Type:</strong> {roomType}</p>
-                <p><strong>Bed Type:</strong> {selectedBedType}</p>
-                <p><strong>Smoking:</strong> {selectedSmoking ? 'Yes' : 'No'}</p>
+                {selectedRooms?.map((room, index) => (
+                    <div key={index} className="room-details">
+                        <h4>Room {index + 1}</h4>
+                        <p><strong>Category:</strong> {room.categoryName}</p>
+                        <p><strong>Room Type:</strong> {room.roomType}</p>
+                        <p><strong>Bed Type:</strong> {room.selectedBedType}</p>
+                        <p><strong>Smoking:</strong> {room.selectedSmoking ? 'Yes' : 'No'}</p>
+                        <p><strong>Base Price:</strong> ${room.totalPrice * numNights}</p>
+                        <p><strong>Room Id:</strong> {room.roomId}</p>
+                    </div>
+                ))}
+
                 <p><strong>Check-in Date:</strong> {checkInDate}</p>
                 <p><strong>Check-out Date:</strong> {checkOutDate}</p>
                 <p><strong>Number of Nights:</strong> {numNights}</p>
-                <p><strong>Base Price:</strong> ${totalPrice * numNights}</p>
-                <p><strong>Room Id:</strong>{roomId}</p>
 
                 {reservedActivity && (
                     <>

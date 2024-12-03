@@ -24,7 +24,6 @@
     align-items: center;
     justify-content: flex-start;
     flex-grow: 1;
-    /* Take up the available space */
 }
 
 .navbar-link-items {

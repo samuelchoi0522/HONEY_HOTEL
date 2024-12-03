@@ -41,12 +41,15 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
+<<<<<<< HEAD
     /**
      * Custom query to find a Room by its ID (optional)
      *
      * @param roomId ID of the room to retrieve
      * @return a room if found by matching ID, empty if none matches
      */
+=======
+>>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     @Query("SELECT r FROM Room r WHERE r.id = :roomId")
     Optional<Room> findRoomById(@Param("roomId") Long roomId);
 }
