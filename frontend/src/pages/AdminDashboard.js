@@ -35,6 +35,12 @@ const AdminDashboard = () => {
 
     dayjs.extend(isSameOrAfter);
     dayjs.extend(isSameOrBefore);
+    const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [menuContext, setMenuContext] = useState({ type: "", data: null });
+
+    dayjs.extend(isSameOrAfter);
+    dayjs.extend(isSameOrBefore);
 
     const handleNavbarSelect = (item) => {
         setSelectedTab(item);
@@ -57,9 +63,17 @@ const AdminDashboard = () => {
             console.error("Invalid type or data for menu context");
             return;
         }
+    const handleMenuClick = (event, type, data) => {
+        if (!type || !data) {
+            console.error("Invalid type or data for menu context");
+            return;
+        }
         setMenuAnchor(event.currentTarget);
         setMenuContext({ type, data });
+        setMenuContext({ type, data });
     };
+
+
 
 
 
@@ -69,9 +83,18 @@ const AdminDashboard = () => {
 
     const handleBookingsDialogOpen = (type) => {
         setSelectedBooking(menuContext.data); // Set the booking from the menu context
+    const handleBookingsDialogOpen = (type) => {
+        setSelectedBooking(menuContext.data); // Set the booking from the menu context
         setConfirmationDialog({ open: true, type });
         handleMenuClose();
     };
+
+
+    const handleBookingsDialogClose = async (confirm) => {
+        if (!selectedBooking) {
+            console.error("No booking selected.");
+            return;
+        }
 
 
     const handleBookingsDialogClose = async (confirm) => {
@@ -131,6 +154,79 @@ const AdminDashboard = () => {
         }
 
         setConfirmationDialog({ open: false, type: "" });
+        setSelectedBooking(null); // Clear the selected booking
+    };
+
+
+    const fetchUsersData = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/admin/users", {
+                method: "GET",
+                credentials: "include",
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUsers(data);
+            } else {
+                console.error("Error fetching users:", await response.text());
+            }
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchUsersData();
+    }, []);
+
+    const getUserStatus = (user) => {
+        if (user.isAdmin) return "Administrator";
+        if (user.isClerk) return "Clerk";
+        return "Guest";
+    };
+
+    const handleUsersDialogOpen = (type) => {
+        setSelectedUser(menuContext.data); // Set the user from the menu context
+        setConfirmationDialog({ open: true, type });
+        handleMenuClose();
+    };
+
+
+    const handleUsersDialogClose = async (confirm) => {
+        if (!selectedUser) {
+            console.error("No user selected.");
+            return;
+        }
+
+        if (confirm) {
+            try {
+                if (confirmationDialog.type === "delete") {
+                    await fetch(`http://localhost:8080/api/admin/users/${selectedUser.id}`, {
+                        method: "DELETE",
+                        credentials: "include",
+                    });
+                    fetchUsersData();
+                } else if (confirmationDialog.type === "makeClerk") {
+                    await fetch(`http://localhost:8080/api/admin/users/${selectedUser.id}/makeClerk`, {
+                        method: "PUT",
+                        credentials: "include",
+                    });
+                    fetchUsersData();
+                } else if (confirmationDialog.type === "makeAdmin") {
+                    await fetch(`http://localhost:8080/api/admin/users/${selectedUser.id}/makeAdmin`, {
+                        method: "PUT",
+                        credentials: "include",
+                    });
+                    fetchUsersData();
+                }
+            } catch (error) {
+                console.error("Error performing user action:", error);
+            }
+        }
+        setConfirmationDialog({ open: false, type: "" });
+        setSelectedUser(null); // Clear the selected user
+    };
         setSelectedBooking(null); // Clear the selected booking
     };
 
@@ -309,6 +405,7 @@ const AdminDashboard = () => {
     return (
         <div className="admin-dashboard">
             <h1 className="dashboard-title"></h1>
+            <h1 className="dashboard-title"></h1>
             <div style={{ display: "flex" }}>
                 <AdminNavbar onSelect={handleNavbarSelect} />
                 <div style={{ marginLeft: "20px", flex: 1 }}>
@@ -370,6 +467,7 @@ const AdminDashboard = () => {
                                             </div>
                                             <div className="dashboard-customer-name">
                                                 {`${booking.user?.firstname || "Unknown"} ${booking.user?.lastname || ""}`}
+                                                {`${booking.user?.firstname || "Unknown"} ${booking.user?.lastname || ""}`}
                                             </div>
                                             <div className="dashboard-checkin-checkout">
                                                 {`${dayjs(booking.checkInDate).format("MM-DD-YYYY")} - ${dayjs(
@@ -385,6 +483,7 @@ const AdminDashboard = () => {
                                             <div className="dashboard-actions">
                                                 <IconButton
                                                     onClick={(e) => handleMenuClick(e, "booking", booking)}
+                                                    onClick={(e) => handleMenuClick(e, "booking", booking)}
                                                 >
                                                     <MoreVertIcon />
                                                 </IconButton>
@@ -393,6 +492,36 @@ const AdminDashboard = () => {
                                     ))
                                 ) : (
                                     <div className="dashboard-no-bookings">No bookings available.</div>
+                                )}
+                            </div>
+                        </>
+                    )}
+                    {selectedTab === "Users" && (
+                        <>
+                            <div className="dashboard-bookings-table">
+                                <div className="dashboard-table-header">
+                                    <div className="dashboard-table-column">Name</div>
+                                    <div className="dashboard-table-column">Email</div>
+                                    <div className="dashboard-table-column">Status</div>
+                                    <div className="dashboard-table-column">Actions</div>
+                                </div>
+                                {isLoading ? (
+                                    <div className="dashboard-loading">Loading...</div>
+                                ) : users.length > 0 ? (
+                                    users.map((user, index) => (
+                                        <div className="dashboard-table-row" key={user.id || index}>
+                                            <div className="dashboard-user-name">{`${user.firstname} ${user.lastname}`}</div>
+                                            <div className="dashboard-user-email">{user.email}</div>
+                                            <div className="dashboard-user-status">{getUserStatus(user)}</div>
+                                            <div className="dashboard-actions">
+                                                <IconButton onClick={(e) => handleMenuClick(e, "user", user)}>
+                                                    <MoreVertIcon />
+                                                </IconButton>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="dashboard-no-bookings">No users available.</div>
                                 )}
                             </div>
                         </>
@@ -497,6 +626,68 @@ const AdminDashboard = () => {
 
                     ),
                 ]}
+                {menuContext.type === "booking" && menuContext.data && [
+                    <MenuItem key="view">
+                        <VisibilityIcon style={{ marginRight: "10px" }} /> View
+                    </MenuItem>,
+                    (() => {
+                        const checkInDate = new Date(menuContext.data.checkInDate);
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0); // Normalize today's date to ignore time
+                        if (checkInDate >= today && getStatus(menuContext.data) === "UPCOMING") {
+                            return (
+                                <MenuItem key="checkin" onClick={() => handleBookingsDialogOpen("checkin")}>
+                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Check In
+                                </MenuItem>
+                            );
+                        } else if (getStatus(menuContext.data) === "CHECKED IN") {
+                            return (
+                                <MenuItem key="checkout" onClick={() => handleBookingsDialogOpen("checkout")}>
+                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Check Out
+                                </MenuItem>
+                            );
+                        }
+                        return null;
+                    })(),
+                    <MenuItem key="delete" onClick={() => handleBookingsDialogOpen("delete")}>
+                        <DeleteIcon style={{ marginRight: "10px", color: "red" }} /> Delete Reservation
+                    </MenuItem>,
+                ]}
+                {menuContext.type === "user" && menuContext.data && [
+                    <MenuItem key="delete" onClick={() => handleUsersDialogOpen("delete")}>
+                        <DeleteIcon style={{ marginRight: "10px", color: "red" }} /> Delete User
+                    </MenuItem>,
+                    !menuContext.data.isAdmin && (
+                        <MenuItem
+                            key="makeAdmin"
+                            onClick={() => {
+                                if (!menuContext.data) {
+                                    console.error("No user data available.");
+                                    return;
+                                }
+                                handleUsersDialogOpen("makeAdmin");
+                            }}
+                        >
+                            <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Admin
+                        </MenuItem>
+
+                    ),
+                    !menuContext.data.isClerk && (
+                        <MenuItem
+                            key="makeClerk"
+                            onClick={() => {
+                                if (!menuContext.data) {
+                                    console.error("No user data available.");
+                                    return;
+                                }
+                                handleUsersDialogOpen("makeClerk");
+                            }}
+                        >
+                            <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Clerk
+                        </MenuItem>
+
+                    ),
+                ]}
             </Menu>
 
 
@@ -512,14 +703,32 @@ const AdminDashboard = () => {
                         handleUsersDialogClose(false);
                     }
                 }}
+                onClose={() => {
+                    if (selectedTab === "Bookings") {
+                        handleBookingsDialogClose(false);
+                    } else if (selectedTab === "Users") {
+                        handleUsersDialogClose(false);
+                    }
+                }}
             >
                 <DialogTitle>Confirmation</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         {selectedTab === "Bookings" && confirmationDialog.type === "checkin"
+                        {selectedTab === "Bookings" && confirmationDialog.type === "checkin"
                             ? "Are you sure you want to check in this reservation?"
                             : selectedTab === "Bookings" && confirmationDialog.type === "checkout"
+                            : selectedTab === "Bookings" && confirmationDialog.type === "checkout"
                                 ? "Are you sure you want to check out this reservation?"
+                                : selectedTab === "Bookings" && confirmationDialog.type === "delete"
+                                    ? "Are you sure you want to delete this reservation?"
+                                    : selectedTab === "Users" && confirmationDialog.type === "delete"
+                                        ? "Are you sure you want to delete this user?"
+                                        : selectedTab === "Users" && confirmationDialog.type === "makeClerk"
+                                            ? "Are you sure you want to make this user a clerk?"
+                                            : selectedTab === "Users" && confirmationDialog.type === "makeAdmin"
+                                                ? "Are you sure you want to make this user an administrator?"
+                                                : "Are you sure about this action?"}
                                 : selectedTab === "Bookings" && confirmationDialog.type === "delete"
                                     ? "Are you sure you want to delete this reservation?"
                                     : selectedTab === "Users" && confirmationDialog.type === "delete"
@@ -542,9 +751,26 @@ const AdminDashboard = () => {
                         }}
                         color="primary"
                     >
+                    <Button
+                        onClick={() => {
+                            if (selectedTab === "Bookings") {
+                                handleBookingsDialogClose(false);
+                            } else if (selectedTab === "Users") {
+                                handleUsersDialogClose(false);
+                            }
+                        }}
+                        color="primary"
+                    >
                         Cancel
                     </Button>
                     <Button
+                        onClick={() => {
+                            if (selectedTab === "Bookings") {
+                                handleBookingsDialogClose(true);
+                            } else if (selectedTab === "Users") {
+                                handleUsersDialogClose(true);
+                            }
+                        }}
                         onClick={() => {
                             if (selectedTab === "Bookings") {
                                 handleBookingsDialogClose(true);
@@ -559,6 +785,7 @@ const AdminDashboard = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
 
         </div>
     );
