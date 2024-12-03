@@ -81,6 +81,26 @@ npm install
 npm start
 ```
 
+### Admin Dashboard Login Information
+* **Admin Dashboard URL**: `/admin-dashboard` 
+* **Username**: `honeyhotelinfo@gmail.com` 
+* **Password**: `honeyhotel123`
+
+### Web Pages
+
+| **Page URL**            | **Page Description**                                                                                   |
+|--------------------------|-------------------------------------------------------------------------------------------------------|
+| `/`                     | The homepage showcasing Honey Hotel's features and a brief overview.                                 |
+| `/find-hive`            | Browse all available rooms, categorized by type and price.                                            |
+| `/room-details`         | A detailed page for users to select bed types, smoking status, and price categories for a specific room. |
+| `/login`                | Login page for users and admin to access their accounts.                                              |
+| `/register`             | Registration page for new users to create an account.                                                 |
+| `/forgot-password`      | Page for users to reset their password by entering their email address.                               |
+| `/account`              | User account page to view and update personal information, including booking history.                 |
+| `/add-vacation-package` | Admin page for adding special vacation packages and promotions to the system.                         |
+| `/checkout`             | Checkout page for users to review their booking details and confirm payment.                          |
+| `/admin-dashboard`      | Admin dashboard to view, edit, and manage bookings, rooms, and user accounts (restricted access).      |
+
 
 
 [//]: #
