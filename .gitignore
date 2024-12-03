@@ -2,3 +2,4 @@ HONEY HOTEL ITERATION 2 SCREEN RECORDING.mov
 backend/.env
 backend/src/test/resources/application-test.properties
 .env
+backend/src/main/java/com/honey_hotel/backend/logs/find_hives_logs.txt
