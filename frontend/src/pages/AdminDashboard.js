@@ -4,7 +4,15 @@ import { DateRangePicker, LocalizationProvider } from "@mui/x-date-pickers-pro";
 import AdminNavbar from "../components/AdminNavbar";
 import "../styles/AdminDashboard.css";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TextField } from "@mui/material";
+import { TextField, Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, IconButton } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
 
 
 const AdminDashboard = () => {
@@ -15,6 +23,17 @@ const AdminDashboard = () => {
     const [selectedTab, setSelectedTab] = useState("Bookings");
     const [statusFilter, setStatusFilter] = useState("");
     const [dateRange, setDateRange] = useState([null, null]);
+
+    dayjs.extend(isSameOrAfter);
+    dayjs.extend(isSameOrBefore);
+
+    // State for the menu and dialogs
+    const [menuAnchor, setMenuAnchor] = useState(null);
+    const [selectedBooking, setSelectedBooking] = useState(null);
+    const [confirmationDialog, setConfirmationDialog] = useState({
+        open: false,
+        type: "", // "checkout" or "delete"
+    });
 
     const handleNavbarSelect = (item) => {
         setSelectedTab(item);
@@ -32,30 +51,107 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleMenuClick = (event, booking) => {
+        setMenuAnchor(event.currentTarget);
+        setSelectedBooking(booking);
+    };
+
+    const handleMenuClose = () => {
+        setMenuAnchor(null);
+    };
+
+    const handleDialogOpen = (type) => {
+        setConfirmationDialog({ open: true, type });
+        handleMenuClose();
+    };
+
+    const handleDialogClose = async (confirm) => {
+        if (confirm) {
+            try {
+                if (confirmationDialog.type === "checkout") {
+                    const response = await fetch(
+                        `http://localhost:8080/api/admin/reservations/${selectedBooking.bookingId}/checkout`,
+                        {
+                            method: "PUT",
+                            credentials: "include",
+                        }
+                    );
+                    if (response.ok) {
+                        console.log("Reservation checked out successfully.");
+                        // Update the bookings list after a successful checkout
+                        fetchAdminDashboardData();
+                    } else {
+                        console.error("Error checking out reservation:", await response.text());
+                    }
+                } else if (confirmationDialog.type === "delete") {
+                    const response = await fetch(
+                        `http://localhost:8080/api/admin/reservations/${selectedBooking.bookingId}`,
+                        {
+                            method: "DELETE",
+                            credentials: "include",
+                        }
+                    );
+                    if (response.ok) {
+                        console.log("Reservation deleted successfully.");
+                        // Update the bookings list after a successful deletion
+                        fetchAdminDashboardData();
+                    } else {
+                        console.error("Error deleting reservation:", await response.text());
+                    }
+                } else if (confirmationDialog.type === "checkin") {
+                    const response = await fetch(
+                        `http://localhost:8080/api/admin/reservations/${selectedBooking.bookingId}/checkin`,
+                        {
+                            method: "PUT",
+                            credentials: "include",
+                        }
+                    );
+                    if (response.ok) {
+                        console.log("Reservation checked in successfully.");
+                        // Update the bookings list after a successful check-in
+                        fetchAdminDashboardData();
+                    } else {
+                        console.error("Error checking in reservation:", await response.text());
+                    }
+                }
+            } catch (error) {
+                console.error("Error performing action:", error);
+            }
+        }
+
+        // Close the dialog
+        setConfirmationDialog({ open: false, type: "" });
+    };
+
+
+
     const getStatus = (booking) => {
-        const today = new Date();
-        const checkInDate = new Date(booking.checkInDate);
-        const checkOutDate = new Date(booking.checkOutDate);
-        const daysAfterCheckout = Math.floor(
-            (today - checkOutDate) / (1000 * 60 * 60 * 24)
-        );
+        if (!booking || !booking.checkInDate || !booking.checkOutDate) {
+            return "UNKNOWN"; // Default to "UNKNOWN" if data is missing
+        }
+
+        const today = dayjs().startOf("day");
+        const checkInDate = dayjs(booking.checkInDate);
+        const checkOutDate = dayjs(booking.checkOutDate);
 
         if (!booking.checkedIn) {
-            if (checkInDate >= today) {
+            if (checkInDate.isSameOrAfter(today)) {
                 return "UPCOMING";
-            } else if (checkInDate < today) {
+            } else if (checkInDate.isBefore(today)) {
                 return "CANCELLED";
             }
         } else if (booking.checkedIn) {
-            if (checkInDate <= today && checkOutDate >= today) {
+            if (checkInDate.isSameOrBefore(today) && checkOutDate.isSameOrAfter(today)) {
                 return "CHECKED IN";
-            } else if (daysAfterCheckout > 3) {
+            } else if (today.diff(checkOutDate, "days") > 3) {
                 updateBookingStatus(booking.id); // Automatically check out the customer
                 return "PAST CHECKOUT";
             }
         }
         return "UNKNOWN";
     };
+
+
 
     const applyFilters = () => {
         let filtered = bookings;
@@ -67,52 +163,54 @@ const AdminDashboard = () => {
 
         // Filter by date range
         if (dateRange[0] && dateRange[1]) {
-            const startDate = new Date(dateRange[0]);
-            const endDate = new Date(dateRange[1]);
+            const startDate = dayjs(dateRange[0]);
+            const endDate = dayjs(dateRange[1]);
+
             filtered = filtered.filter((booking) => {
-                const checkInDate = new Date(booking.checkInDate);
-                const checkOutDate = new Date(booking.checkOutDate);
+                const checkInDate = dayjs(booking.checkInDate);
+                const checkOutDate = dayjs(booking.checkOutDate);
                 return (
-                    (checkInDate >= startDate && checkInDate <= endDate) ||
-                    (checkOutDate >= startDate && checkOutDate <= endDate)
+                    (checkInDate.isSameOrAfter(startDate) && checkInDate.isSameOrBefore(endDate)) ||
+                    (checkOutDate.isSameOrAfter(startDate) && checkOutDate.isSameOrBefore(endDate))
                 );
             });
+
         }
 
         setFilteredBookings(filtered);
     };
 
+    const fetchAdminDashboardData = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/admin/dashboard", {
+                method: "GET",
+                credentials: "include",
+            });
+
+            if (!response.ok) {
+                if (response.status === 403) {
+                    alert("Access denied: You do not have admin access.");
+                }
+                navigate("/");
+                return;
+            }
+
+            const data = await response.json();
+            console.log("API Response Data:", data);
+
+            // Access reservations array
+            const bookingsData = data.reservations || [];
+            setBookings(bookingsData);
+            setFilteredBookings(bookingsData);
+        } catch (error) {
+            console.error("Error fetching admin dashboard:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
         if (selectedTab === "Bookings") {
-            const fetchAdminDashboardData = async () => {
-                try {
-                    const response = await fetch("http://localhost:8080/api/admin/dashboard", {
-                        method: "GET",
-                        credentials: "include",
-                    });
-
-                    if (!response.ok) {
-                        if (response.status === 403) {
-                            alert("Access denied: You do not have admin access.");
-                        }
-                        navigate("/");
-                        return;
-                    }
-
-                    const data = await response.json();
-                    console.log("API Response Data:", data);
-
-                    // Access reservations array
-                    const bookingsData = data.reservations || [];
-                    setBookings(bookingsData);
-                    setFilteredBookings(bookingsData);
-                } catch (error) {
-                    console.error("Error fetching admin dashboard:", error);
-                } finally {
-                    setIsLoading(false);
-                }
-            };
-
             fetchAdminDashboardData();
         }
     }, [selectedTab, navigate]);
@@ -155,28 +253,12 @@ const AdminDashboard = () => {
                                         onChange={(newValue) => setDateRange(newValue)}
                                         renderInput={(startProps, endProps) => (
                                             <div style={{ display: "flex", gap: "10px" }}>
-                                                <TextField
-                                                    {...startProps}
-                                                    placeholder="Check-In"
-                                                    inputProps={{
-                                                        ...startProps.inputProps,
-                                                        placeholder: "Check-In",
-                                                    }}
-                                                />
-                                                <TextField
-                                                    {...endProps}
-                                                    placeholder="Check-Out"
-                                                    inputProps={{
-                                                        ...endProps.inputProps,
-                                                        placeholder: "Check-Out",
-                                                    }}
-                                                    className="dashboard-date-filter"
-                                                />
+                                                <TextField {...startProps} placeholder="Check-In" />
+                                                <TextField {...endProps} placeholder="Check-Out" />
                                             </div>
                                         )}
                                     />
                                 </LocalizationProvider>
-
                             </div>
                             <div className="dashboard-bookings-table">
                                 <div className="dashboard-table-header">
@@ -192,7 +274,6 @@ const AdminDashboard = () => {
                                 ) : filteredBookings.length > 0 ? (
                                     filteredBookings.map((booking, index) => (
                                         <div className="dashboard-table-row" key={booking.id || index}>
-                                            {/* Status */}
                                             <div
                                                 className={`dashboard-status ${getStatus(booking)
                                                     .toLowerCase()
@@ -200,33 +281,28 @@ const AdminDashboard = () => {
                                             >
                                                 {getStatus(booking)}
                                             </div>
-
-                                            {/* Customer Name */}
                                             <div className="dashboard-customer-name">
-                                                {`${booking.user?.firstname || "Unknown"} ${booking.user?.lastname || ""}`}
+                                                {`${booking.user?.firstname || "Unknown"} ${booking.user?.lastname || ""
+                                                    }`}
                                             </div>
-
-                                            {/* Check-In and Check-Out */}
                                             <div className="dashboard-checkin-checkout">
-                                                {`${new Date(booking.checkInDate).toLocaleDateString()} - ${new Date(
+                                                {`${dayjs(booking.checkInDate).format("MM-DD-YYYY")} - ${dayjs(
                                                     booking.checkOutDate
-                                                ).toLocaleDateString()}`}
-                                            </div>
+                                                ).format("MM-DD-YYYY")}`}
 
-                                            {/* Hotel Location */}
+                                            </div>
                                             <div className="dashboard-hotel-location">
                                                 {booking.hotelLocation || "Unknown"}
                                             </div>
-
-                                            {/* Total Price */}
                                             <div className="dashboard-total">
-                                                ${booking.totalPrice?.toFixed(2) || "0.00"}
+                                                ${booking.roomPrice?.toFixed(2) || "0.00"}
                                             </div>
-
-                                            {/* Actions */}
                                             <div className="dashboard-actions">
-                                                <button className="dashboard-action-view">👁</button>
-                                                <button className="dashboard-action-menu">⋮</button>
+                                                <IconButton
+                                                    onClick={(e) => handleMenuClick(e, booking)}
+                                                >
+                                                    <MoreVertIcon />
+                                                </IconButton>
                                             </div>
                                         </div>
                                     ))
@@ -238,6 +314,68 @@ const AdminDashboard = () => {
                     )}
                 </div>
             </div>
+
+            <Menu
+                anchorEl={menuAnchor}
+                open={Boolean(menuAnchor)}
+                onClose={handleMenuClose}
+            >
+                <MenuItem>
+                    <VisibilityIcon style={{ marginRight: "10px" }} /> View
+                </MenuItem>
+                {selectedBooking && (() => {
+                    const checkInDate = new Date(selectedBooking.checkInDate);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // Normalize today's date to ignore time
+                    if (checkInDate >= today) {
+                        return (
+                            <MenuItem onClick={() => handleDialogOpen("checkin")}>
+                                <ExitToAppIcon style={{ marginRight: "10px" }} /> Check In
+                            </MenuItem>
+                        );
+                    } else if (getStatus(selectedBooking) === "CHECKED IN") {
+                        return (
+                            <MenuItem onClick={() => handleDialogOpen("checkout")}>
+                                <ExitToAppIcon style={{ marginRight: "10px" }} /> Check Out
+                            </MenuItem>
+                        );
+                    }
+                    return null;
+                })()}
+                <MenuItem onClick={() => handleDialogOpen("delete")}>
+                    <DeleteIcon style={{ marginRight: "10px", color: "red" }} /> Delete Reservation
+                </MenuItem>
+            </Menu>
+
+
+            <Dialog
+                open={confirmationDialog.open}
+                onClose={() => handleDialogClose(false)}
+            >
+                <DialogTitle>Confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {confirmationDialog.type === "checkin"
+                            ? "Are you sure you want to check in this reservation?"
+                            : confirmationDialog.type === "checkout"
+                                ? "Are you sure you want to check out this reservation?"
+                                : "Are you sure you want to delete this reservation?"}
+                    </DialogContentText>
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleDialogClose(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={() => handleDialogClose(true)}
+                        color="primary"
+                        autoFocus
+                    >
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

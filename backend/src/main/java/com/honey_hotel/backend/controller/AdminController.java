@@ -7,10 +7,7 @@ import com.honey_hotel.backend.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -47,6 +44,72 @@ public class AdminController {
         Map<String, Object> dashboardData = new HashMap<>();
         dashboardData.put("reservations", reservations);
         return ResponseEntity.ok(dashboardData);
+    }
+
+    @PutMapping("/reservations/{id}/checkin")
+    public ResponseEntity<?> checkInReservation(@PathVariable Long id, HttpServletRequest request) {
+        AppUser user = getLoggedInUser(request);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
+        }
+
+        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
+
+        if (!hasAdminAccess) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
+        }
+
+        Reservation reservation = reservationService.checkInReservation(id);
+        if (reservation == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Reservation not found");
+        }
+
+        return ResponseEntity.ok("Reservation checked in successfully");
+    }
+
+    @PutMapping("/reservations/{id}/checkout")
+    public ResponseEntity<?> checkOutReservation(@PathVariable Long id, HttpServletRequest request) {
+        AppUser user = getLoggedInUser(request);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
+        }
+
+        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
+
+        if (!hasAdminAccess) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
+        }
+
+        Reservation reservation = reservationService.checkOutReservation(id);
+        if (reservation == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Reservation not found");
+        }
+
+        return ResponseEntity.ok("Reservation checked out successfully");
+    }
+
+    @DeleteMapping("/reservations/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long id, HttpServletRequest request) {
+        AppUser user = getLoggedInUser(request);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
+        }
+
+        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
+
+        if (!hasAdminAccess) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
+        }
+
+        boolean isDeleted = reservationService.deleteReservation(id);
+        if (!isDeleted) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Reservation not found");
+        }
+
+        return ResponseEntity.ok("Reservation deleted successfully");
     }
 
     private AppUser getLoggedInUser(HttpServletRequest request) {
