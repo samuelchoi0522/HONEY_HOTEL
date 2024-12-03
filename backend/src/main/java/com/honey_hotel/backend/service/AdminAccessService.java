@@ -14,4 +14,16 @@ public class AdminAccessService {
     public boolean isAdmin(String email) {
         return adminAccessRepository.existsByEmail(email);
     }
+
+    public boolean checkIfExists(Long id) {
+        return adminAccessRepository.existsById(id);
+    }
+
+    public boolean checkEmail(String email) {
+        return adminAccessRepository.existsByEmail(email);
+    }
+
+    public void removeAdmin(Long id) {
+        adminAccessRepository.deleteById(id);
+    }
 }

@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.honey_hotel.backend.model.AdminAccess;
+import com.honey_hotel.backend.model.ClerkAccess;
 
 import jakarta.transaction.Transactional;
 
 @Repository
-public interface AdminAccessRepository extends JpaRepository<AdminAccess, Long> {
+public interface ClerkAccessRepository extends JpaRepository<ClerkAccess, Long> {
     @Modifying
     @Transactional
     @Query("DELETE FROM AdminAccess a WHERE a.email = :email")
