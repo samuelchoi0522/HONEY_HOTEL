@@ -400,7 +400,7 @@ INSERT INTO roomtypes (id, type_name) VALUES
 
 -- Insert initial data into 'users'
 INSERT INTO users (email, firstname, lastname, password_hash, title) VALUES
-('honeyhotelinfo@gmail.com', 'Honey', 'Hotel', 'ca18b07032cb2ff53855bf1d73fe4f3ac6d71f78b207ec9fc4be8b5ad25b6ee4', NULL);
+('honeyhotelinfo@gmail.com', 'Honey', 'Hotel', 'yhiwcDLLL/U4Vb8dc/5POsbXH3iyB+yfxL6LWtJbbuQ=', NULL);
 
 -- Insert initial data into 'promo_codes'
 INSERT INTO promo_codes (name, discount_percentage, creation_date, expiration_date, is_active) VALUES
