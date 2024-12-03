@@ -12,6 +12,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { jaJP } from "@mui/x-date-pickers/locales";
 
 
 
@@ -27,7 +28,6 @@ const AdminDashboard = () => {
     dayjs.extend(isSameOrAfter);
     dayjs.extend(isSameOrBefore);
 
-    // State for the menu and dialogs
     const [menuAnchor, setMenuAnchor] = useState(null);
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [confirmationDialog, setConfirmationDialog] = useState({
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
             try {
                 if (confirmationDialog.type === "checkout") {
                     const response = await fetch(
-                        `http://localhost:8080/api/admin/reservations/${selectedBooking.bookingId}/checkout`,
+                        `http://localhost:8080/api/admin/reservations/${selectedBooking.id}/checkout`,
                         {
                             method: "PUT",
                             credentials: "include",
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
                     }
                 } else if (confirmationDialog.type === "delete") {
                     const response = await fetch(
-                        `http://localhost:8080/api/admin/reservations/${selectedBooking.bookingId}`,
+                        `http://localhost:8080/api/admin/reservations/${selectedBooking.id}`,
                         {
                             method: "DELETE",
                             credentials: "include",
@@ -93,14 +93,13 @@ const AdminDashboard = () => {
                     );
                     if (response.ok) {
                         console.log("Reservation deleted successfully.");
-                        // Update the bookings list after a successful deletion
                         fetchAdminDashboardData();
                     } else {
                         console.error("Error deleting reservation:", await response.text());
                     }
                 } else if (confirmationDialog.type === "checkin") {
                     const response = await fetch(
-                        `http://localhost:8080/api/admin/reservations/${selectedBooking.bookingId}/checkin`,
+                        `http://localhost:8080/api/admin/reservations/${selectedBooking.id}/checkin`,
                         {
                             method: "PUT",
                             credentials: "include",
@@ -108,7 +107,6 @@ const AdminDashboard = () => {
                     );
                     if (response.ok) {
                         console.log("Reservation checked in successfully.");
-                        // Update the bookings list after a successful check-in
                         fetchAdminDashboardData();
                     } else {
                         console.error("Error checking in reservation:", await response.text());
@@ -119,7 +117,6 @@ const AdminDashboard = () => {
             }
         }
 
-        // Close the dialog
         setConfirmationDialog({ open: false, type: "" });
     };
 
@@ -127,7 +124,7 @@ const AdminDashboard = () => {
 
     const getStatus = (booking) => {
         if (!booking || !booking.checkInDate || !booking.checkOutDate) {
-            return "UNKNOWN"; // Default to "UNKNOWN" if data is missing
+            return "UNKNOWN";
         }
 
         const today = dayjs().startOf("day");
@@ -135,21 +132,28 @@ const AdminDashboard = () => {
         const checkOutDate = dayjs(booking.checkOutDate);
 
         if (!booking.checkedIn) {
+            // Not checked in yet
             if (checkInDate.isSameOrAfter(today)) {
                 return "UPCOMING";
             } else if (checkInDate.isBefore(today)) {
                 return "CANCELLED";
             }
         } else if (booking.checkedIn) {
+            // Checked in
             if (checkInDate.isSameOrBefore(today) && checkOutDate.isSameOrAfter(today)) {
+                return "CHECKED IN";
+            } else if (checkInDate.isAfter(today)) {
+                // Future check-in date but already marked as checked-in
                 return "CHECKED IN";
             } else if (today.diff(checkOutDate, "days") > 3) {
                 updateBookingStatus(booking.id); // Automatically check out the customer
                 return "PAST CHECKOUT";
             }
         }
+
         return "UNKNOWN";
     };
+
 
 
 
@@ -327,7 +331,7 @@ const AdminDashboard = () => {
                     const checkInDate = new Date(selectedBooking.checkInDate);
                     const today = new Date();
                     today.setHours(0, 0, 0, 0); // Normalize today's date to ignore time
-                    if (checkInDate >= today) {
+                    if (checkInDate >= today && getStatus(selectedBooking) === "UPCOMING") {
                         return (
                             <MenuItem onClick={() => handleDialogOpen("checkin")}>
                                 <ExitToAppIcon style={{ marginRight: "10px" }} /> Check In
