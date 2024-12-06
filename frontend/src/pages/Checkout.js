@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useForm, FormProvider } from 'react-hook-form';
-import Button from '@mui/material/Button';
+import { useForm, FormProvider, Controller } from 'react-hook-form';
+import { Box, TextField, Button, Typography, Grid, Divider, FormControlLabel, Checkbox, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import '../styles/Checkout.css';
 import PaymentComponent from '../components/PaymentComponent';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,9 +31,12 @@ const Checkout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-
     const methods = useForm({
         defaultValues: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            country: '', // This will hold the selected country
             payment: {
                 checkInDate,
                 checkOutDate,
@@ -45,10 +48,10 @@ const Checkout = () => {
                 promoCode,
                 reservedActivity,
                 activityDate,
+                accountHolderName: '',
                 cardnumber: '',
                 expiry: '',
                 cvv: '',
-                accountHolderName: '',
             },
         },
     });
@@ -185,56 +188,348 @@ const Checkout = () => {
     };
 
     return (
-        <div className="checkout-page">
-            <h2 style={{ color: 'black' }}>Complete Booking</h2>
-            <div className="booking-details">
-                <h3>Room Details</h3>
-                {selectedRooms?.map((room, index) => (
-                    <div key={index} className="room-details">
-                        <h4>Room {index + 1}</h4>
-                        <p><strong>Category:</strong> {room.categoryName}</p>
-                        <p><strong>Room Type:</strong> {room.roomType}</p>
-                        <p><strong>Bed Type:</strong> {room.selectedBedType}</p>
-                        <p><strong>Smoking:</strong> {room.selectedSmoking ? 'Yes' : 'No'}</p>
-                        <p><strong>Base Price:</strong> ${room.totalPrice * numNights}</p>
-                        <p><strong>Room Id:</strong> {room.roomId}</p>
-                    </div>
-                ))}
+        <FormProvider {...methods}>
+            <Box
+                sx={{
+                    padding: '60px',
+                    maxWidth: '1000px',
+                    margin: '50px auto',
+                    marginLeft: '0',
+                    backgroundColor: 'white',
+                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '12px',
+                    fontFamily: 'Roboto, sans-serif',
+                }}
+            >
+                <Typography
+                    variant="h4"
+                    gutterBottom
+                    sx={{
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        marginBottom: '30px',
+                        fontSize: '24px',
+                        color: '#333',
+                    }}
+                >
+                    Complete Booking
+                </Typography>
+                <Grid container spacing={3}>
+                    {/* Contact Information */}
+                    <Grid item xs={12}>
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                color: '#333',
+                                fontWeight: 'bold',
+                                marginBottom: '10px',
+                                fontSize: '18px',
+                            }}
+                        >
+                            CONTACT INFORMATION
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Controller
+                            name="firstName"
+                            control={methods.control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="First Name"
+                                    fullWidth
+                                    required
+                                    sx={{
+                                        backgroundColor: '#f9f9f9',
+                                        '& .MuiInputBase-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: 'black',
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'black',
+                                        },
+                                    }}
+                                />
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Controller
+                            name="lastName"
+                            control={methods.control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="Last Name"
+                                    fullWidth
+                                    required
+                                    sx={{
+                                        backgroundColor: '#f9f9f9',
+                                        '& .MuiInputBase-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: 'black',
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'black',
+                                        },
+                                    }}
+                                />
+                            )}
+                        />
+                    </Grid>
 
-                <p><strong>Check-in Date:</strong> {checkInDate}</p>
-                <p><strong>Check-out Date:</strong> {checkOutDate}</p>
-                <p><strong>Number of Nights:</strong> {numNights}</p>
+                    {/* Email and Country/Region fields on the same line */}
+                    <Grid item xs={12} sm={6}>
+                        <Controller
+                            name="email"
+                            control={methods.control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="Email Address"
+                                    fullWidth
+                                    required
+                                    type="email"
+                                    sx={{
+                                        backgroundColor: '#f9f9f9',
+                                        '& .MuiInputBase-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: 'black',
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'black',
+                                        },
+                                    }}
+                                />
+                            )}
+                        />
+                    </Grid>
 
-                {reservedActivity && (
-                    <>
-                        <h3>Activity Details</h3>
-                        <p><strong>Activity:</strong> {reservedActivity.name}</p>
-                        <p><strong>Category:</strong> {reservedActivity.category}</p>
-                        <p><strong>Price:</strong> ${reservedActivity.price}</p>
-                        <p><strong>Activity Date:</strong> {activityDate}</p>
-                        <p><strong>Activity Id:</strong> {reservedActivity.id}</p>
-                    </>
-                )}
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel
+                                id="country-label"
+                                sx={{
+                                    color: 'black',
+                                    '&.Mui-focused': {
+                                        color: 'black',
+                                    },
+                                }}
+                            >
+                                Country/Region *
+                            </InputLabel>
+                            <Controller
+                                name="country"
+                                control={methods.control}
+                                render={({ field }) => (
+                                    <Select
+                                        {...field}
+                                        labelId="country-label"
+                                        id="country-select"
+                                        label="Country/Region"
+                                        sx={{
+                                            backgroundColor: '#f9f9f9',
+                                            height: '40px',
+                                            '& .MuiInputBase-root': {
+                                                color: 'black',
+                                                height: '40px',
+                                            },
+                                            '& .MuiOutlinedInput-root': {
+                                                borderColor: 'black',
+                                                height: '40px',
+                                            },
+                                            '& .MuiSelect-icon': {
+                                                color: 'black',
+                                                height: '20px',
+                                            },
+                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                height: '42px',
+                                            },
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: 'black',
+                                                height: '40px',
+                                            },
+                                        }}
+                                    >
+                                        <MenuItem value="USA">United States</MenuItem>
+                                        <MenuItem value="CAN">Canada</MenuItem>
+                                        <MenuItem value="MEX">Mexico</MenuItem>
+                                        <MenuItem value="UK">United Kingdom</MenuItem>
+                                        <MenuItem value="AUS">Australia</MenuItem>
+                                    </Select>
+                                )}
+                            />
+                        </FormControl>
+                    </Grid>
 
-                <p><strong>Total (including 6% tax):</strong> ${finalTotal}</p>
-            </div>
+                    {/* Divider */}
+                    <Grid item xs={12}>
+                        <Divider sx={{ margin: '20px 0', backgroundColor: '#ddd' }} />
+                    </Grid>
 
-            <FormProvider {...methods}>
-                <form onSubmit={methods.handleSubmit(handleReserveRoom)}>
-                    <PaymentComponent />
+                    {/* Payment Information */}
+                    <Grid item xs={12}>
+                        <PaymentComponent />
+                    </Grid>
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        style={{ marginTop: '20px' }}
-                    >
-                        Reserve Now
-                    </Button>
-                </form>
-            </FormProvider>
-        </div>
+                    {/* Divider */}
+                    <Grid item xs={12}>
+                        <Divider sx={{ margin: '20px 0', backgroundColor: '#ddd' }} />
+                    </Grid>
+
+                    {/* Terms & Conditions */}
+                    <Grid item xs={12}>
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                color: '#333',
+                                fontWeight: 'bold',
+                                marginBottom: '10px',
+                                fontSize: '18px',
+                            }}
+                        >
+                            TERMS & CONDITIONS
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControlLabel
+                            control={
+                                <Controller
+                                    name="cancellationPolicy"
+                                    control={methods.control}
+                                    render={({ field }) => (
+                                        <Checkbox
+                                            {...field}
+                                            sx={{
+                                                color: 'black',
+                                                '&.Mui-checked': {
+                                                    color: 'black',
+                                                },
+                                            }}
+                                            required
+                                        />
+                                    )}
+                                />
+                            }
+                            label={<Typography sx={{ color: 'black' }}>I have read and accepted the Cancellation Policy.</Typography>}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControlLabel
+                            control={
+                                <Controller
+                                    name="consent"
+                                    control={methods.control}
+                                    render={({ field }) => (
+                                        <Checkbox
+                                            {...field}
+                                            sx={{
+                                                color: 'black',
+                                                '&.Mui-checked': {
+                                                    color: 'black',
+                                                },
+                                            }}
+                                            required
+                                        />
+                                    )}
+                                />
+                            }
+                            label={<Typography sx={{ color: 'black' }}>I consent to Hotel Honey sending me electronic communications so that Honey Hotel can keep me informed of upcoming reservations and exclusive offers.</Typography>}
+                        />
+                    </Grid>
+
+                    {/* Submit Button */}
+                    <Grid item xs={12}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            size="large"
+                            onClick={methods.handleSubmit(handleReserveRoom)}
+                            sx={{
+                                marginTop: '20px',
+                                padding: '15px',
+                                fontWeight: 'bold',
+                                fontSize: '16px',
+                                backgroundColor: '#000',
+                                '&:hover': {
+                                    backgroundColor: '#333',
+                                },
+                            }}
+                        >
+                            Book
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Box>
+        </FormProvider>
     );
+
+    //     <div className="checkout-page">
+    //        <h2 style={{ color: 'black' }}>Complete Booking</h2>
+    //        <div className="booking-details">
+    //           <h3>Room Details</h3>
+    //           {selectedRooms?.map((room, index) => (
+    //               <div key={index} className="room-details">
+    //                   <h4>Room {index + 1}</h4>
+    //                   <p><strong>Category:</strong> {room.categoryName}</p>
+    //                     <p><strong>Room Type:</strong> {room.roomType}</p>
+    //                  <p><strong>Bed Type:</strong> {room.selectedBedType}</p>
+    //                   <p><strong>Smoking:</strong> {room.selectedSmoking ? 'Yes' : 'No'}</p>
+    //                   <p><strong>Base Price:</strong> ${room.totalPrice * numNights}</p>
+    //                  <p><strong>Room Id:</strong> {room.roomId}</p>
+    //              </div>
+    //          ))}
+    //
+    //          <p><strong>Check-in Date:</strong> {checkInDate}</p>
+    //          <p><strong>Check-out Date:</strong> {checkOutDate}</p>
+    //          <p><strong>Number of Nights:</strong> {numNights}</p>
+    //
+    //          {reservedActivity && (
+    //                 <>
+    //                    <h3>Activity Details</h3>
+    //                    <p><strong>Activity:</strong> {reservedActivity.name}</p>
+    //                     <p><strong>Category:</strong> {reservedActivity.category}</p>
+    //                    <p><strong>Price:</strong> ${reservedActivity.price}</p>
+    //                     <p><strong>Activity Date:</strong> {activityDate}</p>
+    //                  <p><strong>Activity Id:</strong> {reservedActivity.id}</p>
+    //               </>
+    //           )}
+    //
+    //           <p><strong>Total (including 6% tax):</strong> ${finalTotal}</p>
+    //       </div>
+    //
+    //       <FormProvider {...methods}>
+    //          <form onSubmit={methods.handleSubmit(handleReserveRoom)}>
+    //                 <PaymentComponent />
+    //
+    //                 <Button
+    //                    type="submit"
+    //                    variant="contained"
+    //                   color="primary"
+    //                   style={{ marginTop: '20px' }}
+    //               >
+    //                   Reserve Now
+    //               </Button>
+    //          </form>
+    //      </FormProvider>
+    //     </div>
+    // );
 };
 
 export default Checkout;
