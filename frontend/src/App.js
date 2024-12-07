@@ -29,13 +29,13 @@ function Layout() {
         location.pathname.toLowerCase() !== '/register' &&
         location.pathname.toLowerCase() !== '/forgot-password' &&
         location.pathname.toLowerCase() !== '/reset-password';
-    
+
     const showEmptyNavbar =
         location.pathname.toLowerCase() === '/login' ||
         location.pathname.toLowerCase() === '/register' ||
         location.pathname.toLowerCase() === '/forgot-password' ||
         location.pathname.toLowerCase() === '/reset-password';
-    
+
     const showNavbarForFindHive = location.pathname.toLowerCase() === '/find-hive';
     return (
         <div className="app-container">
