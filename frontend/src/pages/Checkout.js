@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { Box, TextField, Button, Typography, Grid, Divider, FormControlLabel, Checkbox, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import '../styles/Checkout.css';
+import '../styles/AddVacationPackage.css'
 import PaymentComponent from '../components/PaymentComponent';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -36,7 +37,7 @@ const Checkout = () => {
             firstName: '',
             lastName: '',
             email: '',
-            country: '', // This will hold the selected country
+            country: '',
             payment: {
                 checkInDate,
                 checkOutDate,
@@ -192,7 +193,7 @@ const Checkout = () => {
             <Box
                 sx={{
                     padding: '60px',
-                    maxWidth: '1000px',
+                    maxWidth: '600px',
                     margin: '50px auto',
                     marginLeft: '0',
                     backgroundColor: 'white',
@@ -513,21 +514,6 @@ const Checkout = () => {
     //
     //           <p><strong>Total (including 6% tax):</strong> ${finalTotal}</p>
     //       </div>
-    //
-    //       <FormProvider {...methods}>
-    //          <form onSubmit={methods.handleSubmit(handleReserveRoom)}>
-    //                 <PaymentComponent />
-    //
-    //                 <Button
-    //                    type="submit"
-    //                    variant="contained"
-    //                   color="primary"
-    //                   style={{ marginTop: '20px' }}
-    //               >
-    //                   Reserve Now
-    //               </Button>
-    //          </form>
-    //      </FormProvider>
     //     </div>
     // );
 };
