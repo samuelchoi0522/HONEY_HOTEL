@@ -17,6 +17,7 @@ import Checkout from './pages/Checkout';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboard from './pages/AdminDashboard';
+import ReservationDetails from './pages/ReservationDetails';
 
 import './styles/App.css';
 
@@ -54,6 +55,7 @@ function Layout() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                <Route path="/admin-dashboard/view/:id/:bookingId" element={<ReservationDetails />} />
             </Routes>
             {showNavbarAndFooter && <Footer />}
         </div>

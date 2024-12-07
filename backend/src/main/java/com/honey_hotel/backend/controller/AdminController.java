@@ -25,6 +25,7 @@ import com.honey_hotel.backend.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -44,37 +45,50 @@ public class AdminController {
 
     // bookings tab
 
-    @GetMapping("/dashboard")
-    public ResponseEntity<?> getAdminDashboard(HttpServletRequest request) {
+    private boolean checkIfUserHasPermissions(HttpServletRequest request) {
         AppUser user = getLoggedInUser(request);
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
+            return false;
         }
 
         boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
+        boolean hasClerkAccess = clerkAccessService.isClerk(user.getEmail());
 
-        if (!hasAdminAccess) {
+        return hasAdminAccess || hasClerkAccess;
+    }
+
+    private boolean checkIfUserIsAdmin(HttpServletRequest request) {
+        AppUser user = getLoggedInUser(request);
+
+        if (user == null) {
+            return false;
+        }
+
+        return adminAccessService.isAdmin(user.getEmail());
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<?> getAdminDashboard(HttpServletRequest request) {
+        boolean hasPerms = checkIfUserHasPermissions(request);
+        boolean hasAdminAccess = checkIfUserIsAdmin(request);
+
+        if (!hasPerms) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
         }
 
         List<Reservation> reservations = reservationService.getAllReservations();
         Map<String, Object> dashboardData = new HashMap<>();
         dashboardData.put("reservations", reservations);
+        dashboardData.put("role", hasAdminAccess ? "admin" : "clerk");
         return ResponseEntity.ok(dashboardData);
     }
 
     @PutMapping("/reservations/{id}/checkin")
     public ResponseEntity<?> checkInReservation(@PathVariable Long id, HttpServletRequest request) {
-        AppUser user = getLoggedInUser(request);
+        boolean hasPerms = checkIfUserHasPermissions(request);
 
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
-        }
-
-        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
-
-        if (!hasAdminAccess) {
+        if (!hasPerms) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
         }
 
@@ -88,15 +102,9 @@ public class AdminController {
 
     @PutMapping("/reservations/{id}/checkout")
     public ResponseEntity<?> checkOutReservation(@PathVariable Long id, HttpServletRequest request) {
-        AppUser user = getLoggedInUser(request);
+        boolean hasPerms = checkIfUserHasPermissions(request);
 
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
-        }
-
-        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
-
-        if (!hasAdminAccess) {
+        if (!hasPerms) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
         }
 
@@ -108,17 +116,29 @@ public class AdminController {
         return ResponseEntity.ok("Reservation checked out successfully");
     }
 
-    @DeleteMapping("/reservations/{id}")
-    public ResponseEntity<?> deleteReservation(@PathVariable Long id, HttpServletRequest request) {
-        AppUser user = getLoggedInUser(request);
+    @GetMapping("/reservations/{id}/view")
+    public ResponseEntity<Reservation> viewreservations(@PathVariable Long id, HttpServletRequest request) {
+        boolean hasPerms = checkIfUserHasPermissions(request);
 
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
+        if (!hasPerms) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
-        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
 
-        if (!hasAdminAccess) {
+        Reservation reservation = reservationService.findReservationById(id);
+        if (reservation == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.ok(reservation);
+    }
+    
+
+    @DeleteMapping("/reservations/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long id, HttpServletRequest request) {
+        boolean hasPerms = checkIfUserHasPermissions(request);
+
+        if (!hasPerms) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
         }
 
@@ -138,15 +158,9 @@ public class AdminController {
 
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(HttpServletRequest request) {
-        AppUser user = getLoggedInUser(request);
+        boolean hasPerms = checkIfUserHasPermissions(request);
 
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
-        }
-
-        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
-
-        if (!hasAdminAccess) {
+        if (!hasPerms) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
         }
 
@@ -167,13 +181,7 @@ public class AdminController {
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id, HttpServletRequest request) {
-        AppUser user = getLoggedInUser(request);
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
-        }
-
-        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
+        boolean hasAdminAccess = checkIfUserIsAdmin(request);
 
         if (!hasAdminAccess) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
@@ -195,13 +203,7 @@ public class AdminController {
 
     @PutMapping("/users/{id}/makeClerk")
     public ResponseEntity<?> promoteToClerk(@PathVariable Long id, HttpServletRequest request) {
-        AppUser user = getLoggedInUser(request);
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
-        }
-
-        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
+        boolean hasAdminAccess = checkIfUserIsAdmin(request);
 
         if (!hasAdminAccess) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
@@ -217,13 +219,7 @@ public class AdminController {
 
     @PutMapping("/users/{id}/makeAdmin")
     public ResponseEntity<?> promoteToAdmin(@PathVariable Long id, HttpServletRequest request) {
-        AppUser user = getLoggedInUser(request);
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: User not logged in");
-        }
-
-        boolean hasAdminAccess = adminAccessService.isAdmin(user.getEmail());
+        boolean hasAdminAccess = checkIfUserIsAdmin(request);
 
         if (!hasAdminAccess) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");

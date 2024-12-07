@@ -44,17 +44,6 @@ const AdminNavbar = ({ onSelect }) => {
                 />
                 <span className="admin-label">Administrator</span>
             </div>
-            <div
-                className={`admin-navbar-item ${selectedItem === "Settings" ? "selected" : ""}`}
-                onClick={() => handleItemClick("Settings")}
-            >
-                <img
-                    src="./icons/setting.png"
-                    alt="Setting"
-                    className="admin-navbar-icon"
-                />
-                <span className="admin-label">Settings</span>
-            </div>
         </div>
     );
 };

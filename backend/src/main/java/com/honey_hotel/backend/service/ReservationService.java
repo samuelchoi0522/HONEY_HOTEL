@@ -39,11 +39,9 @@ public class ReservationService {
     @Autowired
     private ClerkAccessRepository clerkAccessRepository;
 
-
-
     public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate,
-                                  int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, BigDecimal roomPrice,
-                                  String bookingId, String photo_path, String hotelLocation) {
+            int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, BigDecimal roomPrice,
+            String bookingId, String photo_path, String hotelLocation) {
         try {
             Optional<Room> roomOpt = roomRepository.findById(roomId);
             if (roomOpt.isEmpty()) {
@@ -171,5 +169,9 @@ public class ReservationService {
             return true;
         }
         return false;
+    }
+
+    public Reservation findReservationById(Long id) {
+        return reservationRepository.findById(id).orElse(null);
     }
 }
