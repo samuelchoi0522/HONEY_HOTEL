@@ -13,8 +13,6 @@ import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
-
-
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const [bookings, setBookings] = useState([]);
@@ -32,6 +30,8 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [menuContext, setMenuContext] = useState({ type: "", data: null });
+    const [userRole, setUserRole] = useState(""); // Tracks the role (e.g., "admin" or "clerk")
+
 
     dayjs.extend(isSameOrAfter);
     dayjs.extend(isSameOrBefore);
@@ -141,6 +141,11 @@ const AdminDashboard = () => {
                 method: "GET",
                 credentials: "include",
             });
+            if (response.status === 403) {
+                alert("Access denied: You do not have admin access.");
+                navigate("/");
+                return;
+            }
             if (response.ok) {
                 const data = await response.json();
                 setUsers(data);
@@ -151,11 +156,6 @@ const AdminDashboard = () => {
             console.error("Error fetching users:", error);
         }
     };
-
-
-    useEffect(() => {
-        fetchUsersData();
-    }, []);
 
     const getUserStatus = (user) => {
         if (user.isAdmin) return "Administrator";
@@ -237,9 +237,6 @@ const AdminDashboard = () => {
         return "UNKNOWN";
     };
 
-
-
-
     const applyFilters = () => {
         let filtered = bookings;
 
@@ -276,14 +273,26 @@ const AdminDashboard = () => {
 
             if (!response.ok) {
                 if (response.status === 403) {
-                    alert("Access denied: You do not have admin access.");
+                    alert("Access denied: You do not have sufficient permissions.");
+                    navigate("/");
+                    return;
                 }
-                navigate("/");
-                return;
+                throw new Error("Failed to fetch admin dashboard");
             }
 
             const data = await response.json();
             console.log("API Response Data:", data);
+
+            // Set user role
+            const userRole = data.role;
+            setUserRole(userRole);
+
+            // Redirect if role is not admin or clerk
+            if (userRole !== "admin" && userRole !== "clerk") {
+                alert("Access denied: You do not have sufficient permissions.");
+                navigate("/");
+                return;
+            }
 
             // Access reservations array
             const bookingsData = data.reservations || [];
@@ -295,6 +304,34 @@ const AdminDashboard = () => {
             setIsLoading(false);
         }
     };
+
+    const handleViewReservation = async (reservationId, bookingId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/admin/reservations/${reservationId}/view`, {
+                method: 'GET',
+                credentials: 'include', // Include cookies if required
+            });
+
+            if (response.ok) {
+                const reservationData = await response.json();
+                console.log('Reservation Details:', reservationData);
+                // Display the details in a modal or new page
+            } else {
+                console.error('Failed to fetch reservation details');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        navigate(`/admin-dashboard/view/${reservationId}/${bookingId}`);
+    };
+
+
+
+
+    useEffect(() => {
+        fetchAdminDashboardData();
+        fetchUsersData();
+    }, []);
 
     useEffect(() => {
         if (selectedTab === "Bookings") {
@@ -312,7 +349,12 @@ const AdminDashboard = () => {
             <div style={{ display: "flex" }}>
                 <AdminNavbar onSelect={handleNavbarSelect} />
                 <div style={{ marginLeft: "20px", flex: 1 }}>
-                    {selectedTab === "Bookings" && (
+                    <h2 className="dashboard-admin-title">
+                        {selectedTab === "Bookings" && "Bookings"}
+                        {selectedTab === "Administrator" && userRole === "admin" && "Administrator"}
+                        {selectedTab === "Users" && "Users"}
+                    </h2>
+                    {(userRole === "admin" || userRole === "clerk") && selectedTab === "Bookings" && (
                         <>
                             <div className="dashboard-controls">
                                 <select
@@ -327,7 +369,6 @@ const AdminDashboard = () => {
                                     <option value="cancelled">Cancelled</option>
                                     <option value="past-checkout">Past Checkout</option>
                                 </select>
-
                                 <LocalizationProvider
                                     dateAdapter={AdapterDayjs}
                                     localeText={{
@@ -397,6 +438,43 @@ const AdminDashboard = () => {
                             </div>
                         </>
                     )}
+                    {userRole === "clerk" && selectedTab === "Administrator" && (
+                        <div classname="dashboard-insufficient-permissions">
+                            <h2>Insufficient Permissions</h2>
+                            <p>You do not have sufficient permissions to view this content.</p>
+                        </div>
+                    )}
+
+                    {userRole === "admin" && selectedTab === "Administrator" && (
+                        <>
+                            <div className="dashboard-bookings-table">
+                                <div className="dashboard-table-header">
+                                    <div className="dashboard-table-column">Name</div>
+                                    <div className="dashboard-table-column">Email</div>
+                                    <div className="dashboard-table-column">Status</div>
+                                    <div className="dashboard-table-column">Actions</div>
+                                </div>
+                                {isLoading ? (
+                                    <div className="dashboard-loading">Loading...</div>
+                                ) : users.length > 0 ? (
+                                    users.map((user, index) => (
+                                        <div className="dashboard-table-row" key={user.id || index}>
+                                            <div className="dashboard-user-name">{`${user.firstname} ${user.lastname}`}</div>
+                                            <div className="dashboard-user-email">{user.email}</div>
+                                            <div className="dashboard-user-status">{getUserStatus(user)}</div>
+                                            <div className="dashboard-actions">
+                                                <IconButton onClick={(e) => handleMenuClick(e, "user", user)}>
+                                                    <MoreVertIcon />
+                                                </IconButton>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="dashboard-no-bookings">No users available.</div>
+                                )}
+                            </div>
+                        </>
+                    )}
                     {selectedTab === "Users" && (
                         <>
                             <div className="dashboard-bookings-table">
@@ -429,14 +507,16 @@ const AdminDashboard = () => {
                     )}
                 </div>
             </div>
-
             <Menu
                 anchorEl={menuAnchor}
                 open={Boolean(menuAnchor)}
                 onClose={handleMenuClose}
             >
                 {menuContext.type === "booking" && menuContext.data && [
-                    <MenuItem key="view">
+                    <MenuItem
+                        key="view"
+                        onClick={() => handleViewReservation(menuContext.data.id, menuContext.data.bookingId)}
+                    >
                         <VisibilityIcon style={{ marginRight: "10px" }} /> View
                     </MenuItem>,
                     (() => {
@@ -463,42 +543,36 @@ const AdminDashboard = () => {
                     </MenuItem>,
                 ]}
                 {menuContext.type === "user" && menuContext.data && [
-                    <MenuItem key="delete" onClick={() => handleUsersDialogOpen("delete")}>
-                        <DeleteIcon style={{ marginRight: "10px", color: "red" }} /> Delete User
-                    </MenuItem>,
-                    !menuContext.data.isAdmin && (
-                        <MenuItem
-                            key="makeAdmin"
-                            onClick={() => {
-                                if (!menuContext.data) {
-                                    console.error("No user data available.");
-                                    return;
-                                }
-                                handleUsersDialogOpen("makeAdmin");
-                            }}
-                        >
-                            <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Admin
+                    userRole === "clerk" && (
+                        <MenuItem key="view" onClick={() => handleUsersDialogOpen("view")}>
+                            <VisibilityIcon style={{ marginRight: "10px" }} /> View
                         </MenuItem>
-
                     ),
-                    !menuContext.data.isClerk && (
-                        <MenuItem
-                            key="makeClerk"
-                            onClick={() => {
-                                if (!menuContext.data) {
-                                    console.error("No user data available.");
-                                    return;
-                                }
-                                handleUsersDialogOpen("makeClerk");
-                            }}
-                        >
-                            <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Clerk
-                        </MenuItem>
-
+                    userRole === "admin" && (
+                        <>
+                            <MenuItem key="delete" onClick={() => handleUsersDialogOpen("delete")}>
+                                <DeleteIcon style={{ marginRight: "10px", color: "red" }} /> Delete User
+                            </MenuItem>
+                            {!menuContext.data.isAdmin && (
+                                <MenuItem
+                                    key="makeAdmin"
+                                    onClick={() => handleUsersDialogOpen("makeAdmin")}
+                                >
+                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Admin
+                                </MenuItem>
+                            )}
+                            {!menuContext.data.isClerk && (
+                                <MenuItem
+                                    key="makeClerk"
+                                    onClick={() => handleUsersDialogOpen("makeClerk")}
+                                >
+                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Clerk
+                                </MenuItem>
+                            )}
+                        </>
                     ),
                 ]}
             </Menu>
-
             <Dialog
                 open={confirmationDialog.open}
                 onClose={() => {
@@ -555,7 +629,6 @@ const AdminDashboard = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-
         </div>
     );
 };
