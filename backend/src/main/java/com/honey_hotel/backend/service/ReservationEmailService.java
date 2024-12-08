@@ -15,8 +15,8 @@ public class ReservationEmailService {
     }
 
     public boolean sendReservationEmail(String email, String bookingId, String hotelLocation,
-            String checkInDate, String checkOutDate,
-            List<Map<String, Object>> selectedRooms, double finalTotal) {
+                                        String checkInDate, String checkOutDate,
+                                        List<Map<String, Object>> selectedRooms, double finalTotal) {
         String subject = "Reservation Confirmation - " + bookingId;
         StringBuilder body = new StringBuilder();
 
