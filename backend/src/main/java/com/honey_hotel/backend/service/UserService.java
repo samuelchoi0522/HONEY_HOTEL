@@ -102,4 +102,28 @@ public class UserService {
         return false; // User not found
     }
 
+    public boolean demoteToGuest(Long userId) {
+        Optional<AppUser> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            AppUser user = optionalUser.get();
+
+            try {
+                // Remove clerk access if it exists
+                if (clerkAccessRepository.existsByEmail(user.getEmail())) {
+                    clerkAccessRepository.deleteByEmail(user.getEmail());
+                }
+
+                // Remove admin access if it exists
+                if (adminAccessRepository.existsByEmail(user.getEmail())) {
+                    adminAccessRepository.deleteByEmail(user.getEmail());
+                }
+
+                return true; // Successfully demoted to guest
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to demote user to guest: " + e.getMessage(), e);
+            }
+        }
+        return false; // User not found
+    }
+
 }
