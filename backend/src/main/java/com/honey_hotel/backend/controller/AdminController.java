@@ -249,6 +249,57 @@ public class AdminController {
         }
 
         return ResponseEntity.ok("User demoted to Guest successfully");
+    
+    @GetMapping("/users/{userId}/reservations")
+    public ResponseEntity<?> getUserReservationsForAdmin(@PathVariable Long userId) {
+        Optional<AppUser> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+        }
+
+        AppUser user = optionalUser.get();
+
+        List<Map<String, Object>> reservations = reservationService.getReservationsByUser(user).stream()
+                .map(reservation -> {
+                    Map<String, Object> reservationMap = new HashMap<>();
+                    reservationMap.put("hotelLocation", reservation.getHotelLocation());
+                    reservationMap.put("roomId", reservation.getRoom().getId());
+                    reservationMap.put("roomType", reservation.getRoom().getRoomType());
+                    reservationMap.put("bedType", reservation.getRoom().getBedType());
+                    reservationMap.put("smokingAllowed", reservation.getRoom().isSmokingAllowed());
+                    reservationMap.put("checkInDate", reservation.getCheckInDate());
+                    reservationMap.put("checkOutDate", reservation.getCheckOutDate());
+                    reservationMap.put("adults", reservation.getAdults());
+                    reservationMap.put("children", reservation.getChildren());
+                    reservationMap.put("promoCode", reservation.getPromoCode());
+                    reservationMap.put("rateOption", reservation.getRateOption());
+                    reservationMap.put("roomPrice", reservation.getRoomPrice());
+                    reservationMap.put("totalPrice", reservation.getTotalPrice());
+                    reservationMap.put("bookingId", reservation.getBookingId());
+                    reservationMap.put("photo_path", reservation.getPhoto_path());
+                    return reservationMap;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(reservations);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<?> getUserDetailsForAdmin(@PathVariable Long userId) {
+        Optional<AppUser> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+        }
+
+        AppUser user = optionalUser.get();
+
+        Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("id", user.getId());
+        userDetails.put("email", user.getEmail());
+        userDetails.put("firstname", user.getFirstname());
+        userDetails.put("lastname", user.getLastname());
+
+        return ResponseEntity.ok(userDetails);
     }
 
     @GetMapping("/users/{userId}/reservations")
