@@ -18,6 +18,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboard from './pages/AdminDashboard';
 import ReservationDetails from './pages/ReservationDetails';
+import UserDetails from './pages/UserDetails';
 import InvalidPage from './pages/InvalidPage';
 
 import './styles/App.css';
@@ -57,6 +58,7 @@ function Layout() {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />
                 <Route path="/admin-dashboard/view/:id/:bookingId" element={<ReservationDetails />} />
+                <Route path="/admin-dashboard/view/user/:id" element={<UserDetails />} />
                 <Route path="/invalid-page" element={<InvalidPage />} />
 
                 <Route path="*" element={<Navigate to="/invalid-page" />} />
