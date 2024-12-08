@@ -78,4 +78,48 @@ public class AccountController {
 
         return ResponseEntity.ok("Password Reset Successfully");
     }
+
+    @PostMapping("/update-name")
+    public ResponseEntity<?> updateName(@RequestBody Map<String, String> request, HttpServletRequest servletRequest) {
+        AppUser user = getLoggedInUser(servletRequest);
+        if (user == null) {
+            return ResponseEntity.status(401).body("Error: User is not authenticated");
+        }
+
+        logger.info("Updating name for user: " + user.getEmail());
+
+        String firstName = request.get("firstName");
+        String lastName = request.get("lastName");
+
+        logger.info("New name: " + firstName + " " + lastName);
+
+        user.setFirstname(firstName);
+        user.setLastname(lastName);
+
+        userRepository.save(user);
+
+        HttpSession session = servletRequest.getSession();
+        session.setAttribute("user", user);
+
+        logger.info("Name updated successfully");
+        return ResponseEntity.ok("Name updated successfully");
+    }
+
+    @PostMapping("/update-email")
+    public ResponseEntity<?> updateEmail(@RequestBody Map<String, String> request, HttpServletRequest servletRequest) {
+        AppUser user = getLoggedInUser(servletRequest);
+        if (user == null) {
+            return ResponseEntity.status(401).body("Error: User is not authenticated");
+        }
+
+        String email = request.get("email");
+
+        user.setEmail(email);
+        userRepository.save(user);
+
+        HttpSession session = servletRequest.getSession();
+        session.setAttribute("user", user);
+        
+        return ResponseEntity.ok("Email updated successfully");
+    }
 }

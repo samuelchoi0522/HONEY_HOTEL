@@ -1,16 +1,18 @@
 package com.honey_hotel.backend.service;
 
+import java.time.LocalDate;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.honey_hotel.backend.DTO.ActivityReservationDTO;
+import com.honey_hotel.backend.model.Activities;
 import com.honey_hotel.backend.model.ActivityReservation;
 import com.honey_hotel.backend.model.AppUser;
 import com.honey_hotel.backend.model.Reservation;
-import com.honey_hotel.backend.model.Activities;
+import com.honey_hotel.backend.repository.ActivitiesRepository;
 import com.honey_hotel.backend.repository.ActivityReservationRepository;
 import com.honey_hotel.backend.repository.ReservationRepository;
-import com.honey_hotel.backend.repository.ActivitiesRepository;
-
-import java.time.LocalDate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ActivityReservationService {
@@ -25,7 +27,7 @@ public class ActivityReservationService {
     private ActivitiesRepository activitiesRepository;
 
     public boolean createActivityReservation(AppUser user, Long hotelReservationId, Integer activityId,
-            LocalDate activityDate) {
+                                             LocalDate activityDate) {
         try {
             // Fetch the Reservation and Activities entities from the database
             Reservation reservation = reservationRepository.findById(hotelReservationId).orElse(null);
@@ -52,5 +54,18 @@ public class ActivityReservationService {
             e.printStackTrace();
             return false;
         }
+
     }
+
+    public ActivityReservationDTO getActivityReservationByHotelReservationId(Long hotelReservationId) {
+        ActivityReservation activityReservation = activityReservationRepository.findByReservationId(hotelReservationId);
+        if (activityReservation != null) {
+            return new ActivityReservationDTO(
+                    activityReservation.getId(),
+                    activityReservation.getActivity().getName(),
+                    activityReservation.getReservationDate());
+        }
+        return null;
+    }
+
 }

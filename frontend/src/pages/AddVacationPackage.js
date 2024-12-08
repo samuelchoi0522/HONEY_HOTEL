@@ -10,7 +10,20 @@ import '../styles/AddVacationPackage.css';
 const AddVacationPackage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { hotelLocation, checkInDate, checkOutDate, selectedRooms, rooms, adults, children, rateOption, promoCode, chosenPhoto } = location.state || {};
+    const {
+        hotelLocation,
+        checkInDate,
+        checkOutDate,
+        selectedRooms,
+        roomPrices,  // New array of room prices
+        totalPrice,  // New total price
+        rooms,
+        adults,
+        children,
+        rateOption,
+        promoCode,
+        chosenPhoto
+    } = location.state || {};
 
     const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -19,6 +32,13 @@ const AddVacationPackage = () => {
 
     // Validate dates
     const isValidDate = (date) => date && !isNaN(new Date(date).getTime());
+
+    const numNights = React.useMemo(() => {
+        if (checkInDate && checkOutDate) {
+            return dayjs(checkOutDate).diff(dayjs(checkInDate), 'day');
+        }
+        return 0;
+    }, [checkInDate, checkOutDate]);
 
     useEffect(() => {
         console.log(location.state);
@@ -62,6 +82,8 @@ const AddVacationPackage = () => {
             checkInDate,
             checkOutDate,
             selectedRooms,
+            roomPrices,
+            totalPrice,
             rooms,
             adults,
             children,
@@ -103,7 +125,7 @@ const AddVacationPackage = () => {
                         <p>Room Type: {room.roomType}</p>
                         <p>Bed Type: {room.selectedBedType}</p>
                         <p>Smoking: {room.selectedSmoking ? 'Yes' : 'No'}</p>
-                        <p>Total Price: ${room.totalPrice}</p>
+                        <p>Room Price: ${room.totalPrice * numNights}</p>
                         <p>Room Id: {room.roomId}</p>
                         <p>Adults: {room.adults}</p>
                         <p>Children: {room.children}</p>

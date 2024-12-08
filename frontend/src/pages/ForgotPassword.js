@@ -14,7 +14,7 @@ function ForgotPassword() {
     useEffect(() => {
         const checkSession = async () => {
             try {
-                const response = await fetch("http://localhost:8080/api/check-session", {
+                const response = await fetch("http://localhost:8080/auth/check-session", {
                     method: "POST",
                     credentials: "include",
                     headers: { 'Content-Type': 'application/json' }

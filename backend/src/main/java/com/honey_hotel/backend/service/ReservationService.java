@@ -1,22 +1,25 @@
 package com.honey_hotel.backend.service;
 
-import com.honey_hotel.backend.model.AppUser;
-import com.honey_hotel.backend.model.Reservation;
-import com.honey_hotel.backend.model.Room;
-import com.honey_hotel.backend.repository.ReservationRepository;
-import com.honey_hotel.backend.repository.RoomRepository;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.honey_hotel.backend.model.AppUser;
+import com.honey_hotel.backend.model.Reservation;
+import com.honey_hotel.backend.model.Room;
+import com.honey_hotel.backend.repository.AdminAccessRepository;
+import com.honey_hotel.backend.repository.ClerkAccessRepository;
+import com.honey_hotel.backend.repository.ReservationRepository;
+import com.honey_hotel.backend.repository.RoomRepository;
+import com.honey_hotel.backend.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ReservationService {
@@ -27,8 +30,18 @@ public class ReservationService {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AdminAccessRepository adminAccessRepository;
+
+    @Autowired
+    private ClerkAccessRepository clerkAccessRepository;
+
     public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate,
-            int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, String bookingId, String photo_path, String hotelLocation) {
+            int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, BigDecimal roomPrice,
+            String bookingId, String photo_path, String hotelLocation) {
         try {
             Optional<Room> roomOpt = roomRepository.findById(roomId);
             if (roomOpt.isEmpty()) {
@@ -45,6 +58,7 @@ public class ReservationService {
             reservation.setPromoCode(promoCode);
             reservation.setRateOption(rateOption);
             reservation.setTotalPrice(totalPrice);
+            reservation.setRoomPrice(roomPrice);
             reservation.setBookingId(bookingId);
             reservation.setPhoto_path(photo_path);
             reservation.setHotelLocation(hotelLocation);
@@ -103,6 +117,25 @@ public class ReservationService {
         return false;
     }
 
+    public boolean cancelRoom(AppUser user, Long roomId, String bookingId) {
+        try {
+            Optional<Reservation> reservationOpt = reservationRepository.findByRoomIdAndBookingIdAndUser(
+                    roomId, bookingId, user.getId());
+
+            if (reservationOpt.isPresent()) {
+                Reservation reservation = reservationOpt.get();
+
+                reservationRepository.delete(reservation);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean isUserLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -110,5 +143,35 @@ public class ReservationService {
             return user != null && user instanceof AppUser;
         }
         return false;
+    }
+
+    public Reservation checkInReservation(Long id) {
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        if (reservation != null) {
+            reservation.setCheckedIn(true);
+            return reservationRepository.save(reservation);
+        }
+        return null;
+    }
+
+    public Reservation checkOutReservation(Long id) {
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        if (reservation != null) {
+            reservation.setCheckedIn(false);
+            return reservationRepository.save(reservation);
+        }
+        return null;
+    }
+
+    public boolean deleteReservation(Long id) {
+        if (reservationRepository.existsById(id)) {
+            reservationRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public Reservation findReservationById(Long id) {
+        return reservationRepository.findById(id).orElse(null);
     }
 }
