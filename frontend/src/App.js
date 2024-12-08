@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 
 import Homepage from './pages/Homepage';
 import Login from './pages/Login';
@@ -18,6 +18,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboard from './pages/AdminDashboard';
 import ReservationDetails from './pages/ReservationDetails';
+import InvalidPage from './pages/InvalidPage';
 
 import './styles/App.css';
 
@@ -56,6 +57,9 @@ function Layout() {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />
                 <Route path="/admin-dashboard/view/:id/:bookingId" element={<ReservationDetails />} />
+                <Route path="/invalid-page" element={<InvalidPage />} />
+
+                <Route path="*" element={<Navigate to="/invalid-page" />} />
             </Routes>
             {showNavbarAndFooter && <Footer />}
         </div>
