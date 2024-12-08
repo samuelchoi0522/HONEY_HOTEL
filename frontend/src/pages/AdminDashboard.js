@@ -142,8 +142,7 @@ const AdminDashboard = () => {
                 credentials: "include",
             });
             if (response.status === 403) {
-                alert("Access denied: You do not have admin access.");
-                navigate("/");
+                navigate("/invalid-page");
                 return;
             }
             if (response.ok) {
@@ -273,8 +272,7 @@ const AdminDashboard = () => {
 
             if (!response.ok) {
                 if (response.status === 403) {
-                    alert("Access denied: You do not have sufficient permissions.");
-                    navigate("/");
+                    navigate("/invalid-page");
                     return;
                 }
                 throw new Error("Failed to fetch admin dashboard");
@@ -289,8 +287,7 @@ const AdminDashboard = () => {
 
             // Redirect if role is not admin or clerk
             if (userRole !== "admin" && userRole !== "clerk") {
-                alert("Access denied: You do not have sufficient permissions.");
-                navigate("/");
+                navigate("/invalid-page");
                 return;
             }
 
@@ -325,19 +322,10 @@ const AdminDashboard = () => {
         navigate(`/admin-dashboard/view/${reservationId}/${bookingId}`);
     };
 
-
-
-
     useEffect(() => {
         fetchAdminDashboardData();
         fetchUsersData();
     }, []);
-
-    useEffect(() => {
-        if (selectedTab === "Bookings") {
-            fetchAdminDashboardData();
-        }
-    }, [selectedTab, navigate]);
 
     useEffect(() => {
         applyFilters();
