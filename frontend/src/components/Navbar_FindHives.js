@@ -90,7 +90,7 @@ function Navbar_FindHives() {
                     <div
                         className="account-link"
                         onClick={handleLogout}
-                        style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }}
+                        style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", marginRight: "70px"}}
                         onMouseEnter={() => setHover(true)}
                         onMouseLeave={() => setHover(false)}
                     >
@@ -116,7 +116,6 @@ function Navbar_FindHives() {
                     </div>
                 )}
             </div>
-            <img src="/icons/ICON3.png" alt="Additional Icon" className="additional-icon" />
             </nav>
     );
 }
