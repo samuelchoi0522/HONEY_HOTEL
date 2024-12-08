@@ -69,10 +69,11 @@ CREATE TABLE IF NOT EXISTS activityreservations (
     activity_id INTEGER NOT NULL,
     hotel_reservation_id BIGINT NOT NULL,
     reservation_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (activity_id) REFERENCES activities(id),
-    FOREIGN KEY (hotel_reservation_id) REFERENCES reservations(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE,
+    FOREIGN KEY (hotel_reservation_id) REFERENCES reservations(id) ON DELETE CASCADE
 );
+
 
 
 CREATE TABLE IF NOT EXISTS promo_codes (
