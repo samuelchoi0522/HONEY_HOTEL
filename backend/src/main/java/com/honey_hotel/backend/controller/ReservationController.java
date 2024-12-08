@@ -1,16 +1,5 @@
 package com.honey_hotel.backend.controller;
 
-import com.honey_hotel.backend.model.AppUser;
-import com.honey_hotel.backend.model.Reservation;
-import com.honey_hotel.backend.service.ReservationService;
-import com.honey_hotel.backend.service.ActivityReservationService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -19,6 +8,28 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.honey_hotel.backend.model.AppUser;
+import com.honey_hotel.backend.model.Reservation;
+import com.honey_hotel.backend.service.ActivityReservationService;
+import com.honey_hotel.backend.service.ReservationEmailService;
+import com.honey_hotel.backend.service.ReservationService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -32,6 +43,9 @@ public class ReservationController {
 
     @Autowired
     public ActivityReservationService activityReservationService;
+
+    @Autowired
+    public ReservationEmailService reservationEmailService;
 
     // Helper method to get the logged-in user from the session
     private AppUser getLoggedInUser(HttpServletRequest request) {
@@ -293,4 +307,35 @@ public class ReservationController {
     private Integer extractIntegerValue(Map<String, Object> map, String key) {
         return map.get(key) != null ? ((Number) map.get(key)).intValue() : null;
     }
+
+    @PostMapping("/send-reservation-email")
+    public ResponseEntity<String> sendReservationEmail(@RequestBody Map<String, Object> request) {
+        String email = (String) request.get("email");
+
+        // Validate email
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest().body("Email address is required and cannot be empty.");
+        }
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            return ResponseEntity.badRequest().body("Invalid email address format.");
+        }
+
+        String bookingId = (String) request.get("bookingId");
+        String hotelLocation = (String) request.get("hotelLocation");
+        String checkInDate = (String) request.get("checkInDate");
+        String checkOutDate = (String) request.get("checkOutDate");
+        List<Map<String, Object>> selectedRooms = (List<Map<String, Object>>) request.get("selectedRooms");
+        double finalTotal = Double.parseDouble(request.get("finalTotal").toString());
+
+        boolean success = reservationEmailService.sendReservationEmail(
+                email, bookingId, hotelLocation, checkInDate, checkOutDate, selectedRooms, finalTotal);
+
+        if (success) {
+            return ResponseEntity.ok("Reservation email sent successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to send reservation email.");
+        }
+    }
+
 }

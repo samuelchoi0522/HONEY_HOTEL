@@ -3,6 +3,7 @@ package com.honey_hotel.backend.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.honey_hotel.backend.model.AppUser;
 import com.honey_hotel.backend.model.Reservation;
+import com.honey_hotel.backend.repository.UserRepository;
 import com.honey_hotel.backend.service.AdminAccessService;
 import com.honey_hotel.backend.service.ClerkAccessService;
 import com.honey_hotel.backend.service.ReservationService;
 import com.honey_hotel.backend.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
-
 
 @RestController
 @RequestMapping("/api/admin")
@@ -42,6 +43,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // bookings tab
 
@@ -124,7 +128,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
-
         Reservation reservation = reservationService.findReservationById(id);
         if (reservation == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -132,7 +135,6 @@ public class AdminController {
 
         return ResponseEntity.ok(reservation);
     }
-
 
     @DeleteMapping("/reservations/{id}")
     public ResponseEntity<?> deleteReservation(@PathVariable Long id, HttpServletRequest request) {
@@ -232,4 +234,74 @@ public class AdminController {
 
         return ResponseEntity.ok("User promoted to Administrator successfully");
     }
+
+    @PutMapping("/users/{id}/makeGuest")
+    public ResponseEntity<?> demoteToGuest(@PathVariable Long id, HttpServletRequest request) {
+        boolean hasAdminAccess = checkIfUserIsAdmin(request);
+        System.out.println("hasAdminAccess: " + hasAdminAccess);
+        if (!hasAdminAccess) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
+        }
+
+        boolean isDemoted = userService.demoteToGuest(id);
+        if (!isDemoted) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+        }
+
+        return ResponseEntity.ok("User demoted to Guest successfully");
+    }
+
+    @GetMapping("/users/{userId}/reservations")
+    public ResponseEntity<?> getUserReservationsForAdmin(@PathVariable Long userId) {
+        Optional<AppUser> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+        }
+
+        AppUser user = optionalUser.get();
+
+        List<Map<String, Object>> reservations = reservationService.getReservationsByUser(user).stream()
+                .map(reservation -> {
+                    Map<String, Object> reservationMap = new HashMap<>();
+                    reservationMap.put("hotelLocation", reservation.getHotelLocation());
+                    reservationMap.put("roomId", reservation.getRoom().getId());
+                    reservationMap.put("roomType", reservation.getRoom().getRoomType());
+                    reservationMap.put("bedType", reservation.getRoom().getBedType());
+                    reservationMap.put("smokingAllowed", reservation.getRoom().isSmokingAllowed());
+                    reservationMap.put("checkInDate", reservation.getCheckInDate());
+                    reservationMap.put("checkOutDate", reservation.getCheckOutDate());
+                    reservationMap.put("adults", reservation.getAdults());
+                    reservationMap.put("children", reservation.getChildren());
+                    reservationMap.put("promoCode", reservation.getPromoCode());
+                    reservationMap.put("rateOption", reservation.getRateOption());
+                    reservationMap.put("roomPrice", reservation.getRoomPrice());
+                    reservationMap.put("totalPrice", reservation.getTotalPrice());
+                    reservationMap.put("bookingId", reservation.getBookingId());
+                    reservationMap.put("photo_path", reservation.getPhoto_path());
+                    return reservationMap;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(reservations);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<?> getUserDetailsForAdmin(@PathVariable Long userId) {
+        Optional<AppUser> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
+        }
+
+        AppUser user = optionalUser.get();
+
+        Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("id", user.getId());
+        userDetails.put("email", user.getEmail());
+        userDetails.put("firstname", user.getFirstname());
+        userDetails.put("lastname", user.getLastname());
+
+        return ResponseEntity.ok(userDetails);
+    }
+
+
 }

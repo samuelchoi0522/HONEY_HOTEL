@@ -32,7 +32,6 @@ const AdminDashboard = () => {
     const [menuContext, setMenuContext] = useState({ type: "", data: null });
     const [userRole, setUserRole] = useState(""); // Tracks the role (e.g., "admin" or "clerk")
 
-
     dayjs.extend(isSameOrAfter);
     dayjs.extend(isSameOrBefore);
 
@@ -142,8 +141,7 @@ const AdminDashboard = () => {
                 credentials: "include",
             });
             if (response.status === 403) {
-                alert("Access denied: You do not have admin access.");
-                navigate("/");
+                navigate("/invalid-page");
                 return;
             }
             if (response.ok) {
@@ -164,13 +162,20 @@ const AdminDashboard = () => {
     };
 
     const handleUsersDialogOpen = (type) => {
+        console.log("Opening user dialog with type:", type); // Debugging log
+        if (type === "view" && menuContext.data) {
+            navigate(`/admin-dashboard/view/user/${menuContext.data.id}`);
+            return;
+        }
         setSelectedUser(menuContext.data); // Set the user from the menu context
         setConfirmationDialog({ open: true, type });
         handleMenuClose();
     };
 
 
+
     const handleUsersDialogClose = async (confirm) => {
+        console.log("Closing user dialog with type:", confirm); // Debugging log
         if (!selectedUser) {
             console.error("No user selected.");
             return;
@@ -192,6 +197,12 @@ const AdminDashboard = () => {
                     fetchUsersData();
                 } else if (confirmationDialog.type === "makeAdmin") {
                     await fetch(`http://localhost:8080/api/admin/users/${selectedUser.id}/makeAdmin`, {
+                        method: "PUT",
+                        credentials: "include",
+                    });
+                    fetchUsersData();
+                } else if (confirmationDialog.type === "makeGuest") {
+                    await fetch(`http://localhost:8080/api/admin/users/${selectedUser.id}/makeGuest`, {
                         method: "PUT",
                         credentials: "include",
                     });
@@ -273,8 +284,7 @@ const AdminDashboard = () => {
 
             if (!response.ok) {
                 if (response.status === 403) {
-                    alert("Access denied: You do not have sufficient permissions.");
-                    navigate("/");
+                    navigate("/invalid-page");
                     return;
                 }
                 throw new Error("Failed to fetch admin dashboard");
@@ -289,8 +299,7 @@ const AdminDashboard = () => {
 
             // Redirect if role is not admin or clerk
             if (userRole !== "admin" && userRole !== "clerk") {
-                alert("Access denied: You do not have sufficient permissions.");
-                navigate("/");
+                navigate("/invalid-page");
                 return;
             }
 
@@ -325,19 +334,10 @@ const AdminDashboard = () => {
         navigate(`/admin-dashboard/view/${reservationId}/${bookingId}`);
     };
 
-
-
-
     useEffect(() => {
         fetchAdminDashboardData();
         fetchUsersData();
     }, []);
-
-    useEffect(() => {
-        if (selectedTab === "Bookings") {
-            fetchAdminDashboardData();
-        }
-    }, [selectedTab, navigate]);
 
     useEffect(() => {
         applyFilters();
@@ -542,37 +542,73 @@ const AdminDashboard = () => {
                         <DeleteIcon style={{ marginRight: "10px", color: "red" }} /> Delete Reservation
                     </MenuItem>,
                 ]}
-                {menuContext.type === "user" && menuContext.data && [
-                    userRole === "clerk" && (
-                        <MenuItem key="view" onClick={() => handleUsersDialogOpen("view")}>
+                {
+                    menuContext.type === "user" && menuContext.data && [
+                        <MenuItem
+                            key="view"
+                            onClick={() => handleUsersDialogOpen("view")}
+                        >
                             <VisibilityIcon style={{ marginRight: "10px" }} /> View
-                        </MenuItem>
-                    ),
-                    userRole === "admin" && (
-                        <>
-                            <MenuItem key="delete" onClick={() => handleUsersDialogOpen("delete")}>
-                                <DeleteIcon style={{ marginRight: "10px", color: "red" }} /> Delete User
-                            </MenuItem>
-                            {!menuContext.data.isAdmin && (
-                                <MenuItem
-                                    key="makeAdmin"
-                                    onClick={() => handleUsersDialogOpen("makeAdmin")}
-                                >
-                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Admin
-                                </MenuItem>
-                            )}
-                            {!menuContext.data.isClerk && (
+                        </MenuItem>,
+
+                        userRole === "admin" && selectedTab === "Administrator" && [
+                            // Option to make the user a Clerk if they are a Guest
+                            (getUserStatus(menuContext.data) === "Guest" && (
                                 <MenuItem
                                     key="makeClerk"
                                     onClick={() => handleUsersDialogOpen("makeClerk")}
                                 >
                                     <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Clerk
                                 </MenuItem>
-                            )}
-                        </>
-                    ),
-                ]}
+                            )),
+                            (getUserStatus(menuContext.data) === "Guest" && (
+                                <MenuItem
+                                    key="makeAdmin"
+                                    onClick={() => handleUsersDialogOpen("makeAdmin")}
+                                >
+                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Admin
+                                </MenuItem>
+                            )),
+                            (getUserStatus(menuContext.data) === "Administrator" && (
+                                <MenuItem
+                                    key="makeClerk"
+                                    onClick={() => handleUsersDialogOpen("makeClerk")}
+                                >
+                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Clerk
+                                </MenuItem>
+                            )),
+                            // Option to make the user an Admin if they are a Clerk
+                            (menuContext.data.isClerk && !menuContext.data.isAdmin && (
+                                <MenuItem
+                                    key="makeAdmin"
+                                    onClick={() => handleUsersDialogOpen("makeAdmin")}
+                                >
+                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Admin
+                                </MenuItem>
+                            )),
+                            // Option to make the user a Guest if they are a Clerk or Admin
+                            ((menuContext.data.isClerk || menuContext.data.isAdmin) && (
+                                <MenuItem
+                                    key="makeGuest"
+                                    onClick={() => handleUsersDialogOpen("makeGuest")}
+                                >
+                                    <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Guest
+                                </MenuItem>
+                            )),
+                            // Option to delete the user
+                            <MenuItem
+                                key="delete"
+                                onClick={() => handleUsersDialogOpen("delete")}
+                            >
+                                <DeleteIcon style={{ marginRight: "10px", color: "red" }} /> Delete User
+                            </MenuItem>,
+                        ]
+                    ]
+                }
+
+
             </Menu>
+
             <Dialog
                 open={confirmationDialog.open}
                 onClose={() => {
@@ -592,13 +628,15 @@ const AdminDashboard = () => {
                                 ? "Are you sure you want to check out this reservation?"
                                 : selectedTab === "Bookings" && confirmationDialog.type === "delete"
                                     ? "Are you sure you want to delete this reservation?"
-                                    : selectedTab === "Users" && confirmationDialog.type === "delete"
+                                    : selectedTab === "Administrator" && confirmationDialog.type === "delete"
                                         ? "Are you sure you want to delete this user?"
-                                        : selectedTab === "Users" && confirmationDialog.type === "makeClerk"
+                                        : selectedTab === "Administrator" && confirmationDialog.type === "makeClerk"
                                             ? "Are you sure you want to make this user a clerk?"
-                                            : selectedTab === "Users" && confirmationDialog.type === "makeAdmin"
+                                            : selectedTab === "Administrator" && confirmationDialog.type === "makeAdmin"
                                                 ? "Are you sure you want to make this user an administrator?"
-                                                : "Are you sure about this action?"}
+                                                : selectedTab === "Administrator" && confirmationDialog.type === "makeGuest"
+                                                    ? "Are you sure you want to make this user a guest?"
+                                                    : "Are you sure about this action?"}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -606,7 +644,7 @@ const AdminDashboard = () => {
                         onClick={() => {
                             if (selectedTab === "Bookings") {
                                 handleBookingsDialogClose(false);
-                            } else if (selectedTab === "Users") {
+                            } else if (selectedTab === "Administrator") {
                                 handleUsersDialogClose(false);
                             }
                         }}
@@ -618,7 +656,7 @@ const AdminDashboard = () => {
                         onClick={() => {
                             if (selectedTab === "Bookings") {
                                 handleBookingsDialogClose(true);
-                            } else if (selectedTab === "Users") {
+                            } else if (selectedTab === "Administrator") {
                                 handleUsersDialogClose(true);
                             }
                         }}
@@ -629,6 +667,7 @@ const AdminDashboard = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
         </div>
     );
 };
