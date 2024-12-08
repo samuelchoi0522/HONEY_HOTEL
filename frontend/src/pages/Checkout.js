@@ -216,7 +216,7 @@ const Checkout = () => {
                     padding: '60px',
                     maxWidth: '600px',
                     margin: '50px auto',
-                    marginLeft: '0',
+                    marginTop: '150px',
                     backgroundColor: 'white',
                     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
                     borderRadius: '12px',
