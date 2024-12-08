@@ -138,18 +138,18 @@ public class AdminController {
 
     @DeleteMapping("/reservations/{id}")
     public ResponseEntity<?> deleteReservation(@PathVariable Long id, HttpServletRequest request) {
+        AppUser user = getLoggedInUser(request);
         boolean hasPerms = checkIfUserHasPermissions(request);
 
         if (!hasPerms) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Error: Access denied");
         }
 
-        boolean isDeleted = reservationService.deleteReservation(id);
-        if (!isDeleted) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Reservation not found");
-        }
+        boolean reservationDeleted = reservationService.deleteReservation(id, user);
 
-        return ResponseEntity.ok("Reservation deleted successfully");
+        return reservationDeleted
+                ? ResponseEntity.ok("Reservation deleted successfully!")
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Failed to delete reservation");
     }
 
     private AppUser getLoggedInUser(HttpServletRequest request) {
@@ -249,8 +249,7 @@ public class AdminController {
         }
 
         return ResponseEntity.ok("User demoted to Guest successfully");
-    }
-
+    
     @GetMapping("/users/{userId}/reservations")
     public ResponseEntity<?> getUserReservationsForAdmin(@PathVariable Long userId) {
         Optional<AppUser> optionalUser = userRepository.findById(userId);
@@ -302,6 +301,4 @@ public class AdminController {
 
         return ResponseEntity.ok(userDetails);
     }
-
-
 }

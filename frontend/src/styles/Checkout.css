@@ -8,14 +8,14 @@
     font-family: 'Roboto', sans-serif;
 }
 
-h2 {
+.checkout-h2 {
     text-align: center;
     font-size: 24px;
     margin-bottom: 30px;
     color: #333;
 }
 
-.form-group {
+.checkout-form-group {
     margin-bottom: 20px;
 }
 
@@ -30,7 +30,7 @@ h2 {
     margin-right: 10px;
 }
 
-button {
+.checkout-button {
     margin-top: 20px;
     padding: 12px;
     background-color: #000;
@@ -41,16 +41,16 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.checkout-button:hover {
     background-color: #333;
 }
 
-.terms-link {
+.checkout-terms-link {
     color: #000;
     text-decoration: underline;
 }
 
-footer {
+.checkout-footer {
     text-align: center;
     margin-top: 40px;
     font-size: 12px;
