@@ -109,15 +109,14 @@ const Checkout = () => {
             return;
         }
 
-        const bookingId = uuidv4(); // Generate a unique booking ID
+        const bookingId = uuidv4();
 
         try {
             const reservationIds = [];
 
-            // Iterate over selectedRooms to create a reservation for each room
             for (let i = 0; i < selectedRooms.length; i++) {
                 const room = selectedRooms[i];
-                const roomPrice = roomPrices[i]; // Get the corresponding room price
+                const roomPrice = roomPrices[i];
 
                 const reservationPayload = {
                     hotelLocation,
@@ -128,8 +127,8 @@ const Checkout = () => {
                     children,
                     rateOption,
                     promoCode,
-                    totalPrice: roomPrice * numNights, // Total price for this room
-                    roomPrice, // Individual room price per night
+                    totalPrice: roomPrice * numNights,
+                    roomPrice,
                     bookingId,
                     chosenPhoto,
                 };
@@ -461,6 +460,7 @@ const Checkout = () => {
                             color="primary"
                             fullWidth
                             size="large"
+                            className="checkout-button"
                             onClick={methods.handleSubmit(handleReserveRoom)}
                             sx={{
                                 marginTop: '20px',
@@ -480,42 +480,6 @@ const Checkout = () => {
             </Box>
         </FormProvider>
     );
-
-    //     <div className="checkout-page">
-    //        <h2 style={{ color: 'black' }}>Complete Booking</h2>
-    //        <div className="booking-details">
-    //           <h3>Room Details</h3>
-    //           {selectedRooms?.map((room, index) => (
-    //               <div key={index} className="room-details">
-    //                   <h4>Room {index + 1}</h4>
-    //                   <p><strong>Category:</strong> {room.categoryName}</p>
-    //                     <p><strong>Room Type:</strong> {room.roomType}</p>
-    //                  <p><strong>Bed Type:</strong> {room.selectedBedType}</p>
-    //                   <p><strong>Smoking:</strong> {room.selectedSmoking ? 'Yes' : 'No'}</p>
-    //                   <p><strong>Base Price:</strong> ${room.totalPrice * numNights}</p>
-    //                  <p><strong>Room Id:</strong> {room.roomId}</p>
-    //              </div>
-    //          ))}
-    //
-    //          <p><strong>Check-in Date:</strong> {checkInDate}</p>
-    //          <p><strong>Check-out Date:</strong> {checkOutDate}</p>
-    //          <p><strong>Number of Nights:</strong> {numNights}</p>
-    //
-    //          {reservedActivity && (
-    //                 <>
-    //                    <h3>Activity Details</h3>
-    //                    <p><strong>Activity:</strong> {reservedActivity.name}</p>
-    //                     <p><strong>Category:</strong> {reservedActivity.category}</p>
-    //                    <p><strong>Price:</strong> ${reservedActivity.price}</p>
-    //                     <p><strong>Activity Date:</strong> {activityDate}</p>
-    //                  <p><strong>Activity Id:</strong> {reservedActivity.id}</p>
-    //               </>
-    //           )}
-    //
-    //           <p><strong>Total (including 6% tax):</strong> ${finalTotal}</p>
-    //       </div>
-    //     </div>
-    // );
 };
 
 export default Checkout;
