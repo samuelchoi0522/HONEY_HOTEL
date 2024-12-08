@@ -14,7 +14,7 @@ public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         Dotenv dotenv = Dotenv.configure()
-                .directory("/Users/sam/Desktop/SWE 1/FULLSTACK_HOTEL_APP")
+                .directory("C:\\Users\\aegra\\HONEY_HOTEL\\.env")
                 .load();
         dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
 
