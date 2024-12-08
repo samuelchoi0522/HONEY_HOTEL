@@ -23,6 +23,7 @@ Honey Hotel uses a number of open-source projects to work properly:
 - [JUnit] - Unit testing library
 - [Java] - Backend development
 - [PostgreSQL] - SQL Database
+- [Docker] - Containerization platform
 
 And of course, Honey Hotel is accessible with a [public repository][dill]
  on GitHub.
@@ -47,6 +48,22 @@ Once all dependencies and servers are running, the project should be viewable on
 
 ### To run this project locally:
 
+Rename the .env.example file in the backend and frontend directories to .env, and replace the placeholder values to your environment variables.
+You must have the .env file for the app to compile and run.
+
+```sh
+DB_USERNAME=database_username
+DB_PASSWORD=database_password
+EMAIL_USERNAME=gmail_email
+EMAIL_PASSWORD=gmail_app_password
+```
+
+Initialize your PostgreSQL databse with the following command in the root directory.
+
+```sh
+psql -U admin -d honey_hotel_db -f ./init.sql
+```
+
 Install the dependencies and devDependencies and start the server on port :8080.
 
 ```sh
@@ -64,6 +81,26 @@ npm install
 npm start
 ```
 
+### Admin Dashboard Login Information
+* **Admin Dashboard URL**: `/admin-dashboard` 
+* **Username**: `honeyhotelinfo@gmail.com` 
+* **Password**: `honeyhotel123`
+
+### Web Pages
+
+| **Page URL**            | **Page Description**                                                                                   |
+|--------------------------|-------------------------------------------------------------------------------------------------------|
+| `/`                     | The homepage showcasing Honey Hotel's features and a brief overview.                                 |
+| `/find-hive`            | Browse all available rooms, categorized by type and price.                                            |
+| `/room-details`         | A detailed page for users to select bed types, smoking status, and price categories for a specific room. |
+| `/login`                | Login page for users and admin to access their accounts.                                              |
+| `/register`             | Registration page for new users to create an account.                                                 |
+| `/forgot-password`      | Page for users to reset their password by entering their email address.                               |
+| `/account`              | User account page to view and update personal information, including booking history.                 |
+| `/add-vacation-package` | Admin page for adding special vacation packages and promotions to the system.                         |
+| `/checkout`             | Checkout page for users to review their booking details and confirm payment.                          |
+| `/admin-dashboard`      | Admin dashboard to view, edit, and manage bookings, rooms, and user accounts (restricted access).      |
+
 
 
 [//]: #
@@ -75,3 +112,4 @@ npm start
    [JUnit]: <https://junit.org/junit5/>
    [Java]: <https://www.java.com/en/>
    [PostgreSQL]: <https://www.postgresql.org/>
+   [Docker]: <https://www.docker.com/>

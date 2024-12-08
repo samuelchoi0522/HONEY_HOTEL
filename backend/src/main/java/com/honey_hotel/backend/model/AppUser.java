@@ -1,15 +1,17 @@
 package com.honey_hotel.backend.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
 
 @Entity
 @Table(name = "users")
@@ -24,9 +26,11 @@ public class AppUser implements Serializable {
     private String firstname;
     private String lastname;
     private String email;
-    private String password_hash;  // Storing password hash
+    private String password_hash;
 
-    // Getters and Setters
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations;
+
     public String getTitle() {
         return title;
     }

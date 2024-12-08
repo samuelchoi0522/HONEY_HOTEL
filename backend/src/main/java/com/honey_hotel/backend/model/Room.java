@@ -29,20 +29,19 @@ public class Room {
     private boolean smokingAllowed;
     private double price;
 
-    @Column(name = "price_category") // Make sure the column name matches your database schema
+    @Column(name = "price_category")
     private String priceCategory;
 
     @Column(name = "room_type_id", nullable = false)
     private int roomTypeId;
 
-    // A static array of room type names mapped to room type IDs
     private static final String[] ROOM_TYPE_NAMES = {
-            "Single", // ID 1
-            "Double", // ID 2
-            "Family", // ID 3
-            "Suite", // ID 4
-            "Deluxe", // ID 5
-            "Standard" // ID 6
+            "Single",
+            "Double",
+            "Family",
+            "Suite",
+            "Deluxe",
+            "Standard"
     };
 
     /////// room id

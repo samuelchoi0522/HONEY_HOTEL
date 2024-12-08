@@ -1,8 +1,13 @@
 package com.honey_hotel.backend.controller;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.Level;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +24,25 @@ import com.honey_hotel.backend.service.FindHivesService;
 @RequestMapping("/api/hives")
 public class FindHivesController {
 
+    private static final Logger logger = Logger.getLogger(FindHivesController.class.getName());
+
+    static {
+        if (logger.getHandlers().length == 0) {
+            try {
+                FileHandler fileHandler = new FileHandler(
+                        "/Users/sam/Desktop/SWE 1/FULLSTACK_HOTEL_APP/backend/src/main/java/com/honey_hotel/backend/logs/find_hives_logs.txt",
+                        true);
+                fileHandler.setFormatter(new SimpleFormatter());
+                logger.addHandler(fileHandler);
+                logger.setLevel(Level.INFO);
+            } catch (IOException e) {
+                logger.severe("Failed to initialize logger file handler: " + e.getMessage());
+            }
+        }
+    }
+
     @Autowired
     private FindHivesService findHivesService;
-
 
     @PostMapping("/find")
     public ResponseEntity<?> findRooms(@RequestBody BookingDetails bookingDetails) {
@@ -34,17 +55,22 @@ public class FindHivesController {
                     startDate,
                     endDate);
 
+            // Log room details
             availableRooms.forEach(room -> {
-                if (room.getCategory() == null) {
-                    System.out.println("Room ID " + room.getId() + " does not have a category.");
-                } else {
-                    System.out.println(
-                            "Room ID " + room.getId() + " has category " + room.getCategory().getCategoryName());
-                }
+                String categoryName = (room.getCategory() != null) ? room.getCategory().getCategoryName()
+                        : "Unknown Category";
+                logger.info("Room ID: " + room.getId() +
+                        ", Category: " + categoryName +
+                        ", Bed Type: " + room.getBedType() +
+                        ", Smoking Allowed: " + room.isSmokingAllowed() +
+                        ", Price: " + room.getPrice() +
+                        ", Room Type: " + room.getRoomType() +
+                        ", Price Category: " + room.getPriceCategory());
             });
 
             return ResponseEntity.ok(availableRooms);
         } catch (DateTimeParseException e) {
+            logger.warning("Error: Invalid date format provided.");
             return ResponseEntity.badRequest().body("Error: Invalid date format. Please use MM/DD/YYYY.");
         }
     }

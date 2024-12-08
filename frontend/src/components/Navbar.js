@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Navbar.css';
 import Modal from './Modal.js';
 import PersonIcon from '@mui/icons-material/Person';
@@ -10,28 +10,25 @@ function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userName, setUserName] = useState('');
     const [hover, setHover] = useState(false);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
         //check if the user is logged in by fetching session data
         const checkSession = async () => {
-            console.log("checking session");
             try {
-                const response = await fetch("http://localhost:8080/api/check-session", {
+                const response = await fetch("http://localhost:8080/auth/check-session", {
                     method: "POST",
                     credentials: "include",
                     headers: { 'Content-Type': 'application/json' }
                 });
 
                 const data = await response.json();
-                console.log(data);
 
                 if (response.ok && data.isLoggedIn) {
                     setIsLoggedIn(true);
-                    console.log("User is logged in:", data);    //debugging
                     setUserName(data.firstname.toUpperCase());
                 } else {
-                    console.log("No active session found.");    //debugging
                     setIsLoggedIn(false);
                 }
             } catch (error) {
@@ -47,7 +44,7 @@ function Navbar() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/logout", {
+            const response = await fetch("http://localhost:8080/auth/logout", {
                 method: "POST",
                 credentials: "include",
             });
@@ -55,12 +52,22 @@ function Navbar() {
             if (response.ok) {
                 setIsLoggedIn(false);
                 setUserName('');
+                localStorage.removeItem("isLoggedIn");
+                navigate("/");
             } else {
                 alert("Logout failed. Please try again.");
             }
         } catch (error) {
             console.error("Error logging out:", error);
             alert("An error occurred while logging out. Please try again.");
+        }
+    };
+
+    const handleAccountClick = () => {
+        if (isLoggedIn) {
+            navigate("/account");
+        } else {
+            navigate("/login");
         }
     };
 
@@ -89,9 +96,13 @@ function Navbar() {
                 <Link to="/about-us" className="navbar-link-items">
                     ABOUT US
                 </Link>
-                <Link to="/account" className="navbar-link-items">
+                <div
+                    className="navbar-link-items"
+                    onClick={handleAccountClick}
+                    style={{cursor: 'pointer'}}
+                >
                     ACCOUNT
-                </Link>
+                </div>
             </div>
 
             <div className="navbar-user">

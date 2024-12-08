@@ -11,7 +11,6 @@
     width: auto;
 }
 
-/* Modal Overlay */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -25,7 +24,6 @@
     z-index: 9999;
 }
 
-/* Modal Container */
 .modal-container {
     background-color: #fff;
     padding: 30px;
@@ -36,7 +34,6 @@
     box-sizing: border-box;
 }
 
-/* Close Button */
 .close-button {
     position: absolute;
     top: 20px;
@@ -46,14 +43,17 @@
     border: none;
     cursor: pointer;
     color: black;
+    background-color: none;
 }
 
-/* Modal Content */
+.close-button:hover {
+    background-color: transparent;
+}
+
 .modal-content {
     font-family: "Helvetica Neue", sans-serif;
 }
 
-/* Destination Field */
 .field.destination {
     display: flex;
     flex-direction: column;
@@ -61,7 +61,6 @@
     margin-bottom: 20px;
 }
 
-/* Date Range Picker Field */
 .field.date-range-picker {
     display: flex;
     flex-direction: column;
@@ -69,7 +68,6 @@
     margin-bottom: 20px;
 }
 
-/* Label Styling */
 .label {
     margin-top: 30px;
     font-size: 12px;
@@ -81,7 +79,6 @@
     align-items: center;
 }
 
-/* Placeholder option styling */
 .placeholder-option {
     opacity: 0.5;
 }
@@ -90,16 +87,13 @@
     opacity: 1;
 }
 
-/* Date Range and Button Container */
 .date-range-container {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* Add space between the date picker and button */
     width: 100%;
 }
 
-/* Adjust the button styles */
 .find-hives-button {
     transition: ease-in-out 0.2s;
     background-color: #000000;
@@ -115,6 +109,7 @@
     width: 300px;
     height: 40px;
     margin-top: 55px;
+    border-radius: 0px;
 }
 
 .find-hives-button:hover {
@@ -122,7 +117,6 @@
     border-color: #f0d10b;
 }
 
-/* Media Query for Tablet and Smaller Screens */
 @media (max-width: 768px) {
     .modal-container {
         width: 90%;
@@ -130,7 +124,6 @@
     }
 }
 
-/* Media Query for Mobile Screens */
 @media (max-width: 480px) {
     .modal-container {
         width: 95%;

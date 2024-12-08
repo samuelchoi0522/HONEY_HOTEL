@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700;800&display=swap");
+
+.checkRatesBar {
+    position: fixed;
+    top: 70px;
+    width: 100%;
+    background-color: #D9D9D9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 999;
+    height: 80px;
+    gap: 20px;
+}
+
+.checkRatesBar> :first-child {
+    padding-left: 50px;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 200px;
+}
+
+.destinationInput .MuiOutlinedInput-root {
+    background-color: #363535;
+    color: white;
+    height: 33px;
+    min-width: 300px;
+    width: 400px;
+    max-width: 500px;
+    padding-right: 50px;
+    border-radius: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.336);
+    display: flex;
+    align-items: center;
+}
+
+.destinationInput .MuiOutlinedInput-input {
+    font-size: 0.85rem;
+    padding: 0;
+    top: -20px;
+    text-align: center;
+    line-height: normal;
+    height: 100%;
+}
+
+.checkRatesButton {
+    margin-left: -50px;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    border: 1.5px solid #000;
+    border-color: black;
+    cursor: pointer;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 800;
+    transition: background-color 0.3s ease;
+    border-radius: 0;
+}
+
+.checkRatesButton:hover {
+    background-color: white;
+    color: black;
+    border-color: yellow;
+}

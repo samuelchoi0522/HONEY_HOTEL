@@ -2,6 +2,7 @@ package com.honey_hotel.backend.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findAvailableRooms(@Param("location") String location,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT r FROM Room r WHERE r.id = :roomId")
+    Optional<Room> findRoomById(@Param("roomId") Long roomId);
 }

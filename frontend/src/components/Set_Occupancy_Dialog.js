@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,21 +11,34 @@ import {
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function SetOccupancyDialog({ onSetOccupancy }) {
+export default function SetOccupancyDialog({ onSetOccupancy, rooms: initialRooms, adults: initialAdults, children: initialChildren }) {
     const [open, setOpen] = useState(false);
-    const [rooms, setRooms] = useState(1);
-    const [adults, setAdults] = useState(1);
-    const [children, setChildren] = useState(0);
+    const [rooms, setRooms] = useState(initialRooms);
+    const [adults, setAdults] = useState(initialAdults);
+    const [children, setChildren] = useState(initialChildren);
+
+    useEffect(() => {
+        setRooms(initialRooms || 1);
+        setAdults(initialAdults || 1);
+        setChildren(initialChildren || 0);
+    }, [initialRooms, initialAdults, initialChildren]);
+
     const totalGuests = adults + children;
     const guestLabel = totalGuests === 1 ? "GUEST" : "GUESTS";
+
     const handleClickOpen = () => {
         setOpen(true);
     };
+
     const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleSet = () => {
         onSetOccupancy(rooms, adults, children);
         setOpen(false);
     };
-    
+
     return (
         <React.Fragment>
             <Button
@@ -52,7 +65,7 @@ export default function SetOccupancyDialog({ onSetOccupancy }) {
                     },
                 }}
             >
-                {rooms} ROOM, {totalGuests} {guestLabel}
+                {rooms} ROOM{rooms > 1 ? 'S' : ''}, {totalGuests} {guestLabel}
             </Button>
 
             <Dialog open={open} onClose={handleClose}>
@@ -68,51 +81,43 @@ export default function SetOccupancyDialog({ onSetOccupancy }) {
                             step={1}
                             onChange={(event, value) => {
                                 setRooms(value);
-                                console.log(`NUMBER OF ROOMS: `, value);
                             }}
                         />
                     </div>
 
                     <div className="counter-section">
-                        <p>Adults</p> 
-                        <p style={{marginTop: '-15px', fontSize: '0.65rem' }}>(Max: 8 guests/room)</p>
+                        <p>Adults</p>
+                        <p style={{ marginTop: '-15px', fontSize: '0.65rem' }}>(Max: 8 guests/room)</p>
                         <NumberInput
                             aria-label="Adults"
                             value={adults}
                             min={1}
-                            max={8}
-                            onChange={(event, value) => {
-                                setAdults(value)
-                                console.log(`NUMBER OF ADULTS: `, value);
-                            }}
+                            max={rooms * 8}
                             step={1}
+                            onChange={(event, value) => {
+                                setAdults(value);
+                            }}
                         />
                     </div>
 
                     <div className="counter-section">
                         <p>Children</p>
-                        <p style={{marginTop: '-15px', fontSize: '0.65rem' }}>(Max: 8 guests/room)</p>
+                        <p style={{ marginTop: '-15px', fontSize: '0.65rem' }}>(Max: 8 guests/room)</p>
                         <NumberInput
                             aria-label="Children"
                             value={children}
                             min={0}
-                            max={8}
-                            onChange={(event, value) => {
-                                setChildren(value)
-                                console.log(`NUMBER OF CHILDREN: `, value);
-                            }}
+                            max={rooms * 8 - adults}
                             step={1}
+                            onChange={(event, value) => {
+                                setChildren(value);
+                            }}
                         />
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button
-                        onClick={() => {
-                            console.log(`Rooms: ${rooms}, Adults: ${adults}, Children: ${children}`);
-                            handleClose();
-                        }}
-                    >
+                    <Button onClick={handleSet}>
                         Set
                     </Button>
                 </DialogActions>
@@ -121,10 +126,7 @@ export default function SetOccupancyDialog({ onSetOccupancy }) {
     );
 }
 
-const NumberInput = React.forwardRef(function CustomNumberInput(
-    props,
-    ref,
-) {
+const NumberInput = React.forwardRef(function CustomNumberInput(props, ref) {
     return (
         <BaseNumberInput
             slots={{
@@ -172,75 +174,68 @@ const grey = {
     900: '#1C2025',
 };
 
-const StyledInputRoot = styled('div')(
-    ({ theme }) => `
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-weight: 400;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`,
-);
+const StyledInputRoot = styled('div')`
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
-const StyledInput = styled('input')(
-    ({ theme }) => `
-  font-size: 0.875rem;
-  font-family: inherit;
-  font-weight: 400;
-  line-height: 1.375;
-  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-  box-shadow: 0px 2px 4px ${theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'
-        };
-  border-radius: 8px;
-  margin: 0 8px;
-  padding: 10px 12px;
-  outline: 0;
-  width: 4rem;
-  text-align: center;
-
-  &:hover {
-    border-color: ${honeyYellow[400]};
-  }
-
-  &:focus {
-    border-color: ${honeyYellow[400]};
-    box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? honeyYellow[700] : honeyYellow[200]};
-  }
-
-  &:focus-visible {
+const StyledInput = styled('input')`
+    font-size: 0.875rem;
+    font-family: inherit;
+    font-weight: 400;
+    line-height: 1.375;
+    color: ${props => props.theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+    background: ${props => props.theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+    border: 1px solid ${props => props.theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+    box-shadow: 0px 2px 4px ${props => props.theme.palette.mode === 'dark' ? 'rgba(0,0,0, 0.5)' : 'rgba(0,0,0, 0.05)'};
+    border-radius: 8px;
+    margin: 0 8px;
+    padding: 10px 12px;
     outline: 0;
-  }
-`,
-);
+    width: 4rem;
+    text-align: center;
 
-const StyledButton = styled('button')(
-    ({ theme }) => `
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  border: 1px solid;
-  border-radius: 999px;
-  border-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
-  background: ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
-  color: ${theme.palette.mode === 'dark' ? grey[200] : grey[900]};
-  width: 32px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+&:hover {
+    border-color: ${honeyYellow[400]};
+}
 
-  &:hover {
+&:focus {
+    border-color: ${honeyYellow[400]};
+    box-shadow: 0 0 0 3px ${props => props.theme.palette.mode === 'dark' ? honeyYellow[700] : honeyYellow[200]};
+}
+
+&:focus-visible {
+    outline: 0;
+}
+`;
+
+const StyledButton = styled('button')`
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    order: 1px solid;
+    border-radius: 999px;
+    border-color: ${props => props.theme.palette.mode === 'dark' ? grey[800] : grey[200]};
+    background: ${props => props.theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+    ${props => props.theme.palette.mode === 'dark' ? grey[200] : grey[900]};
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+
+&:hover {
     cursor: pointer;
-    background: ${theme.palette.mode === 'dark' ? honeyYellow[700] : honeyYellow[500]};
-    border-color: ${theme.palette.mode === 'dark' ? honeyYellow[500] : honeyYellow[400]};
+    background: ${props => props.theme.palette.mode === 'dark' ? honeyYellow[700] : honeyYellow[500]};
+    border-color: ${props => props.theme.palette.mode === 'dark' ? honeyYellow[500] : honeyYellow[400]};
     color: ${grey[50]};
-  }
+}
 
-  &.increment {
+&.increment {
     order: 1;
-  }
-`,
-);
+}
+`;

@@ -158,9 +158,6 @@ const Modal = ({ open, handleClose }) => {
             promoCode: rateOption === 'Promo Code' ? ratePromoCode : ''
         };
 
-        console.log(hotelTitle, startDate, endDate, nights, rooms, adults, children, rateOption, ratePromoCode);
-
-        // Fetch available rooms and pass booking details
         fetch("http://localhost:8080/api/hives/find", {
             method: "POST",
             headers: {
@@ -175,11 +172,16 @@ const Modal = ({ open, handleClose }) => {
                 return response.json();
             })
             .then(data => {
-                console.log("Available rooms:", data);
-                // Navigate to the /check-rates page and pass bookingDetails and available rooms as state
-                navigate('/find-hive', { state: { bookingDetails, rooms: data } });
+                navigate('/find-hive', {
+                    state: {
+                        bookingDetails,
+                        rooms: data
+                    }
+                });
             })
             .catch(error => console.error("Error fetching available rooms:", error));
+        
+        handleClose();
     };
 
 
@@ -341,7 +343,31 @@ const Modal = ({ open, handleClose }) => {
 
                         {/* occupancy and rate dialog boxes */}
                         <SetOccupancyDialog onSetOccupancy={handleSetOccupancy} />
-                        <SetRateDialog onSetRate={handleSetRate} />
+                        <SetRateDialog
+                            onSetRate={handleSetRate}
+                            customStyle={{
+                                background: 'none',
+                                color: 'black',
+                                boxShadow: 'none',
+                                textTransform: 'none',
+                                marginLeft: '20px',
+                                fontFamily: 'IBM Plex Sans, sans-serif',
+                                fontWeight: 800,
+                                fontSize: '0.755rem',
+                                textDecoration: 'none',
+                                textDecorationColor: 'transparent',
+                                letterSpacing: '0.1em',
+                                left: '-8px',
+                                '&:hover': {
+                                    background: 'none',
+                                    boxShadow: 'none',
+                                    color: 'black',
+                                    textDecoration: 'underline',
+                                    textDecorationColor: 'black',
+                                    transition: 'text-decoration-color 0.2s ease-in-out',
+                                }
+                            }}
+                        />
                     </div>
                 </div>
             </div>

@@ -10,7 +10,20 @@ import '../styles/AddVacationPackage.css';
 const AddVacationPackage = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { checkInDate, checkOutDate, categoryName, roomType, selectedBedType, selectedSmoking, totalPrice } = location.state || {};
+    const {
+        hotelLocation,
+        checkInDate,
+        checkOutDate,
+        selectedRooms,
+        roomPrices,  // New array of room prices
+        totalPrice,  // New total price
+        rooms,
+        adults,
+        children,
+        rateOption,
+        promoCode,
+        chosenPhoto
+    } = location.state || {};
 
     const [activities, setActivities] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -20,10 +33,16 @@ const AddVacationPackage = () => {
     // Validate dates
     const isValidDate = (date) => date && !isNaN(new Date(date).getTime());
 
+    const numNights = React.useMemo(() => {
+        if (checkInDate && checkOutDate) {
+            return dayjs(checkOutDate).diff(dayjs(checkInDate), 'day');
+        }
+        return 0;
+    }, [checkInDate, checkOutDate]);
+
     useEffect(() => {
+        console.log(location.state);
         const fetchActivities = async () => {
-            console.log('Fetching check-in and check-out dates:', checkInDate, checkOutDate);
-            // Only fetch if the dates are valid
             if (!isValidDate(checkInDate) || !isValidDate(checkOutDate)) {
                 console.error('Invalid check-in or check-out date.');
                 setLoading(false);
@@ -59,18 +78,27 @@ const AddVacationPackage = () => {
 
         // Prepare booking details for checkout
         const bookingDetails = {
+            hotelLocation,
             checkInDate,
             checkOutDate,
-            categoryName,
-            roomType,
-            selectedBedType,
-            selectedSmoking,
+            selectedRooms,
+            roomPrices,
             totalPrice,
-            reservedActivity: selectedActivity || null,
+            rooms,
+            adults,
+            children,
+            rateOption,
+            promoCode,
+            reservedActivity: selectedActivity ? {
+                id: selectedActivity.id,
+                name: selectedActivity.name,
+                price: selectedActivity.price * (adults + children),
+                category: selectedActivity.category,
+            } : null,
             activityDate: selectedActivity ? dayjs(activityDate).format('YYYY-MM-DD') : null,
+            chosenPhoto
         };
 
-        // Redirect to checkout page
         navigate('/checkout', { state: bookingDetails });
     };
 
@@ -78,30 +106,46 @@ const AddVacationPackage = () => {
         return <div>Loading available activities...</div>;
     }
 
+
+
+    // TODO: Add sort by activity category
+
+
+
     return (
         <div className="vacation-package">
-            <h2>Vacation Package Details</h2>
-            <p>Check-in Date: {checkInDate}</p>
-            <p>Check-out Date: {checkOutDate}</p>
-            <p>Category: {categoryName}</p>
-            <p>Room Type: {roomType}</p>
-            <p>Bed Type: {selectedBedType}</p>
-            <p>Smoking: {selectedSmoking ? 'Yes' : 'No'}</p>
-            <p>Total Price: ${totalPrice}</p>
+            <div style={{color: 'black', marginTop: '200px'}}>
+                <h2>Vacation Package Details</h2>
+                <p>Check-in Date: {checkInDate}</p>
+                <p>Check-out Date: {checkOutDate}</p>
+                {selectedRooms?.map((room, index) => (
+                    <div key={index} className="room-details">
+                        <h3>Room {index + 1}</h3>
+                        <p>Category: {room.categoryName}</p>
+                        <p>Room Type: {room.roomType}</p>
+                        <p>Bed Type: {room.selectedBedType}</p>
+                        <p>Smoking: {room.selectedSmoking ? 'Yes' : 'No'}</p>
+                        <p>Room Price: ${room.totalPrice * numNights}</p>
+                        <p>Room Id: {room.roomId}</p>
+                        <p>Adults: {room.adults}</p>
+                        <p>Children: {room.children}</p>
+                        <p>Promo Code: {promoCode}</p>
+                        <p>Rate Option: {rateOption}</p>
+                    </div>
+                ))}
+
+            </div>
 
             <div className="activity-list">
                 <h3>Select an Activity (Optional)</h3>
-                <div
-                    className={`activity-card no-activity ${!selectedActivity ? 'selected' : ''}`}
-                >
+                <div className={`activity-card no-activity ${!selectedActivity ? 'selected' : ''}`}>
                     <h3>No Thanks</h3>
                     <Button
                         variant="outlined"
                         color={!selectedActivity ? 'secondary' : 'primary'}
                         onClick={() => setSelectedActivity(null)}
-                        style={{ marginTop: '10px' }}
                     >
-                        {selectedActivity ? 'Select No Activity' : 'No Thanks'}
+                        No Thanks
                     </Button>
                 </div>
 
@@ -113,12 +157,11 @@ const AddVacationPackage = () => {
                         >
                             <h3>{activity.name}</h3>
                             <p>Category: {activity.category}</p>
-                            <p>Price: ${activity.price}</p>
+                            <p>Price: ${activity.price * (adults + children)}</p>
                             <Button
                                 variant="outlined"
                                 color={selectedActivity?.id === activity.id ? 'secondary' : 'primary'}
                                 onClick={() => setSelectedActivity(activity)}
-                                style={{ marginTop: '10px' }}
                             >
                                 {selectedActivity?.id === activity.id ? 'Selected' : 'Select Activity'}
                             </Button>
@@ -134,7 +177,11 @@ const AddVacationPackage = () => {
                     <DatePicker
                         label="Select Activity Date"
                         value={activityDate}
-                        onChange={(newValue) => setActivityDate(newValue)}
+                        onChange={(newValue) => {
+                            if (newValue) {
+                                setActivityDate(newValue);
+                            }
+                        }}
                         minDate={dayjs(checkInDate)}
                         maxDate={dayjs(checkOutDate)}
                         disablePast

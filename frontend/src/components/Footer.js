@@ -37,7 +37,7 @@ function Footer() {
                 </div>
             </div>
             <div className="footer-bottom">
-                <p>PLEASE GIVE US A GOOD GRADE ERNESTO :)</p>
+                <p>PLEASE GIVE ME A GOOD GRADE ERNESTO :)</p>
             </div>
         </footer>
     );
