@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 public interface ClerkAccessRepository extends JpaRepository<ClerkAccess, Long> {
     @Modifying
     @Transactional
-    @Query("DELETE FROM AdminAccess a WHERE a.email = :email")
+    @Query("DELETE FROM ClerkAccess a WHERE a.email = :email")
     void deleteByEmail(@Param("email") String email);
 
     boolean existsByEmail(String email);
