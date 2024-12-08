@@ -1,12 +1,13 @@
 package com.honey_hotel.backend.service;
 
-import com.honey_hotel.backend.model.Activities;
-import com.honey_hotel.backend.repository.ActivitiesRepository;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.honey_hotel.backend.model.Activities;
+import com.honey_hotel.backend.repository.ActivitiesRepository;
 
 @Service
 public class ActivitiesService {

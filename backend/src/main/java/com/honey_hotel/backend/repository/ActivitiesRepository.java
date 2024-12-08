@@ -1,13 +1,14 @@
 package com.honey_hotel.backend.repository;
 
-import com.honey_hotel.backend.model.Activities;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.honey_hotel.backend.model.Activities;
 
 @Repository
 public interface ActivitiesRepository extends JpaRepository<Activities, Long> {
@@ -18,4 +19,6 @@ public interface ActivitiesRepository extends JpaRepository<Activities, Long> {
     List<Activities> findAvailableActivities(
             @Param("checkInDate") LocalDate checkInDate,
             @Param("checkOutDate") LocalDate checkOutDate);
+
+
 }
