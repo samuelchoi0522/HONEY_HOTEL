@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
-import { Box, TextField, Button, Typography, Grid, Divider, FormControlLabel, Checkbox, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import {
+    Box,
+    TextField,
+    Button,
+    Typography,
+    Grid,
+    Divider,
+    FormControlLabel,
+    Checkbox,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+} from '@mui/material';
 import '../styles/Checkout.css';
-import '../styles/AddVacationPackage.css'
+import '../styles/AddVacationPackage.css';
 import PaymentComponent from '../components/PaymentComponent';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -33,32 +46,21 @@ const Checkout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const methods = useForm({
+        mode: 'onChange', // Tracks real-time form validation state
         defaultValues: {
             firstName: '',
             lastName: '',
             email: '',
             country: '',
-            payment: {
-                checkInDate,
-                checkOutDate,
-                selectedRooms,
-                rooms,
-                adults,
-                children,
-                rateOption,
-                promoCode,
-                reservedActivity,
-                activityDate,
-                accountHolderName: '',
-                cardnumber: '',
-                expiry: '',
-                cvv: '',
-            },
+            cancellationPolicy: false,
+            consent: false,
         },
     });
 
+    const { formState } = methods;
+    const { isValid } = formState;
+
     useEffect(() => {
-        console.log(location.state);
         const checkSession = async () => {
             try {
                 const response = await fetch("http://localhost:8080/auth/check-session", {
@@ -177,7 +179,27 @@ const Checkout = () => {
                 }
             }
 
-            alert("Reservation successful!");
+            // Send email confirmation
+            const emailPayload = {
+                email: data.email,
+                bookingId,
+                hotelLocation,
+                checkInDate,
+                checkOutDate,
+                selectedRooms,
+                finalTotal,
+            };
+
+            const emailResponse = await fetch("http://localhost:8080/api/reservations/send-reservation-email", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(emailPayload),
+            });
+
+            if (!emailResponse.ok) {
+                console.error("Failed to send confirmation email.");
+            }
+
             navigate('/confirmation');
         } catch (error) {
             console.error("Error during reservation:", error);
@@ -233,27 +255,14 @@ const Checkout = () => {
                         <Controller
                             name="firstName"
                             control={methods.control}
-                            render={({ field }) => (
+                            rules={{ required: 'First Name is required' }}
+                            render={({ field, fieldState }) => (
                                 <TextField
                                     {...field}
                                     label="First Name"
                                     fullWidth
-                                    required
-                                    sx={{
-                                        backgroundColor: '#f9f9f9',
-                                        '& .MuiInputBase-root': {
-                                            color: 'black',
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'black',
-                                        },
-                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: 'black',
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: 'black',
-                                        },
-                                    }}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
                                 />
                             )}
                         />
@@ -262,119 +271,63 @@ const Checkout = () => {
                         <Controller
                             name="lastName"
                             control={methods.control}
-                            render={({ field }) => (
+                            rules={{ required: 'Last Name is required' }}
+                            render={({ field, fieldState }) => (
                                 <TextField
                                     {...field}
                                     label="Last Name"
                                     fullWidth
-                                    required
-                                    sx={{
-                                        backgroundColor: '#f9f9f9',
-                                        '& .MuiInputBase-root': {
-                                            color: 'black',
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'black',
-                                        },
-                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: 'black',
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: 'black',
-                                        },
-                                    }}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
                                 />
                             )}
                         />
                     </Grid>
-
-                    {/* Email and Country/Region fields on the same line */}
                     <Grid item xs={12} sm={6}>
                         <Controller
                             name="email"
                             control={methods.control}
-                            render={({ field }) => (
+                            rules={{
+                                required: 'Email is required',
+                                pattern: {
+                                    value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+                                    message: 'Invalid email address',
+                                },
+                            }}
+                            render={({ field, fieldState }) => (
                                 <TextField
                                     {...field}
                                     label="Email Address"
                                     fullWidth
-                                    required
-                                    type="email"
-                                    sx={{
-                                        backgroundColor: '#f9f9f9',
-                                        '& .MuiInputBase-root': {
-                                            color: 'black',
-                                        },
-                                        '& .MuiInputLabel-root': {
-                                            color: 'black',
-                                        },
-                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                            borderColor: 'black',
-                                        },
-                                        '& .MuiInputLabel-root.Mui-focused': {
-                                            color: 'black',
-                                        },
-                                    }}
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
                                 />
                             )}
                         />
                     </Grid>
-
                     <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel
-                                id="country-label"
-                                sx={{
-                                    color: 'black',
-                                    '&.Mui-focused': {
-                                        color: 'black',
-                                    },
-                                }}
-                            >
-                                Country/Region *
-                            </InputLabel>
-                            <Controller
-                                name="country"
-                                control={methods.control}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        labelId="country-label"
-                                        id="country-select"
-                                        label="Country/Region"
-                                        sx={{
-                                            backgroundColor: '#f9f9f9',
-                                            height: '40px',
-                                            '& .MuiInputBase-root': {
-                                                color: 'black',
-                                                height: '40px',
-                                            },
-                                            '& .MuiOutlinedInput-root': {
-                                                borderColor: 'black',
-                                                height: '40px',
-                                            },
-                                            '& .MuiSelect-icon': {
-                                                color: 'black',
-                                                height: '20px',
-                                            },
-                                            '& .MuiOutlinedInput-notchedOutline': {
-                                                height: '42px',
-                                            },
-                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                borderColor: 'black',
-                                                height: '40px',
-                                            },
-                                        }}
-                                    >
+                        <Controller
+                            name="country"
+                            control={methods.control}
+                            rules={{ required: 'Country is required' }}
+                            render={({ field, fieldState }) => (
+                                <FormControl fullWidth error={!!fieldState.error}>
+                                    <InputLabel>Country/Region</InputLabel>
+                                    <Select {...field} label="Country/Region">
                                         <MenuItem value="USA">United States</MenuItem>
                                         <MenuItem value="CAN">Canada</MenuItem>
                                         <MenuItem value="MEX">Mexico</MenuItem>
                                         <MenuItem value="UK">United Kingdom</MenuItem>
                                         <MenuItem value="AUS">Australia</MenuItem>
                                     </Select>
-                                )}
-                            />
-                        </FormControl>
+                                    {fieldState.error && (
+                                        <Typography variant="caption" color="error">
+                                            {fieldState.error.message}
+                                        </Typography>
+                                    )}
+                                </FormControl>
+                            )}
+                        />
                     </Grid>
 
                     {/* Divider */}
@@ -394,39 +347,22 @@ const Checkout = () => {
 
                     {/* Terms & Conditions */}
                     <Grid item xs={12}>
-                        <Typography
-                            variant="h6"
-                            sx={{
-                                color: '#333',
-                                fontWeight: 'bold',
-                                marginBottom: '10px',
-                                fontSize: '18px',
-                            }}
-                        >
-                            TERMS & CONDITIONS
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
                         <FormControlLabel
                             control={
                                 <Controller
                                     name="cancellationPolicy"
                                     control={methods.control}
-                                    render={({ field }) => (
+                                    rules={{ required: true }}
+                                    render={({ field, fieldState }) => (
                                         <Checkbox
                                             {...field}
-                                            sx={{
-                                                color: 'black',
-                                                '&.Mui-checked': {
-                                                    color: 'black',
-                                                },
-                                            }}
-                                            required
+                                            color="primary"
+                                            error={!!fieldState.error}
                                         />
                                     )}
                                 />
                             }
-                            label={<Typography sx={{ color: 'black' }}>I have read and accepted the Cancellation Policy.</Typography>}
+                            label={<Typography>I have read and accepted the Cancellation Policy.</Typography>}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -435,21 +371,21 @@ const Checkout = () => {
                                 <Controller
                                     name="consent"
                                     control={methods.control}
-                                    render={({ field }) => (
+                                    rules={{ required: true }}
+                                    render={({ field, fieldState }) => (
                                         <Checkbox
                                             {...field}
-                                            sx={{
-                                                color: 'black',
-                                                '&.Mui-checked': {
-                                                    color: 'black',
-                                                },
-                                            }}
-                                            required
+                                            color="primary"
+                                            error={!!fieldState.error}
                                         />
                                     )}
                                 />
                             }
-                            label={<Typography sx={{ color: 'black' }}>I consent to Hotel Honey sending me electronic communications so that Honey Hotel can keep me informed of upcoming reservations and exclusive offers.</Typography>}
+                            label={
+                                <Typography>
+                                    I consent to receiving communications from Hotel Honey.
+                                </Typography>
+                            }
                         />
                     </Grid>
 
@@ -460,7 +396,7 @@ const Checkout = () => {
                             color="primary"
                             fullWidth
                             size="large"
-                            className="checkout-button"
+                            disabled={!isValid || isSubmitting}
                             onClick={methods.handleSubmit(handleReserveRoom)}
                             sx={{
                                 marginTop: '20px',

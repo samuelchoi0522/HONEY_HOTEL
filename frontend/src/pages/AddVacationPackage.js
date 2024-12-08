@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
-import Button from '@mui/material/Button';
-import '../styles/AddVacationPackage.css';
+import React, { useState, useEffect, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+    Typography,
+    Button,
+    Card,
+    CardContent,
+    Grid,
+    Box,
+    CircularProgress,
+    TextField,
+} from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 
 const AddVacationPackage = () => {
     const location = useLocation();
@@ -15,14 +22,14 @@ const AddVacationPackage = () => {
         checkInDate,
         checkOutDate,
         selectedRooms,
-        roomPrices,  // New array of room prices
-        totalPrice,  // New total price
+        roomPrices,
+        totalPrice,
         rooms,
         adults,
         children,
         rateOption,
         promoCode,
-        chosenPhoto
+        chosenPhoto,
     } = location.state || {};
 
     const [activities, setActivities] = useState([]);
@@ -30,25 +37,15 @@ const AddVacationPackage = () => {
     const [selectedActivity, setSelectedActivity] = useState(null);
     const [activityDate, setActivityDate] = useState(null);
 
-    // Validate dates
-    const isValidDate = (date) => date && !isNaN(new Date(date).getTime());
-
-    const numNights = React.useMemo(() => {
+    const numNights = useMemo(() => {
         if (checkInDate && checkOutDate) {
-            return dayjs(checkOutDate).diff(dayjs(checkInDate), 'day');
+            return dayjs(checkOutDate).diff(dayjs(checkInDate), "day");
         }
         return 0;
     }, [checkInDate, checkOutDate]);
 
     useEffect(() => {
-        console.log(location.state);
         const fetchActivities = async () => {
-            if (!isValidDate(checkInDate) || !isValidDate(checkOutDate)) {
-                console.error('Invalid check-in or check-out date.');
-                setLoading(false);
-                return;
-            }
-
             try {
                 const response = await fetch(
                     `http://localhost:8080/api/vacations/available?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`
@@ -57,10 +54,10 @@ const AddVacationPackage = () => {
                     const data = await response.json();
                     setActivities(data);
                 } else {
-                    console.error('Failed to fetch activities.');
+                    console.error("Failed to fetch activities.");
                 }
             } catch (error) {
-                console.error('Error fetching activities:', error);
+                console.error("Error fetching activities:", error);
             } finally {
                 setLoading(false);
             }
@@ -69,14 +66,12 @@ const AddVacationPackage = () => {
         fetchActivities();
     }, [checkInDate, checkOutDate]);
 
-    // Handle activity reservation
     const handleReserveActivity = () => {
         if (selectedActivity && !activityDate) {
             alert("Please select an activity date.");
             return;
         }
 
-        // Prepare booking details for checkout
         const bookingDetails = {
             hotelLocation,
             checkInDate,
@@ -89,116 +84,160 @@ const AddVacationPackage = () => {
             children,
             rateOption,
             promoCode,
-            reservedActivity: selectedActivity ? {
-                id: selectedActivity.id,
-                name: selectedActivity.name,
-                price: selectedActivity.price * (adults + children),
-                category: selectedActivity.category,
-            } : null,
-            activityDate: selectedActivity ? dayjs(activityDate).format('YYYY-MM-DD') : null,
-            chosenPhoto
+            reservedActivity: selectedActivity
+                ? {
+                    id: selectedActivity.id,
+                    name: selectedActivity.name,
+                    price: selectedActivity.price * (adults + children),
+                    category: selectedActivity.category,
+                }
+                : null,
+            activityDate: selectedActivity
+                ? dayjs(activityDate).format("YYYY-MM-DD")
+                : null,
+            chosenPhoto,
         };
 
-        navigate('/checkout', { state: bookingDetails });
+        navigate("/checkout", { state: bookingDetails });
     };
 
     if (loading) {
-        return <div>Loading available activities...</div>;
+        return (
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                }}
+            >
+                <CircularProgress />
+            </Box>
+        );
     }
 
-
-
-    // TODO: Add sort by activity category
-
-
-
     return (
-        <div className="vacation-package">
-            <div style={{color: 'black', marginTop: '200px'}}>
-                <h2>Vacation Package Details</h2>
-                <p>Check-in Date: {checkInDate}</p>
-                <p>Check-out Date: {checkOutDate}</p>
-                {selectedRooms?.map((room, index) => (
-                    <div key={index} className="room-details">
-                        <h3>Room {index + 1}</h3>
-                        <p>Category: {room.categoryName}</p>
-                        <p>Room Type: {room.roomType}</p>
-                        <p>Bed Type: {room.selectedBedType}</p>
-                        <p>Smoking: {room.selectedSmoking ? 'Yes' : 'No'}</p>
-                        <p>Room Price: ${room.totalPrice * numNights}</p>
-                        <p>Room Id: {room.roomId}</p>
-                        <p>Adults: {room.adults}</p>
-                        <p>Children: {room.children}</p>
-                        <p>Promo Code: {promoCode}</p>
-                        <p>Rate Option: {rateOption}</p>
-                    </div>
-                ))}
+        <Box
+            sx={{
+                padding: "20px",
+                maxWidth: "1200px",
+                margin: "0 auto",
+                marginTop: "50px",
+            }}
+        >
+            <Typography variant="h4" gutterBottom>
+                Vacation Package Details
+            </Typography>
 
-            </div>
+            <Box mb={3}>
+                <Typography variant="body1">
+                    <strong>Check-in Date:</strong> {checkInDate}
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Check-out Date:</strong> {checkOutDate}
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Hotel Location:</strong> {hotelLocation || "N/A"}
+                </Typography>
+            </Box>
 
-            <div className="activity-list">
-                <h3>Select an Activity (Optional)</h3>
-                <div className={`activity-card no-activity ${!selectedActivity ? 'selected' : ''}`}>
-                    <h3>No Thanks</h3>
-                    <Button
-                        variant="outlined"
-                        color={!selectedActivity ? 'secondary' : 'primary'}
+            {selectedRooms?.map((room, index) => (
+                <Card
+                    key={index}
+                    sx={{
+                        mb: 3,
+                        boxShadow: 3,
+                        p: 2,
+                        borderRadius: 2,
+                    }}
+                >
+                    <CardContent>
+                        <Typography variant="h6" gutterBottom>
+                            Room {index + 1} Details
+                        </Typography>
+                        <Typography variant="body1">Category: {room.categoryName}</Typography>
+                        <Typography variant="body1">Room Type: {room.roomType}</Typography>
+                        <Typography variant="body1">
+                            Bed Type: {room.selectedBedType}
+                        </Typography>
+                        <Typography variant="body1">
+                            Smoking: {room.selectedSmoking ? "Yes" : "No"}
+                        </Typography>
+                        <Typography variant="body1">
+                            Room Price: ${room.totalPrice * numNights}
+                        </Typography>
+                    </CardContent>
+                </Card>
+            ))}
+
+            <Typography variant="h5" gutterBottom>
+                Select an Activity (Optional)
+            </Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                    <Card
                         onClick={() => setSelectedActivity(null)}
+                        sx={{
+                            p: 2,
+                            cursor: "pointer",
+                            boxShadow: selectedActivity === null ? 6 : 3,
+                            backgroundColor: selectedActivity === null ? "#f0f8ff" : "#fff",
+                        }}
                     >
-                        No Thanks
-                    </Button>
-                </div>
-
-                {activities.length > 0 ? (
-                    activities.map(activity => (
-                        <div
-                            key={activity.id}
-                            className={`activity-card ${selectedActivity?.id === activity.id ? 'selected' : ''}`}
+                        <Typography>No Thanks</Typography>
+                    </Card>
+                </Grid>
+                {activities.map((activity) => (
+                    <Grid item xs={12} sm={6} md={4} key={activity.id}>
+                        <Card
+                            onClick={() => setSelectedActivity(activity)}
+                            sx={{
+                                p: 2,
+                                cursor: "pointer",
+                                boxShadow:
+                                    selectedActivity?.id === activity.id ? 6 : 3,
+                                backgroundColor:
+                                    selectedActivity?.id === activity.id
+                                        ? "#f0f8ff"
+                                        : "#fff",
+                            }}
                         >
-                            <h3>{activity.name}</h3>
-                            <p>Category: {activity.category}</p>
-                            <p>Price: ${activity.price * (adults + children)}</p>
-                            <Button
-                                variant="outlined"
-                                color={selectedActivity?.id === activity.id ? 'secondary' : 'primary'}
-                                onClick={() => setSelectedActivity(activity)}
-                            >
-                                {selectedActivity?.id === activity.id ? 'Selected' : 'Select Activity'}
-                            </Button>
-                        </div>
-                    ))
-                ) : (
-                    <p>No activities available for the selected dates.</p>
-                )}
-            </div>
+                            <Typography variant="h6">{activity.name}</Typography>
+                            <Typography>Category: {activity.category}</Typography>
+                            <Typography>
+                                Price: ${activity.price * (adults + children)}
+                            </Typography>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
 
             {selectedActivity && (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                        label="Select Activity Date"
-                        value={activityDate}
-                        onChange={(newValue) => {
-                            if (newValue) {
-                                setActivityDate(newValue);
-                            }
-                        }}
-                        minDate={dayjs(checkInDate)}
-                        maxDate={dayjs(checkOutDate)}
-                        disablePast
-                        renderInput={(params) => <input {...params} />}
-                    />
-                </LocalizationProvider>
+                <Box mt={3}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            label="Select Activity Date"
+                            value={activityDate}
+                            onChange={(newValue) => setActivityDate(newValue)}
+                            minDate={dayjs(checkInDate)}
+                            maxDate={dayjs(checkOutDate)}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
+                </Box>
             )}
 
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleReserveActivity}
-                style={{ marginTop: '20px' }}
-            >
-                {selectedActivity ? 'Reserve Activity' : 'Proceed Without Activity'}
-            </Button>
-        </div>
+            <Box mt={4}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleReserveActivity}
+                    fullWidth
+                >
+                    {selectedActivity ? "Reserve Activity" : "Proceed Without Activity"}
+                </Button>
+            </Box>
+        </Box>
     );
 };
 

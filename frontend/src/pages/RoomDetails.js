@@ -255,13 +255,12 @@ const RoomDetails = () => {
                         </select>
                     </div>
 
-                    <p style={{ color: 'black' }}>Total: ${room.totalPrice}</p>
-                    <p style={{ color: 'black' }}>Room ID: {room.roomId}</p>
+                    <p style={{ color: 'black' }}>Room Price: ${room.totalPrice}</p>
                 </div>
             ))}
 
 
-            <p style={{ color: 'black' }}>Subtotal: ${subtotal * numNights}</p>
+            <p style={{ color: 'black' }}>Subtotal: ${subtotal} x {numNights} nights = ${subtotal * numNights}</p>
 
             <button onClick={handleReserve}>Reserve</button>
         </div>
