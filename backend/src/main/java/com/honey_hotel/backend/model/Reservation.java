@@ -189,12 +189,4 @@ public class Reservation {
     public void setCheckedIn(boolean checkedIn) {
         this.checkedIn = checkedIn;
     }
-    
-    public ActivityReservation getActivityReservation() {
-        return activityReservation;
-    }
-
-    public void setActivityReservation(ActivityReservation activityReservation) {
-        this.activityReservation = activityReservation;
-    }
 }

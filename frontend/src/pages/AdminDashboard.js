@@ -163,7 +163,8 @@ const AdminDashboard = () => {
 
     const handleUsersDialogOpen = (type) => {
         console.log("Opening user dialog with type:", type); // Debugging log
-        if (type === "view") {
+        if (type === "view" && menuContext.data) {
+            navigate(`/admin-dashboard/view/user/${menuContext.data.id}`);
             return;
         }
         setSelectedUser(menuContext.data); // Set the user from the menu context
