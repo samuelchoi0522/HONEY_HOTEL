@@ -27,7 +27,7 @@ public class ActivityReservationService {
     private ActivitiesRepository activitiesRepository;
 
     public boolean createActivityReservation(AppUser user, Long hotelReservationId, Integer activityId,
-            LocalDate activityDate) {
+                                             LocalDate activityDate) {
         try {
             // Fetch the Reservation and Activities entities from the database
             Reservation reservation = reservationRepository.findById(hotelReservationId).orElse(null);

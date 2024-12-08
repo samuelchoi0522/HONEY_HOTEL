@@ -7,6 +7,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
 public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
     @Override
@@ -14,7 +16,7 @@ public class DotenvEnvironmentPostProcessor implements EnvironmentPostProcessor 
         String projectDirectory = System.getProperty("user.dir");
 
         Dotenv dotenv = Dotenv.configure()
-                .directory(projectDirectory) 
+                .directory(projectDirectory)
                 .load();
 
         dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
