@@ -313,7 +313,10 @@ const Checkout = () => {
                             render={({ field, fieldState }) => (
                                 <FormControl fullWidth error={!!fieldState.error}>
                                     <InputLabel>Country/Region</InputLabel>
-                                    <Select {...field} label="Country/Region">
+                                    <Select {...field}
+                                        label="Country/Region"
+                                        sx={{ height: '40px', fontSize: '14px' }}
+                                    >
                                         <MenuItem value="USA">United States</MenuItem>
                                         <MenuItem value="CAN">Canada</MenuItem>
                                         <MenuItem value="MEX">Mexico</MenuItem>
@@ -362,7 +365,7 @@ const Checkout = () => {
                                     )}
                                 />
                             }
-                            label={<Typography>I have read and accepted the Cancellation Policy.</Typography>}
+                            label={<Typography style={{ color: 'black' }}>I have read and accepted the Cancellation Policy.</Typography>}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -382,7 +385,7 @@ const Checkout = () => {
                                 />
                             }
                             label={
-                                <Typography>
+                                <Typography style={{ color: 'black' }}>
                                     I consent to receiving communications from Hotel Honey.
                                 </Typography>
                             }
