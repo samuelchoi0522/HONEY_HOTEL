@@ -8,6 +8,10 @@ import Visibility from "@mui/icons-material/Visibility";
 import AccountNavbar from "../components/AccountNavbar";
 import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from "react-loader-spinner";
+import dayjs from "dayjs";
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'; // Import the plugin
+
+dayjs.extend(isSameOrAfter);
 
 const AccountPage = () => {
     const [formData, setFormData] = useState({
@@ -204,11 +208,12 @@ const AccountPage = () => {
     };
 
     const upcomingReservations = reservations.filter((reservation) =>
-        new Date(reservation.checkInDate) >= new Date()
+        dayjs(reservation.checkInDate).isSameOrAfter(dayjs(), "day")
     );
     const pastReservations = reservations.filter((reservation) =>
-        new Date(reservation.checkOutDate) < new Date()
+        dayjs(reservation.checkOutDate).isBefore(dayjs(), "day")
     );
+
 
     return (
         <div className="account-page">
@@ -232,19 +237,13 @@ const AccountPage = () => {
                             </div>
                         ) : (
                             Object.entries(groupedReservations).map(([bookingId, reservations]) => (
-                                new Date(reservations[0].checkOutDate) >= new Date() && (
+                                dayjs(reservations[0].checkOutDate).isSameOrAfter(dayjs(), "day") && (
                                     <div className="account-booking-box" key={bookingId}>
                                         {/* Booking Details Section */}
                                         <div className="account-booking-info-top">
                                             <div className="account-checkin-checkout">
-                                                <p style={{ paddingLeft: "20px" }}>
-                                                    CHECK-IN <br />
-                                                    <strong>{new Date(reservations[0].checkInDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong>
-                                                </p>
-                                                <p>
-                                                    CHECK-OUT <br />
-                                                    <strong>{new Date(reservations[0].checkOutDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong>
-                                                </p>
+                                                <p>CHECK-IN <br /><strong>{dayjs(reservations[0].checkInDate).format('MMMM D, YYYY')}</strong></p>
+                                                <p>CHECK-OUT <br /><strong>{dayjs(reservations[0].checkOutDate).format('MMMM D, YYYY')}</strong></p>
                                             </div>
                                             <p className="account-booking-id">Booking ID: {bookingId}</p>
                                             <p className="account-total-price">

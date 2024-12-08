@@ -20,6 +20,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import ReservationDetails from './pages/ReservationDetails';
 import UserDetails from './pages/UserDetails';
 import InvalidPage from './pages/InvalidPage';
+import Confirmation from './pages/Confirmation';
 
 import './styles/App.css';
 
@@ -60,6 +61,7 @@ function Layout() {
                 <Route path="/admin-dashboard/view/:id/:bookingId" element={<ReservationDetails />} />
                 <Route path="/admin-dashboard/view/user/:id" element={<UserDetails />} />
                 <Route path="/invalid-page" element={<InvalidPage />} />
+                <Route path="/confirmation" element={<Confirmation />} />
 
                 <Route path="*" element={<Navigate to="/invalid-page" />} />
             </Routes>
