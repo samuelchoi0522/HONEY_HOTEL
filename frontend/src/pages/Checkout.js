@@ -260,6 +260,21 @@ const Checkout = () => {
                                 <TextField
                                     {...field}
                                     label="First Name"
+                                    sx={{
+                                        backgroundColor: '#f9f9f9',
+                                        '& .MuiInputBase-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: 'black',
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'black',
+                                        },
+                                    }}
                                     fullWidth
                                     error={!!fieldState.error}
                                     helperText={fieldState.error?.message}
@@ -267,6 +282,7 @@ const Checkout = () => {
                             )}
                         />
                     </Grid>
+
                     <Grid item xs={12} sm={6}>
                         <Controller
                             name="lastName"
@@ -276,6 +292,21 @@ const Checkout = () => {
                                 <TextField
                                     {...field}
                                     label="Last Name"
+                                    sx={{
+                                        backgroundColor: '#f9f9f9',
+                                        '& .MuiInputBase-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: 'black',
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'black',
+                                        },
+                                    }}
                                     fullWidth
                                     error={!!fieldState.error}
                                     helperText={fieldState.error?.message}
@@ -298,6 +329,21 @@ const Checkout = () => {
                                 <TextField
                                     {...field}
                                     label="Email Address"
+                                    sx={{
+                                        backgroundColor: '#f9f9f9',
+                                        '& .MuiInputBase-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiInputLabel-root': {
+                                            color: 'black',
+                                        },
+                                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                            borderColor: 'black',
+                                        },
+                                        '& .MuiInputLabel-root.Mui-focused': {
+                                            color: 'black',
+                                        },
+                                    }}
                                     fullWidth
                                     error={!!fieldState.error}
                                     helperText={fieldState.error?.message}
@@ -312,10 +358,43 @@ const Checkout = () => {
                             rules={{ required: 'Country is required' }}
                             render={({ field, fieldState }) => (
                                 <FormControl fullWidth error={!!fieldState.error}>
-                                    <InputLabel>Country/Region</InputLabel>
+                                    <InputLabel
+                                        sx={{
+                                            marginTop: '-7px',
+                                            color: 'black',
+                                            '&.Mui-focused': {
+                                                color: 'black',
+                                            },
+                                        }}
+                                    >Country/Region
+                                    </InputLabel>
                                     <Select {...field}
-                                        label="Country/Region"
-                                        sx={{ height: '40px', fontSize: '14px' }}
+                                            label="Country/Region"
+                                            sx={{
+                                                height: '40px',
+                                                fontSize: '14px',
+                                                backgroundColor: '#f9f9f9',
+                                                color: 'black',
+                                                '& .MuiInputBase-root': {
+                                                    color: 'black',
+                                                    height: '40px',
+                                                },
+                                                '& .MuiOutlinedInput-root': {
+                                                    borderColor: 'black',
+                                                    height: '40px',
+                                                },
+                                                '& .MuiSelect-icon': {
+                                                    color: 'black',
+                                                    height: '20px',
+                                                },
+                                                '& .MuiOutlinedInput-notchedOutline': {
+                                                    height: '42px',
+                                                },
+                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                    borderColor: 'black',
+                                                    height: '40px',
+                                                },
+                                    }}
                                     >
                                         <MenuItem value="USA">United States</MenuItem>
                                         <MenuItem value="CAN">Canada</MenuItem>
@@ -332,6 +411,7 @@ const Checkout = () => {
                             )}
                         />
                     </Grid>
+
 
                     {/* Divider */}
                     <Grid item xs={12}>

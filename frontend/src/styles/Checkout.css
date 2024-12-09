@@ -1,18 +1,17 @@
 .checkout-page {
     padding: 50px;
-    max-width: 700px;
     margin: 50px auto;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     font-family: 'Roboto', sans-serif;
+    color: black;
 }
 
 .checkout-h2 {
     text-align: center;
     font-size: 24px;
     margin-bottom: 30px;
-    color: #333;
 }
 
 .checkout-form-group {
@@ -55,8 +54,4 @@
     margin-top: 40px;
     font-size: 12px;
     color: #666;
-}
-
-.css-1vinq6g-MuiFormLabel-root-MuiInputLabel-root{
-    margin-top: -6px !important;
 }

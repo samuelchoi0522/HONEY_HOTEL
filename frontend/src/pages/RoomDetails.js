@@ -82,7 +82,7 @@ const RoomDetails = () => {
             const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
             setNumNights(nights);
         }
-        
+
         const fetchReservedRooms = async () => {
             try {
                 const response = await fetch(
@@ -156,7 +156,7 @@ const RoomDetails = () => {
                         updatedRooms[i] = {
                             ...updatedRooms[i],
                             roomId: nextAvailableOption.id,
-                            selectedBedType: nextAvailableOption.bedType, 
+                            selectedBedType: nextAvailableOption.bedType,
                             selectedSmoking: nextAvailableOption.smokingAllowed,
                             selectedPriceCategory: nextAvailableOption.priceCategory,
                             totalPrice: (nextAvailableOption.price * (1 - discountRate)).toFixed(2),
@@ -198,7 +198,6 @@ const RoomDetails = () => {
                 totalPrice: bookingDetails.totalPrice,
                 discountRate: bookingDetails.discountRate,
                 chosenPhoto: bookingDetails.chosenPhoto,
-                totalPrice,
                 roomPrices,
             },
         });
@@ -218,8 +217,9 @@ const RoomDetails = () => {
                     <h3>Room {index + 1} Options:</h3>
 
                     <div className="room-option">
-                        <label>Bed Type:</label>
+                        <label>Bed Type: </label>
                         <select
+                            className="room-details.select"
                             value={room.selectedBedType}
                             onChange={(e) => handleRoomChange(index, 'selectedBedType', e.target.value)}
                         >
@@ -230,8 +230,9 @@ const RoomDetails = () => {
                     </div>
 
                     <div className="room-option">
-                        <label>Smoking Status:</label>
+                        <label>Smoking Status: </label>
                         <select
+                            className="room-details.select"
                             value={room.selectedSmoking}
                             onChange={(e) => handleRoomChange(index, 'selectedSmoking', e.target.value === 'true')}
                         >
@@ -244,8 +245,9 @@ const RoomDetails = () => {
                     </div>
 
                     <div className="room-option">
-                        <label>Price Category:</label>
+                        <label>Price Category: </label>
                         <select
+                            className="room-details.select"
                             value={room.selectedPriceCategory}
                             onChange={(e) => handleRoomChange(index, 'selectedPriceCategory', e.target.value)}
                         >
@@ -262,7 +264,7 @@ const RoomDetails = () => {
 
             <p style={{ color: 'black' }}>Subtotal: ${subtotal} x {numNights} nights = ${subtotal * numNights}</p>
 
-            <button onClick={handleReserve}>Reserve</button>
+            <button className="room-details-button" onClick={handleReserve}>Reserve</button>
         </div>
     );
 };
