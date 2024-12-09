@@ -358,7 +358,15 @@ const Checkout = () => {
                             rules={{ required: 'Country is required' }}
                             render={({ field, fieldState }) => (
                                 <FormControl fullWidth error={!!fieldState.error}>
-                                    <InputLabel>Country/Region
+                                    <InputLabel
+                                        sx={{
+                                            marginTop: '-7px',
+                                            color: 'black',
+                                            '&.Mui-focused': {
+                                                color: 'black',
+                                            },
+                                        }}
+                                    >Country/Region
                                     </InputLabel>
                                     <Select {...field}
                                             label="Country/Region"
@@ -367,6 +375,25 @@ const Checkout = () => {
                                                 fontSize: '14px',
                                                 backgroundColor: '#f9f9f9',
                                                 color: 'black',
+                                                '& .MuiInputBase-root': {
+                                                    color: 'black',
+                                                    height: '40px',
+                                                },
+                                                '& .MuiOutlinedInput-root': {
+                                                    borderColor: 'black',
+                                                    height: '40px',
+                                                },
+                                                '& .MuiSelect-icon': {
+                                                    color: 'black',
+                                                    height: '20px',
+                                                },
+                                                '& .MuiOutlinedInput-notchedOutline': {
+                                                    height: '42px',
+                                                },
+                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                    borderColor: 'black',
+                                                    height: '40px',
+                                                },
                                     }}
                                     >
                                         <MenuItem value="USA">United States</MenuItem>
