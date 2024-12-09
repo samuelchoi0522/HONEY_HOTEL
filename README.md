@@ -100,7 +100,9 @@ npm start
 | `/add-vacation-package` | Admin page for adding special vacation packages and promotions to the system.                         |
 | `/checkout`             | Checkout page for users to review their booking details and confirm payment.                          |
 | `/admin-dashboard`      | Admin dashboard to view, edit, and manage bookings, rooms, and user accounts (restricted access).      |
-
+| `/admin-dashboard/view/:id/:bookingId`      | Page for clerks and administrators to view details on a specific bookingId.      |
+| `/admin-dashboard/view/user/:id`      | Page for clerks and administrators to specific details of a user and view reservations associated with the user.      |
+| `/invalid-page`             | 404 Page that displays when authorized users try and access /admin-dashboard or try and access unimplemented pages.      |
 
 
 [//]: #
