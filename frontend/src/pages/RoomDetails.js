@@ -82,7 +82,7 @@ const RoomDetails = () => {
             const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
             setNumNights(nights);
         }
-        
+
         const fetchReservedRooms = async () => {
             try {
                 const response = await fetch(
@@ -156,7 +156,7 @@ const RoomDetails = () => {
                         updatedRooms[i] = {
                             ...updatedRooms[i],
                             roomId: nextAvailableOption.id,
-                            selectedBedType: nextAvailableOption.bedType, 
+                            selectedBedType: nextAvailableOption.bedType,
                             selectedSmoking: nextAvailableOption.smokingAllowed,
                             selectedPriceCategory: nextAvailableOption.priceCategory,
                             totalPrice: (nextAvailableOption.price * (1 - discountRate)).toFixed(2),
