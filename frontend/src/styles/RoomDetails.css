@@ -62,3 +62,10 @@ footer {
     bottom: 0;
     left: 0;
 }
+
+.room-details h2,
+.room-details p,
+.room-details .room-options h3,
+.room-details .room-option label {
+    color: black;
+}
