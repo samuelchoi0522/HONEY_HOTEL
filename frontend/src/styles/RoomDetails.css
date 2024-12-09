@@ -27,7 +27,7 @@
     border-color: gold;
 }
 
-select {
+.room-details.select {
     border-radius: 5px;
     padding: 5px;
     font-size: 14px;
@@ -35,7 +35,7 @@ select {
     width: 100%;
 }
 
-select:focus {
+.room-details.select:focus {
     outline: none;
     border-color: gold;
 }
