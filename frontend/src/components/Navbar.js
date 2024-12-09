@@ -78,7 +78,7 @@ function Navbar() {
             </Link>
 
             <div className="navbar-links">
-                <Link to="/view-all-hotels" className="navbar-link-items">
+                <Link to="/" className="navbar-link-items">
                     HOTELS & RESORTS
                 </Link>
                 <Link to="/amenities" className="navbar-link-items">

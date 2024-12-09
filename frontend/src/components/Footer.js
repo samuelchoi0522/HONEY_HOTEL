@@ -21,7 +21,7 @@ function Footer() {
                 <div className="footer-column">
                     <h3>Reservations</h3>
                     <Link to="/make-reservation"><strong>MAKE A RESERVATION</strong></Link>
-                    <Link to="/find-reservation"><strong>FIND YOUR RESERVATION</strong></Link>
+                    <Link to="/account"><strong>FIND YOUR RESERVATION</strong></Link>
                 </div>
                 <div className="footer-column">
                     <h3>Social Media</h3>
@@ -37,7 +37,7 @@ function Footer() {
                 </div>
             </div>
             <div className="footer-bottom">
-                <p>PLEASE GIVE ME A GOOD GRADE ERNESTO :)</p>
+                <p>PLEASE GIVE US A GOOD GRADE ERNESTO :)</p>
             </div>
         </footer>
     );
