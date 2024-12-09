@@ -40,7 +40,7 @@ select:focus {
     border-color: gold;
 }
 
-button {
+.room-details-button {
     background-color: #FFD700;
     border: none;
     padding: 10px 20px;
