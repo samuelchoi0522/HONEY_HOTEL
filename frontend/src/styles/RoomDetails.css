@@ -1,64 +1,71 @@
 .room-details {
-    top: 20px;
-    max-width: 800px;
-    margin: 100px auto;
+    position: relative;
     padding: 20px;
-    background-color: #f7f7f7;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.room-details h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 16px;
+    background: white;
+    box-shadow: inset 0px 0px 300px rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    width: 100%;
     text-align: center;
-}
-
-.room-options {
-    margin-bottom: 24px;
-}
-
-.room-options h3 {
-    font-size: 20px;
-    color: #444;
-    margin-bottom: 12px;
+    margin-top: 70px;
+    box-sizing: border-box;
+    flex-grow: 1;
 }
 
 .room-option {
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
-.room-option label {
+/* Gold outline when a box or select field is selected */
+.room-option:focus-within select,
+.room-option:focus-within input,
+.room-option:focus-within textarea {
+    outline: 1px solid gold;
+    border-color: gold;
+}
+
+.room-details.select {
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.room-details.select:focus {
+    outline: none;
+    border-color: gold;
+}
+
+.room-details-button {
+    background-color: #FFD700;
+    border: none;
+    padding: 10px 20px;
     font-size: 16px;
-    color: #333;
     cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
 }
 
-.room-option input[type="radio"] {
-    margin-right: 8px;
+footer {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    left: 0;
 }
 
-.total {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px;
-    background-color: #fff;
-    border-top: 2px solid #ddd;
-    font-size: 18px;
-}
-
-.total h3 {
-    font-size: 20px;
-    color: #222;
-}
-
-
-
-.css-noxty9{
-    margin-top: 150px !important;
-    margin-bottom: 100px !important;
+.room-details h2,
+.room-details p,
+.room-details .room-options h3,
+.room-details .room-option label {
+    color: black;
 }

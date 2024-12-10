@@ -3,15 +3,15 @@
 ## Group Members
 
 - Samuel Choi
--- Project Manager  
+   - Project Manager  
 - Eugene Pak
--- Quality Assurance Engineer
+   - Quality Assurance Engineer
 - Kirby Dyson
--- Design Engineer
+   - Design Engineer
 - Candor Miller
--- Requirements Engineer
+   - Requirements Engineer
 - Aiden Grajo
--- Project Librarian
+   - Project Librarian
 
 ## Tech
 
@@ -86,6 +86,64 @@ npm start
 * **Username**: `honeyhotelinfo@gmail.com` 
 * **Password**: `honeyhotel123`
 
+### Troubleshooting
+
+#### **Client Issues**
+
+#### 1. **Error**: `sh: react-scripts: command not found`
+   - **Cause**: The `react-scripts` package is not installed because `npm install` was not run before `npm start`.
+   - **Solution**:
+     - Navigate to the `frontend` directory:
+       ```sh
+       cd HONEY_HOTEL/frontend
+       ```
+     - Install dependencies:
+       ```sh
+       npm install
+       ```
+     - Start the frontend server:
+       ```sh
+       npm start
+       ```
+
+
+#### **Server Issues**
+
+#### 1. **Error**: `IllegalState Failed to load ApplicationContext`
+   - **Cause**: The `.env` file is missing in the `backend` folder directory.
+   - **Solution**:
+     - Navigate to the `backend` directory:
+       ```sh
+       cd HONEY_HOTEL/backend
+       ```
+     - Create a `.env` file and add the required environment variables. Example:
+       ```env
+       DB_USERNAME=xxxxxxxxxxxx
+       DB_PASSWORD=xxxxxxxxxxxx
+
+       EMAIL_USERNAME=xxxxxxxxxxxx@gmail.com
+       EMAIL_PASSWORD=xxxx xxxx xxxx xxxx
+       ```
+     - Restart the server:
+       ```sh
+       mvn clean install
+       mvn spring-boot:run
+       ```
+#### **2. Error**: `Database connection failed`
+- **Cause**: The database credentials in the `.env` file are incorrect or the PostgreSQL server is not running.
+- **Solution**:
+  - Check the `.env` file in the `backend` directory and ensure the credentials match your database setup. Example:
+    ```env
+    DB_USERNAME=correct_username
+    DB_PASSWORD=correct_password
+    ```
+  - Ensure the PostgreSQL server is running:
+    ```sh
+    sudo service postgresql start
+    ```
+
+
+
 ### Web Pages
 
 | **Page URL**            | **Page Description**                                                                                   |
@@ -103,6 +161,8 @@ npm start
 | `/admin-dashboard/view/:id/:bookingId`      | Page for clerks and administrators to view details on a specific bookingId.      |
 | `/admin-dashboard/view/user/:id`      | Page for clerks and administrators to specific details of a user and view reservations associated with the user.      |
 | `/invalid-page`             | 404 Page that displays when unauthorized users try and access /admin-dashboard or try and access unimplemented pages.      |
+
+
 
 
 [//]: #
