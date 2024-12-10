@@ -1,7 +1,12 @@
     HONEY HOTEL ITERATION 2 SCREEN RECORDING.mov
 backend/.env
+frontend/.env
 backend/src/test/resources/application-test.properties
+<<<<<<< HEAD
 .env
 backend/src/main/java/com/honey_hotel/backend/logs/find_hives_logs.txt
 backend/src/main/java/com/honey_hotel/backend/logs/find_hives_logs 1.txt
 backend/src/main/java/com/honey_hotel/backend/logs/find_hives_logs.txt.lck
+=======
+.env
+>>>>>>> a0bdd74 (Fixing Git Guardian Issue Hopefully)
