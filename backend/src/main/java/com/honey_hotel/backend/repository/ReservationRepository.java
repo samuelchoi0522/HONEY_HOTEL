@@ -29,7 +29,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findByUserId(Long userId);
 
 
-    boolean existsByUserId(Long userId);
 
     /**
      * Finds all reservations that fall within the given date range

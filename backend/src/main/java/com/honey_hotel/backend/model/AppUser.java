@@ -56,7 +56,6 @@ public class AppUser implements Serializable {
      * The email address of user
      */
     private String email;
-    private String password_hash;
 
     /**
      * The hashed password for the user

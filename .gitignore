@@ -3,6 +3,7 @@ backend/.env
 frontend/.env
 backend/src/test/resources/application-test.properties
 <<<<<<< HEAD
+<<<<<<< HEAD
 .env
 backend/src/main/java/com/honey_hotel/backend/logs/find_hives_logs.txt
 backend/src/main/java/com/honey_hotel/backend/logs/find_hives_logs 1.txt
@@ -10,3 +11,6 @@ backend/src/main/java/com/honey_hotel/backend/logs/find_hives_logs.txt.lck
 =======
 .env
 >>>>>>> a0bdd74 (Fixing Git Guardian Issue Hopefully)
+=======
+.env
+>>>>>>> 95a6367af686bd4929afa53ff7459cd02a2c7ba1
