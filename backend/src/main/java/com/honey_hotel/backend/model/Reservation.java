@@ -33,7 +33,6 @@ public class Reservation {
     @Column(name = "check_out_date", nullable = false)
     private LocalDate checkOutDate;
 
-<<<<<<< HEAD
     /**
      * The room associated with the reservation
      */
@@ -54,15 +53,7 @@ public class Reservation {
      *
      * @return reservation ID
      */
-=======
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room room;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private AppUser user;
-
+    
     @Column(name = "adults", nullable = false)
     private int adults;
 
@@ -93,7 +84,6 @@ public class Reservation {
     @Column(name = "checked_in")
     private boolean checkedIn;
 
->>>>>>> 61dad834af4f6f2b9fb693043a903f313e256c90
     public Long getId() {
         return id;
     }
