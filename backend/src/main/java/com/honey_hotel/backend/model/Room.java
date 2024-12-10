@@ -119,5 +119,9 @@ public class Room {
     public void setPriceCategory(String priceCategory) {
         this.priceCategory = priceCategory;
     }
+
+    public void setRoomType(String deluxe) {
+
+    }
     /////// price category(economy, comfort, etc.)
 }

@@ -31,7 +31,7 @@ public class ClerkTest {
 
     @Test
     void testIsClerk() {
-        String email = "test@gmail.com";
+        String email = "kirby@gmail.com";
 
         when(clerkAccessRepository.existsByEmail(email)).thenReturn(true);
 
@@ -55,7 +55,7 @@ public class ClerkTest {
 
     @Test
     void testCheckEmail() {
-        String email = "test@gmail.com";
+        String email = "kirby@gmail.com";
 
         when(clerkAccessRepository.existsByEmail(email)).thenReturn(false);
 
