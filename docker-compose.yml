@@ -7,10 +7,14 @@ services:
       - "8080:8080"
     env_file:
       - ./backend/.env
+    volumes:
+      - ./backend/.env:/app/.env
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/honey_hotel_db
-      - SPRING_DATASOURCE_USERNAME=admin
-      - SPRING_DATASOURCE_PASSWORD=honeyhotel123
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_MAIL_USERNAME=${EMAIL_USERNAME}
+      - SPRING_MAIL_PASSWORD=${EMAIL_PASSWORD}
     depends_on:
       - postgres
 
@@ -21,6 +25,8 @@ services:
       - "3000:80"
     env_file:
       - ./frontend/.env
+    environment:
+      - REACT_APP_MUI_X_LICENSEKEY=${REACT_APP_MUI_X_LICENSEKEY}
     depends_on:
       - backend
 
@@ -28,8 +34,8 @@ services:
     image: postgres:15-alpine
     container_name: postgres_container
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: honeyhotel123
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: honey_hotel_db
     ports:
       - "5432:5432"

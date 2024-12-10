@@ -176,6 +176,9 @@ function Login() {
                     <p className="register-link" style={{ fontWeight: 100, fontSize: "1.2em" }}>
                         Don't have an account? <Link to="/register">Register</Link>
                     </p>
+                    <p className="forgot-link" style={{ fontWeight: 100, fontSize: "1.2em" }}>
+                        <Link to="/forgot-password">Forgot Password?</Link>
+                    </p>
                 </form>
             </div>
 

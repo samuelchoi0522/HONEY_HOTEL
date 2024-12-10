@@ -65,6 +65,21 @@
     margin-top: -30px;
 }
 
+.forgot-link {
+    margin-top: 0;
+    text-decoration: none;
+}
+
+.forgot-link a {
+    transition: ease-in-out 0.2s;
+    color: #000000;
+}
+
+.forgot-link a:hover {
+    color: #f0d10b;
+    text-decoration: underline;
+}
+
 .register-link a {
     transition: ease-in-out 0.2s;
     color: #000000;
