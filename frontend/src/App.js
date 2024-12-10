@@ -23,6 +23,7 @@ import InvalidPage from './pages/InvalidPage';
 import Confirmation from './pages/Confirmation';
 
 import './styles/App.css';
+import ClerkReservationPage from "./pages/Clerk";
 
 function Layout() {
     const location = useLocation();

@@ -5,24 +5,29 @@ header {
     color: white;
     padding: 20px;
     text-align: center;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
     z-index: 1000;
+    height: 80px;
 }
 
 body {
-    padding-top: 80px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    padding-top: 100px;
 }
 
 .page-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: calc(100vh - 80px);
     padding: 20px;
     box-sizing: border-box;
+    flex-direction: column;
 }
 
 .account-page {
@@ -32,6 +37,8 @@ body {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .account-page h2 {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {Button, TextField} from "@mui/material";
 
 const ClerkReservationPage = () => {
     const [customerEmail, setCustomerEmail] = useState('');
@@ -14,7 +15,7 @@ const ClerkReservationPage = () => {
                 const response = await fetch("http://localhost:8080/auth/check-session", {
                     method: 'POST',
                     credentials: "include",
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                 });
 
                 if (response.ok) {
@@ -91,33 +92,80 @@ const ClerkReservationPage = () => {
     };
 
     return (
-        <div className="account-page">
-            <h2>Create Reservation for Customer</h2>
+        <div className="page-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <div className="account-page" style={{ textAlign: 'center', width: 'auto', padding: '20px' }}>
+                <h2 style={{
+                    fontSize: '36px',
+                    fontWeight: 'bold',
+                    marginBottom: '50px',
+                }}>
+                    Create Reservation for Customer
+                </h2>
+                {!isLoggedIn ? (
+                    <p>Please log in to create a reservation.</p>
+                ) : (
+                    <form onSubmit={handleReservationSubmit}>
+                        <div className="input-group" style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <p>EMAIL</p>
+                            <div className="account-settings-text-field-container">
+                                <TextField
+                                    name="email"
+                                    value={customerEmail}
+                                    onChange={handleEmailChange}
+                                    variant='filled'
+                                    size='small'
+                                    inputProps={{
+                                        style: {
+                                            padding: '10px',
+                                        },
+                                    }}
+                                    sx={{
+                                        "& .MuiFilledInput-root": {
+                                            borderRadius: "0px",
+                                            overflow: "hidden",
+                                            width: "300px", // Keep the original width
+                                        },
+                                    }}
+                                />
+                            </div>
 
-            {!isLoggedIn ? (
-                <p>Please log in to create a reservation.</p>
-            ) : (
-                <form onSubmit={handleReservationSubmit}>
-                    <div className="input-group">
-                        <label htmlFor="customerEmail">Customer Email:</label>
-                        <input
-                            type="email"
-                            id="customerEmail"
-                            value={customerEmail}
-                            onChange={handleEmailChange}
-                            required
-                        />
-                    </div>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                disabled={loading}
+                                style={{
+                                    padding: '10px',
+                                    marginTop: '20px',
+                                }}
+                                sx={{
+                                    backgroundColor: 'black',
+                                    color: 'white',
+                                    padding: '12px',
+                                    fontSize: '16px',
+                                    borderRadius: '8px',
+                                    textTransform: 'none',
+                                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                                    '&:hover': {
+                                        backgroundColor: 'grey',
+                                        color: 'black',
+                                    },
+                                    '&:disabled': {
+                                        backgroundColor: '#ccc',
+                                        color: '#888',
+                                    },
+                                }}
+                            >
+                                {loading ? 'Creating Reservation...' : 'Create Reservation'}
+                            </Button>
+                        </div>
+                    </form>
+                )}
 
-                    <button type="submit" disabled={loading}>
-                        {loading ? 'Creating Reservation...' : 'Create Reservation'}
-                    </button>
-                </form>
-            )}
-
-            {message && <div className="message">{message}</div>}
+                {message && <div className="message">{message}</div>}
+            </div>
         </div>
     );
-};
+}
 
 export default ClerkReservationPage;
