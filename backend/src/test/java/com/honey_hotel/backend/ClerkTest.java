@@ -1,15 +1,14 @@
 package com.honey_hotel.backend;
 
+import com.honey_hotel.backend.service.ClerkAccessService;
+import com.honey_hotel.backend.repository.ClerkAccessRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
-import com.honey_hotel.backend.service.ClerkAccessService;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import com.honey_hotel.backend.repository.ClerkAccessRepository;
 
 public class ClerkTest {
     @Mock
