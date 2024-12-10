@@ -23,6 +23,8 @@ import InvalidPage from './pages/InvalidPage';
 import Confirmation from './pages/Confirmation';
 
 import './styles/App.css';
+import Clerk from "./pages/Clerk";
+import ClerkReservationPage from "./pages/Clerk";
 
 function Layout() {
     const location = useLocation();
@@ -62,6 +64,7 @@ function Layout() {
                 <Route path="/admin-dashboard/view/user/:id" element={<UserDetails />} />
                 <Route path="/invalid-page" element={<InvalidPage />} />
                 <Route path="/confirmation" element={<Confirmation />} />
+                <Route path="/clerk/dashboard" element={<ClerkReservationPage />} />
 
                 <Route path="*" element={<Navigate to="/invalid-page" />} />
             </Routes>

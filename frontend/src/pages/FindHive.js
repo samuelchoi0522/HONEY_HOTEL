@@ -94,12 +94,19 @@ const FindHive = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setUser(data.isLoggedIn ? data : null);
+                    if (data.isLoggedIn) {
+                        setUser(data);
+                    } else {
+                        setUser(null);
+                        navigate('/login');
+                    }
                 } else {
                     setUser(null);
+                    navigate('/login');
                 }
             } catch (error) {
                 console.error("Error checking session:", error);
+                navigate('/login');
             }
         };
 

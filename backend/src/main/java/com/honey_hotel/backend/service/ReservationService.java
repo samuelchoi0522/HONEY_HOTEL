@@ -45,6 +45,33 @@ public class ReservationService {
     @Autowired
     private RoomRepository roomRepository;
 
+    public Long createReservation(Reservation other) {
+        try {
+            Reservation reservation = new Reservation();
+            reservation.setUser(other.getUser());
+            reservation.setRoom(other.getRoom());
+            reservation.setCheckInDate(other.getCheckInDate());
+            reservation.setCheckOutDate(other.getCheckOutDate());
+            reservation.setAdults(other.getAdults());
+            reservation.setChildren(other.getChildren());
+            reservation.setPromoCode(other.getPromoCode());
+            reservation.setRateOption(other.getRateOption());
+            reservation.setTotalPrice(other.getTotalPrice());
+            reservation.setRoomPrice(other.getRoomPrice());
+            reservation.setBookingId(other.getBookingId());
+            reservation.setPhoto_path(other.getPhoto_path());
+            reservation.setHotelLocation(other.getHotelLocation());
+
+            Reservation savedReservation = reservationRepository.save(reservation);
+            return savedReservation.getId();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     public Long createReservation(AppUser user, Long roomId, LocalDate checkInDate, LocalDate checkOutDate,
                                   int adults, int children, String promoCode, String rateOption, BigDecimal totalPrice, BigDecimal roomPrice,
                                   String bookingId, String photo_path, String hotelLocation) {
