@@ -62,6 +62,7 @@ function Layout() {
                 <Route path="/admin-dashboard/view/user/:id" element={<UserDetails />} />
                 <Route path="/invalid-page" element={<InvalidPage />} />
                 <Route path="/confirmation" element={<Confirmation />} />
+                <Route path="/clerk/dashboard" element={<ClerkReservationPage />} />
 
                 <Route path="*" element={<Navigate to="/invalid-page" />} />
             </Routes>
