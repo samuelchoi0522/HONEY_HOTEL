@@ -7,7 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
+/**
+ * Class pertaining to the clerk role and what they can access
+ *
+ * @author Samuel Choi
+ * @Version 1.1 (12/3/24)
+ */
 @Entity
 @Table(name = "clerk_access")
 public class ClerkAccess {

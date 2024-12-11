@@ -9,6 +9,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
+/**
+ * Class pertaining to tokens used for email password resets
+ *
+ * @author Samuel Choi
+ * @Version 1.1 (11/8/24)
+ */
 @Entity
 public class PasswordResetToken {
 

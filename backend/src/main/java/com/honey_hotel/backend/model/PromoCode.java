@@ -3,6 +3,12 @@ package com.honey_hotel.backend.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Class pertaining to promo codes and their details
+ *
+ * @author Samuel Choi
+ * @Version 1.0 (10/30/24)
+ */
 @Entity
 @Table(name = "promo_codes")
 public class PromoCode {

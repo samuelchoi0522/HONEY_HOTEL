@@ -11,6 +11,12 @@ import com.honey_hotel.backend.model.PasswordResetToken;
 import com.honey_hotel.backend.repository.PasswordResetTokenRepository;
 import com.honey_hotel.backend.repository.UserRepository;
 
+/**
+ * Service for generating and sending password reset tokens through email
+ *
+ * @author Samuel Choi
+ * @Version 1.0 (11/8/24)
+ */
 @Service
 public class ForgotPasswordService {
 

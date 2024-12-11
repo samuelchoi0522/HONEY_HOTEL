@@ -22,11 +22,9 @@ import com.honey_hotel.backend.service.ActivitiesService;
 import com.honey_hotel.backend.service.ActivityReservationService;
 
 /**
- * Activity controller class to break down complicated tasks with an array of
- * simpler function calls
- * 
- * @author Samuel Choi
- * @version 1.0 (Oct 18 2024)
+ Activity controller class to break down complicated tasks with an array of simpler function calls
+ @author Samuel Choi
+ @version 1.0 (Oct 18 2024)
  */
 @RestController
 @RequestMapping("/api/vacations")
@@ -54,13 +52,11 @@ public class ActivitiesController {
 
     // Get available activities (filtered by reservation dates)
     /**
-     * Retrieves a list of available vacation activities, filtered by the given
-     * reservation dates
+     * Retrieves a list of available vacation activities, filtered by the given reservation dates
      *
-     * @param checkInDate  check-in date of the reservation
+     * @param checkInDate check-in date of the reservation
      * @param checkOutDate check-out date of the reservation
-     * @return ResponseEntity containing the list of available activities, or a
-     *         BAD_REQUEST status if invalid dates are provided
+     * @return ResponseEntity containing the list of available activities, or a BAD_REQUEST status if invalid dates are provided
      */
     @GetMapping("/available")
     public ResponseEntity<List<Activities>> getAvailableVacations(

@@ -15,20 +15,16 @@ import com.honey_hotel.backend.model.AppUser;
 import com.honey_hotel.backend.repository.UserRepository;
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
 /**
- * Account controller class to break down complicated tasks with an array of
- * simpler function calls
- * 
- * @author Eugene Pak
- * @version 3.2 (Oct 30 2024)
+ Account controller class to break down complicated tasks with an array of simpler function calls
+ @author Eugene Pak
+ @version 3.2 (Oct 30 2024)
  */
 @RestController
 @RequestMapping("/api/account")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AccountController {
+    //If logged in, go to account page, if logged out, redirect to login page
     @Autowired
     private UserRepository userRepository;
 
@@ -49,12 +45,10 @@ public class AccountController {
 
     /**
      * Resets the user's password
-     * Validates the old password, checks if the new password matches confirmation,
-     * and updates the password
+     * Validates the old password, checks if the new password matches confirmation, and updates the password
      * if all conditions are met
      *
-     * @param request        map containing the old password, new password, and
-     *                       confirm password
+     * @param request map containing the old password, new password, and confirm password
      * @param servletRequest HttpServletRequest to manage the session
      * @return a ResponseEntity indicating the result of the password reset attempt
      */
