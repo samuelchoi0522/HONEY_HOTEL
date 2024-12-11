@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Controller for room management in the repository
+ *
+ * @author Eugene Pak
+ * @Version 2.0 (12/10/24)
+ */
 @RestController
 @RequestMapping("/api/rooms")
 public class RoomController {
@@ -37,6 +42,11 @@ public class RoomController {
         return null;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<Room>> getAllRooms() {
         List<Room> rooms = roomService.getAllRooms();
@@ -45,6 +55,12 @@ public class RoomController {
                 .body(rooms);
     }
 
+    /**
+     * Gets a specific room by its id
+     *
+     * @param id, room id to search with
+     * @return room corresponding to the id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getRoomById(@PathVariable Long id) {
         Room room = roomService.getRoomById(id);
@@ -54,6 +70,12 @@ public class RoomController {
         return ResponseEntity.ok(room);
     }
 
+    /**
+     * Creates a room and adds it to the repository
+     *
+     * @param roomDetails, key information that make up a room
+     * @return Response Entity stating room was successfully created, error if not
+     */
     @PostMapping
     public ResponseEntity<Room> createRoom(@RequestBody Map<String, Object> roomDetails) {
         try {
@@ -101,6 +123,13 @@ public class RoomController {
         }
     }
 
+    /**
+     * Updates a room found by its id
+     *
+     * @param id, id used to find room
+     * @param roomDetails, new details about the room to add/edit
+     * @return Response Entity stating room was updated or if room was not found
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
         Room updatedRoom = roomService.updateRoom(id, roomDetails);
@@ -110,6 +139,12 @@ public class RoomController {
         return ResponseEntity.ok(updatedRoom);
     }
 
+    /**
+     * Deletes a room from the repository found by its associated id
+     *
+     * @param id, id used to find the room to delete
+     * @return Response Entity stating if room was deleted successfully, or if room was not found
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRoom(@PathVariable Long id) {
         if (roomService.deleteRoom(id)) {

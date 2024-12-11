@@ -2,7 +2,6 @@ package com.honey_hotel.backend.model;
 
 import java.time.LocalDate;
 
-<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -15,13 +14,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-=======
 /**
  Main Activity reservations class with functionalities
  @author Samuel Choi
  @version 1.0 (Oct 26 2024)
  */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
 @Entity
 @Table(name = "activityreservations")
 public class ActivityReservation {
@@ -62,15 +59,12 @@ public class ActivityReservation {
     @Column(name = "reservation_date", nullable = false)
     private LocalDate reservationDate;
 
-<<<<<<< HEAD
-=======
     // Getters and setters
     /**
      * Gets the unique identifier of the activity reservation
      *
      * @return activity reservation ID
      */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
     public Long getId() {
         return id;
     }

@@ -5,6 +5,12 @@ import org.springframework.stereotype.Service;
 
 import com.honey_hotel.backend.repository.ClerkAccessRepository;
 
+/**
+ * Services for checking if person has clerk permissions or is clerk and to remove clerk permissions
+ *
+ * @author Samuel Choi
+ * @Version 1.0 (12/3/24)
+ */
 @Service
 public class ClerkAccessService {
 

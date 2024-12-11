@@ -22,6 +22,13 @@ public class PasswordController {
     private ValidateTokenService tokenService;
 
     // Token-based password reset endpoint
+
+    /**
+     * Resets password given a token
+     *
+     * @param request, map holding object retrieved from the frontend
+     * @return Response Entity stating password was successfully reset, or error occured
+     */
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPasswordWithToken(@RequestBody Map<String, Object> request) {
         String token = (String) request.get("token");

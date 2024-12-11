@@ -10,7 +10,7 @@ import com.honey_hotel.backend.model.Reservation;
 
 /**
  Repository class for activity reservations
- @author Samuel Choi
+ @author Samuel Choi, Aiden Grajo
  @version 1.0 (Oct 26 2024)
  */
 @Repository
@@ -24,19 +24,8 @@ public interface ActivityReservationRepository extends JpaRepository<ActivityRes
      */
     List<ActivityReservation> findByUserId(Long userId);
 
-<<<<<<< HEAD
     ActivityReservation findByReservationId(Long reservationId);
 
     List<ActivityReservation> findByReservation(Reservation reservation); // Updated to return a List
 
 }
-=======
-    /**
-     * Finds all activity reservations associated with a specific reservation
-     *
-     * @param reservationId ID of the reservation
-     * @return A filtered list of activity reservations
-     */
-    List<ActivityReservation> findByReservationId(Long reservationId);
-}
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff

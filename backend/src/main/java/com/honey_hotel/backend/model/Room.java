@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
- Main Reservation class with functionalities
+ Main Room class with functionalities
  @author Samuel Choi
  @version 3.1 (Oct 18 2024)
  */
@@ -53,12 +53,10 @@ public class Room {
      */
     private double price;
 
-<<<<<<< HEAD
-=======
+
     /**
      * The price category of the room (e.g., economy, comfort)
      */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
     @Column(name = "price_category")
     private String priceCategory;
 
@@ -68,12 +66,10 @@ public class Room {
     @Column(name = "room_type_id", nullable = false)
     private int roomTypeId;
 
-<<<<<<< HEAD
-=======
+
     /**
      * A static array of room type names mapped to room type IDs
      */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
     private static final String[] ROOM_TYPE_NAMES = {
             "Single",
             "Double",

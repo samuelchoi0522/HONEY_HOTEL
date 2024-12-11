@@ -10,6 +10,12 @@ import com.honey_hotel.backend.model.AdminAccess;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Repository for admin access accounts
+ *
+ * @author Samuel Choi
+ * @Version 2.0 (12/3/24)
+ */
 @Repository
 public interface AdminAccessRepository extends JpaRepository<AdminAccess, Long> {
     @Modifying

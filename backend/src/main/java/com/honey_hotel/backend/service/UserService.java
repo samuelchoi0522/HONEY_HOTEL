@@ -16,6 +16,12 @@ import com.honey_hotel.backend.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Service class for users
+ *
+ * @author Samuel Choi
+ * @Version 1.0 (12/3/24)
+ */
 @Service
 public class UserService {
 
@@ -35,6 +41,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    /**
+     * Deletes a user found by its id
+     *
+     * @param id, id used to find user
+     * @return true if user is found/exists and is deleted, false otherwise
+     */
     @Transactional
     public boolean deleteUserById(Long id) {
         Optional<AppUser> optionalUser = userRepository.findById(id);
@@ -58,6 +70,12 @@ public class UserService {
         return false; // User not found
     }
 
+    /**
+     * Promotes a user to clerk found by their id
+     *
+     * @param userId, id of user to be promoted
+     * @return true if user exists and is successfully promoted, false otherwise
+     */
     public boolean promoteToClerk(Long userId) {
         Optional<AppUser> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
@@ -80,6 +98,12 @@ public class UserService {
         return false; // User not found
     }
 
+    /**
+     * Promotes a user to admin found by their id
+     *
+     * @param userId, id of user to be promoted
+     * @return true if user exists and is successfully promoted, false otherwise
+     */
     public boolean promoteToAdmin(Long userId) {
         Optional<AppUser> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
@@ -102,6 +126,12 @@ public class UserService {
         return false; // User not found
     }
 
+    /**
+     * Demotes a clerk or admin to a guest
+     *
+     * @param userId, id of user to be demoted
+     * @return true if user exists and is successfully demoted, false otherwise
+     */
     public boolean demoteToGuest(Long userId) {
         Optional<AppUser> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {

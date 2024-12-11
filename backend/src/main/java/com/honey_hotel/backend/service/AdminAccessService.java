@@ -5,6 +5,12 @@ import org.springframework.stereotype.Service;
 
 import com.honey_hotel.backend.repository.AdminAccessRepository;
 
+/**
+ * Services to utilize admin permission checks and to remove admins
+ *
+ * @author Samuel Choi
+ * @Version 2.0 (12/3/24)
+ */
 @Service
 public class AdminAccessService {
 

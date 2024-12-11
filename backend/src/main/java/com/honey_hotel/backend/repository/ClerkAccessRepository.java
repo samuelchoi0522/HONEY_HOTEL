@@ -10,6 +10,12 @@ import com.honey_hotel.backend.model.ClerkAccess;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Repository holding information on who has clerk access
+ *
+ * @author Samuel Choi
+ * @Version 2.0 (12/8/24)
+ */
 @Repository
 public interface ClerkAccessRepository extends JpaRepository<ClerkAccess, Long> {
     @Modifying

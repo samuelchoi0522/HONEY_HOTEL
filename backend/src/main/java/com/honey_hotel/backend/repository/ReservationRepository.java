@@ -28,17 +28,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
      */
     List<Reservation> findByUserId(Long userId);
 
-<<<<<<< HEAD
     boolean existsByUserId(Long userId);
-=======
-    /**
-     * Finds all reservations associated with a specific room
-     *
-     * @param roomId ID of the room
-     * @return A filtered list of reservations
-     */
-    List<Reservation> findByRoomId(Long roomId);
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
 
     /**
      * Finds all reservations that fall within the given date range

@@ -2,6 +2,12 @@ package com.honey_hotel.backend.model;
 
 import jakarta.persistence.*;
 
+/**
+ * Class pertaining to admin access
+ *
+ * @author Samuel Choi
+ * @Version 1.0 (11/19/24)
+ */
 @Entity
 @Table(name = "admin_access")
 public class AdminAccess {

@@ -33,7 +33,6 @@ public class Reservation {
     @Column(name = "check_out_date", nullable = false)
     private LocalDate checkOutDate;
 
-<<<<<<< HEAD
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
@@ -72,28 +71,6 @@ public class Reservation {
     @Column(name = "checked_in")
     private boolean checkedIn;
 
-=======
-    /**
-     * The room associated with the reservation
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room room;
-
-    /**
-     * The user who made the reservation
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private AppUser user;
-
-    // Getters and setters
-    /**
-     * Gets the unique identifier of the reservation
-     *
-     * @return reservation ID
-     */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
     public Long getId() {
         return id;
     }

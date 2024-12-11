@@ -9,7 +9,6 @@ import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +31,11 @@ import com.honey_hotel.backend.service.ReservationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-=======
 /**
  Reservation controller class to break down complicated tasks with an array of simpler function calls
  @author Samuel Choi
  @version 2.0 (Oct 26 2024)
  */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
 @RestController
 @RequestMapping("/api/reservations")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")

@@ -13,6 +13,12 @@ public class ValidateTokenController {
     @Autowired
     private ValidateTokenService tokenService;
 
+    /**
+     * Validates token
+     *
+     * @param token, token received from the session
+     * @return Response Entity that is ok if token was validated, throws bad request if not
+     */
     @GetMapping("/validate-token")
     public ResponseEntity<Void> validateToken(@RequestParam("token") String token) {
         boolean isValid = tokenService.validateToken(token);

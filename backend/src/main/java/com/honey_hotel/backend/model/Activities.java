@@ -36,15 +36,13 @@ public class Activities {
     @Column(nullable = false)
     private String category;
 
-<<<<<<< HEAD
-=======
+
     // Getters and Setters
     /**
      * Gets the unique identifier of the activity
      *
      * @return Activity ID
      */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
     public Long getId() {
         return id;
     }

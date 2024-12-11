@@ -26,9 +26,6 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-<<<<<<< HEAD
-    @PostMapping("/auth/login")
-=======
     /**
      * Login web directory that allows user to enter user credentials to log in
      *
@@ -36,8 +33,7 @@ public class LoginController {
      * @param request HTTP request object used to manage the session
      * @return ResponseEntity indicating whether login was successful or not
      */
-    @PostMapping("/api/login")
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
+    @PostMapping("/auth/login")
     public ResponseEntity<?> loginUser(@RequestBody AppUser user, HttpServletRequest request) {
         if (user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.badRequest().body("A required field is missing.");
@@ -53,17 +49,14 @@ public class LoginController {
         return ResponseEntity.ok("Login successful!");
     }
 
-<<<<<<< HEAD
-    @PostMapping("/auth/check-session")
-=======
+
     /**
      * Web directory used to check if a user is currently logged in
      *
      * @param request HTTP request object used to check the session state
      * @return ResponseEntity containing the login status and user's first name if logged in
      */
-    @PostMapping("/api/check-session")
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
+    @PostMapping("/auth/check-session")
     public ResponseEntity<?> checkSession(HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         if (loginService.isUserLoggedIn(request)) {
@@ -78,17 +71,14 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
-<<<<<<< HEAD
-    @PostMapping("/auth/logout")
-=======
+
     /**
      * Web directory to log out a user by invalidating their credentials
      *
      * @param request HTTP request object used to invalidate the session
      * @return ResponseEntity indicating if logout was successful
      */
-    @PostMapping("/api/logout")
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
+    @PostMapping("/auth/logout")
     public ResponseEntity<?> logoutUser(HttpServletRequest request) {
         loginService.invalidateSession(request);
         return ResponseEntity.ok("Logout successful.");

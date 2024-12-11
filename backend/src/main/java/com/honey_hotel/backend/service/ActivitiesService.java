@@ -3,20 +3,17 @@ package com.honey_hotel.backend.service;
 import java.time.LocalDate;
 import java.util.List;
 
-<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.honey_hotel.backend.model.Activities;
 import com.honey_hotel.backend.repository.ActivitiesRepository;
 
-=======
 /**
  Service class for activity reservation web directory
  @author Samuel Choi
  @version 1.0 (Oct 18 2024)
  */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
 @Service
 public class ActivitiesService {
 

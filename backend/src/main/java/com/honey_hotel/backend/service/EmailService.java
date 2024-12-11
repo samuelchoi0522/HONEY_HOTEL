@@ -7,6 +7,12 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+/**
+ * Services related to email billing feature
+ *
+ * @author Samuel Choi
+ * @Version 1.0 (11/8/24)
+ */
 @Service
 public class EmailService {
 

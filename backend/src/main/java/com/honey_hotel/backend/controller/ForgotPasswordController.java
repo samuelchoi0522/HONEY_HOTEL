@@ -17,10 +17,20 @@ public class ForgotPasswordController {
 
     private final ForgotPasswordService forgotPasswordService;
 
+    /**
+     * Copy constructor for the forgot password service
+     * @param forgotPasswordService, service that holds all the functions for forgot password
+     */
     public ForgotPasswordController(ForgotPasswordService forgotPasswordService) {
         this.forgotPasswordService = forgotPasswordService;
     }
 
+    /**
+     * Sends a password reset link to the email inputted by the user to reset the password
+     *
+     * @param request, map that holds data received from the frontend
+     * @return Response entity stating the password reset link was sent, system error if not
+     */
     @PostMapping("/forgot-password")
     public ResponseEntity<String> sendResetLink(@RequestBody Map<String, String> request) {
         String email = request.get("email");

@@ -14,14 +14,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-<<<<<<< HEAD
-=======
+
 /**
  Main App User class with functionalities
  @author Samuel Choi
  @version 4.0 (Oct 5 2024)
  */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
 @Entity
 @Table(name = "users")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -59,29 +57,12 @@ public class AppUser implements Serializable {
      * The email address of user
      */
     private String email;
-<<<<<<< HEAD
+
     private String password_hash;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
 
-=======
-
-    /**
-     * The hashed password for the user
-     */
-    private String password_hash;
-
-    // Getters and Setters
-    /**
-     * Gets the title of the user
-     *
-     * @return user title
-     */
->>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
-    public String getTitle() {
-        return title;
-    }
 
     /**
      * Sets the title of the user
