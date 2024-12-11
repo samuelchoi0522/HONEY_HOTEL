@@ -54,7 +54,7 @@ public class ClerkAccessController {
                     .body(Map.of("error", "Customer not found"));
         }
 
-        request.getSession().setAttribute("user", customer);
+        //request.getSession().setAttribute("user", customer);
 
         return ResponseEntity.ok(Map.of(
                 "message", "Customer session set successfully. Redirecting to reservation page.",
