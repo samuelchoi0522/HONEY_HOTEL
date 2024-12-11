@@ -24,6 +24,7 @@ import Confirmation from './pages/Confirmation';
 
 import './styles/App.css';
 import ClerkReservationPage from "./pages/Clerk";
+import RoomManagement from "./pages/RoomManagement";
 
 function Layout() {
     const location = useLocation();
@@ -64,6 +65,7 @@ function Layout() {
                 <Route path="/invalid-page" element={<InvalidPage />} />
                 <Route path="/confirmation" element={<Confirmation />} />
                 <Route path="/clerk/dashboard" element={<ClerkReservationPage />} />
+                <Route path="/rooms" element={<RoomManagement />} />
 
                 <Route path="*" element={<Navigate to="/invalid-page" />} />
             </Routes>
