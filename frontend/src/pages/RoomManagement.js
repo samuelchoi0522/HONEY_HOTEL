@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     FormControl,
     InputLabel,
@@ -20,10 +20,9 @@ const RoomManagement = () => {
         smokingAllowed: false,
         price: '',
         priceCategory: '',
-        roomTypeId: '',
+        roomType: '',
+        roomCategory: '',
     });
-
-    const [categories, setCategories] = useState([]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -32,11 +31,12 @@ const RoomManagement = () => {
             ...prevRoom,
             [name]: type === 'checkbox'
                 ? checked
-                : name === 'price' || name === 'roomTypeId'
+                : name === 'price'
                     ? parseFloat(value)
                     : value,
         }));
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,9 +45,9 @@ const RoomManagement = () => {
             bedType: room.bedType,
             price: room.price,
             priceCategory: room.priceCategory,
-            roomTypeId: room.roomTypeId,
+            roomType: room.roomType,
             smokingAllowed: room.smokingAllowed,
-            roomCategory: room.category,
+            roomCategory: room.roomCategory,
         };
 
         try {
@@ -76,12 +76,13 @@ const RoomManagement = () => {
             smokingAllowed: false,
             price: '',
             priceCategory: '',
-            roomTypeId: '',
+            roomType: '',
+            roomCategory: '',
         });
     };
 
     return (
-        <Box sx={{marginTop: 30, marginBottom: 20}}>
+        <Box sx={{ marginTop: 30, marginBottom: 20 }}>
             <h2 style={{
                 fontSize: '36px',
                 fontWeight: 'bold',
@@ -125,10 +126,7 @@ const RoomManagement = () => {
                                     />
                                 }
                                 label="Smoking Allowed"
-                                sx={{ display: 'flex',
-                                    alignItems: 'center',
-                                    color: 'black',
-                                }}
+                                sx={{ display: 'flex', alignItems: 'center', color: 'black' }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -149,59 +147,56 @@ const RoomManagement = () => {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid item xs={12}>
-                                <FormControl fullWidth required sx={{ marginTop: '15px' }}>
-                                    <InputLabel>Price Category</InputLabel>
-                                    <Select
-                                        label="Price Category"
-                                        name="priceCategory"
-                                        value={room.priceCategory}
-                                        onChange={handleChange}
-                                        fullWidth
-                                        sx={{
-                                            height: '60px',
-                                        }}
-                                    >
-                                        <MenuItem value="Economy">Economy</MenuItem>
-                                        <MenuItem value="Comfort">Comfort</MenuItem>
-                                        <MenuItem value="Premium">Premium</MenuItem>
-                                        <MenuItem value="Luxury">Luxury</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
+                            <FormControl fullWidth required sx={{ marginTop: '15px' }}>
+                                <InputLabel>Price Category</InputLabel>
+                                <Select
+                                    label="Price Category"
+                                    name="priceCategory"
+                                    value={room.priceCategory}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    sx={{
+                                        height: '60px',
+                                    }}
+                                >
+                                    <MenuItem value="Economy">Economy</MenuItem>
+                                    <MenuItem value="Comfort">Comfort</MenuItem>
+                                    <MenuItem value="Premium">Premium</MenuItem>
+                                    <MenuItem value="Luxury">Luxury</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={14}>
                             <FormControl fullWidth margin="normal">
-                                <InputLabel id="roomType-label">Room Type</InputLabel>
+                                <InputLabel id="roomType">Room Type</InputLabel>
                                 <Select
-                                    labelId="roomType-label"
-                                    id="roomType"
-                                    value={room.roomTypeId}
                                     label="Room Type"
+                                    id="roomType"
+                                    value={room.roomType}
                                     onChange={handleChange}
+                                    name="roomType"
                                 >
-                                    <MenuItem value={1}>Single</MenuItem>
-                                    <MenuItem value={2}>Double</MenuItem>
-                                    <MenuItem value={3}>Family</MenuItem>
-                                    <MenuItem value={4}>Suite</MenuItem>
-                                    <MenuItem value={5}>Deluxe</MenuItem>
-                                    <MenuItem value={6}>Standard</MenuItem>
+                                    <MenuItem value="Single">Single</MenuItem>
+                                    <MenuItem value="Double">Double</MenuItem>
+                                    <MenuItem value="Family">Family</MenuItem>
+                                    <MenuItem value="Suite">Suite</MenuItem>
+                                    <MenuItem value="Deluxe">Deluxe</MenuItem>
+                                    <MenuItem value="Standard">Standard</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl fullWidth required>
+                            <FormControl fullWidth margin="normal">
                                 <InputLabel>Room Category</InputLabel>
                                 <Select
-                                    name="roomTypeId"
-                                    value={room.roomTypeId}
+                                    name="roomCategory"
+                                    label="Room Category"
+                                    value={room.roomCategory}
                                     onChange={handleChange}
                                 >
-                                    {categories.map((category) => (
-                                        <MenuItem key={category.id} value={category.id}>
-                                            {category.name}
-                                        </MenuItem>
-                                    ))}
+                                    <MenuItem value="Nature Retreat">Nature Retreat</MenuItem>
+                                    <MenuItem value="Urban Elegance">Urban Elegance</MenuItem>
+                                    <MenuItem value="Vintage Charm">Vintage Charm</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

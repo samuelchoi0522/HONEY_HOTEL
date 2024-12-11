@@ -12,12 +12,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/api/rooms")
 public class RoomController {
 
+    private static final String[] ROOM_TYPE_NAMES = {
+            "Single",
+            "Double",
+            "Family",
+            "Suite",
+            "Deluxe",
+            "Standard"
+    };
     @Autowired
     private RoomService roomService;
+
+    private Integer getRoomTypeId(String roomType) {
+        for (int i = 0; i < ROOM_TYPE_NAMES.length; i++) {
+            if (ROOM_TYPE_NAMES[i].equalsIgnoreCase(roomType)) {
+                return i + 1;
+            }
+        }
+        return null;
+    }
 
     @GetMapping
     public ResponseEntity<List<Room>> getAllRooms() {
@@ -45,13 +63,16 @@ public class RoomController {
                     ? ((Number) roomDetails.get("price")).doubleValue()
                     : null;
             String priceCategory = (String) roomDetails.get("priceCategory");
-            Integer roomTypeId = (roomDetails.get("roomTypeId") instanceof Number)
-                    ? ((Number) roomDetails.get("roomTypeId")).intValue()
-                    : null;
+            String roomType = (String) roomDetails.get("roomType");
+            Integer roomTypeId = getRoomTypeId(roomType);
+            String roomCat = (String) roomDetails.get("roomCategory");
+
             if (bedType == null || smokingAllowed == null || price == null ||
-                    priceCategory == null || roomTypeId == null) {
+                    priceCategory == null || roomTypeId == null || roomCat == null) {
                 return ResponseEntity.badRequest().body(null);
             }
+
+            System.out.println("Checkpoint1");
 
             Room room = new Room();
             room.setBedType(bedType);
@@ -60,15 +81,17 @@ public class RoomController {
             room.setPriceCategory(priceCategory);
             room.setRoomTypeId(roomTypeId);
 
+            System.out.println("Checkpoint2");
+
             RoomCategory roomCategory = new RoomCategory();
-            roomCategory.setCategoryName(priceCategory);
+            roomCategory.setCategoryName(roomCat);
             room.setCategory(roomCategory);
 
-            System.out.println("Checkpoint1");
+            System.out.println("Checkpoint3");
 
             Room savedRoom = roomService.createRoom(room);
 
-            System.out.println("Checkpoint2");
+            System.out.println("Checkpoint4");
 
             return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
         } catch (ClassCastException e) {
@@ -77,7 +100,6 @@ public class RoomController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
