@@ -239,7 +239,6 @@ const AccountPage = () => {
                             Object.entries(groupedReservations).map(([bookingId, reservations]) => (
                                     dayjs(reservations[0].checkOutDate).isSameOrAfter(dayjs(), "day") && (
                                         <div className="account-booking-box" key={bookingId}>
-                                            {/* Booking Details Section */}
                                             <div className="account-booking-info-top">
                                                 <div className="account-checkin-checkout">
                                                     <p>CHECK-IN <br /><strong>{dayjs(reservations[0].checkInDate).format('MMMM D, YYYY')}</strong></p>
@@ -252,7 +251,6 @@ const AccountPage = () => {
                                                 </span>
                                                 </p>
                                             </div>
-                                            {/* Room Details */}
                                             {reservations.map((room, index) => (
                                                 <div key={index}>
                                                     <div className="account-room-details-container">
@@ -264,7 +262,6 @@ const AccountPage = () => {
                                                             <p>TOTAL: ${room.roomPrice}</p>
                                                         </div>
                                                     </div>
-                                                    {/* Action Buttons for each room */}
                                                     <div className="account-action-buttons">
                                                         <button
                                                             className="account-action-button"
@@ -274,7 +271,6 @@ const AccountPage = () => {
                                                         </button>
                                                         <button className="account-action-button">REQUEST EARLY CHECK-IN</button>
                                                     </div>
-                                                    {/* Divider between rooms if not the last room */}
                                                     {index < reservations.length - 1 && <hr className="account-divider-line" />}
                                                 </div>
                                             ))}
@@ -307,7 +303,6 @@ const AccountPage = () => {
                             Object.entries(groupedReservations).map(([bookingId, reservations]) => (
                                     new Date(reservations[0].checkOutDate) < new Date() && (
                                         <div className="account-booking-box" key={bookingId}>
-                                            {/* Booking Details Section */}
                                             <div className="account-booking-info-top">
                                                 <div className="account-checkin-checkout">
                                                     <p style={{ paddingLeft: "20px" }}>CHECK-IN <br /><strong>{new Date(reservations[0].checkInDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong></p>
@@ -316,7 +311,6 @@ const AccountPage = () => {
                                                 <p className="account-booking-id">Booking ID: {bookingId}</p>
                                             </div>
 
-                                            {/* Room Details */}
                                             {reservations.map((room, index) => (
                                                 <div key={index}>
                                                     <div className="account-room-details-container">
@@ -328,14 +322,10 @@ const AccountPage = () => {
                                                             <p>TOTAL: ${room.roomPrice}</p>
                                                         </div>
                                                     </div>
-
-                                                    {/* Action Buttons for each room */}
                                                     <div className="account-action-buttons">
                                                         <button className="account-action-button">VIEW RECEIPT</button>
                                                         <button className="account-action-button">BOOK AGAIN</button>
                                                     </div>
-
-                                                    {/* Divider between rooms if not the last room */}
                                                     {index < reservations.length - 1 && <hr className="account-divider-line" />}
                                                 </div>
                                             ))}
@@ -523,7 +513,7 @@ const AccountPage = () => {
                                     <button
                                         type="button"
                                         className="account-settings-change-button"
-                                        onClick={() => setIsPasswordEditable(false)} // Set back to non-editable state
+                                        onClick={() => setIsPasswordEditable(false)}
                                     >
                                         Cancel
                                     </button>

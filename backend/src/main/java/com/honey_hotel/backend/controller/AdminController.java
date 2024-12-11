@@ -47,8 +47,6 @@ public class AdminController {
     @Autowired
     private UserRepository userRepository;
 
-    // bookings tab
-
     private boolean checkIfUserHasPermissions(HttpServletRequest request) {
         AppUser user = getLoggedInUser(request);
 
@@ -156,8 +154,6 @@ public class AdminController {
         return (AppUser) request.getSession().getAttribute("user");
     }
 
-    // users tab
-
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(HttpServletRequest request) {
         boolean hasPerms = checkIfUserHasPermissions(request);
@@ -174,7 +170,7 @@ public class AdminController {
             userDetails.put("firstname", appUser.getFirstname());
             userDetails.put("lastname", appUser.getLastname());
             userDetails.put("isAdmin", adminAccessService.isAdmin(appUser.getEmail()));
-            userDetails.put("isClerk", clerkAccessService.isClerk(appUser.getEmail())); // Add a clerk access check
+            userDetails.put("isClerk", clerkAccessService.isClerk(appUser.getEmail()));
             return userDetails;
         }).collect(Collectors.toList());
 
@@ -195,7 +191,6 @@ public class AdminController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: User not found");
             }
         } catch (Exception e) {
-            // Log the stack trace for debugging
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }

@@ -44,7 +44,6 @@ public class Room {
             "Standard"
     };
 
-    /////// room id
     public Long getId() {
         return id;
     }
@@ -52,9 +51,7 @@ public class Room {
     public void setId(Long id) {
         this.id = id;
     }
-    /////// room id
 
-    /////// room category (Nature Retreat, etc.)
     public RoomCategory getCategory() {
         return category;
     }
@@ -62,9 +59,7 @@ public class Room {
     public void setCategory(RoomCategory category) {
         this.category = category;
     }
-    /////// room category (Nature Retreat, etc.)
 
-    /////// bed type (Single, Double, etc.)
     public String getBedType() {
         return bedType;
     }
@@ -72,9 +67,7 @@ public class Room {
     public void setBedType(String bedType) {
         this.bedType = bedType;
     }
-    /////// bed type (Single, Double, etc.)
 
-    /////// smoking allowed
     public boolean isSmokingAllowed() {
         return smokingAllowed;
     }
@@ -82,9 +75,7 @@ public class Room {
     public void setSmokingAllowed(boolean smokingAllowed) {
         this.smokingAllowed = smokingAllowed;
     }
-    /////// smoking allowed
 
-    /////// price
     public double getPrice() {
         return price;
     }
@@ -92,14 +83,12 @@ public class Room {
     public void setPrice(double price) {
         this.price = price;
     }
-    /////// price
 
-    // Getter for room type name (e.g. Single, Double, etc.)
     public String getRoomType() {
         if (roomTypeId >= 1 && roomTypeId <= ROOM_TYPE_NAMES.length) {
-            return ROOM_TYPE_NAMES[roomTypeId - 1]; // Mapping ID to String
+            return ROOM_TYPE_NAMES[roomTypeId - 1];
         } else {
-            return "Unknown"; // Default if roomTypeId is out of bounds
+            return "Unknown";
         }
     }
 
@@ -111,7 +100,6 @@ public class Room {
         this.roomTypeId = roomTypeId;
     }
     
-    /////// price category(economy, comfort, etc.)
     public String getPriceCategory() {
         return priceCategory;
     }
@@ -123,5 +111,4 @@ public class Room {
     public void setRoomType(String deluxe) {
 
     }
-    /////// price category(economy, comfort, etc.)
 }

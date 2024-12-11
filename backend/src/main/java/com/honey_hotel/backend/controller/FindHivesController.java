@@ -5,9 +5,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import java.util.logging.Level;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +55,6 @@ public class FindHivesController {
                     startDate,
                     endDate);
 
-            // Log room details
             availableRooms.forEach(room -> {
                 String categoryName = (room.getCategory() != null) ? room.getCategory().getCategoryName()
                         : "Unknown Category";

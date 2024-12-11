@@ -18,10 +18,9 @@ public class ValidateTokenService {
         PasswordResetToken resetToken = tokenRepository.findByToken(token).orElse(null);
 
         if (resetToken == null) {
-            return false; // Token does not exist
+            return false;
         }
 
-        // Check if the token is expired
         return resetToken.getExpiryDate().isAfter(LocalDateTime.now());
     }
 

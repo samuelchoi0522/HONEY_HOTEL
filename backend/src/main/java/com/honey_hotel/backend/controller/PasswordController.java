@@ -1,15 +1,18 @@
 package com.honey_hotel.backend.controller;
 
-import com.honey_hotel.backend.model.AppUser;
-import com.honey_hotel.backend.repository.UserRepository;
-import com.honey_hotel.backend.service.ValidateTokenService;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import com.honey_hotel.backend.model.AppUser;
+import com.honey_hotel.backend.repository.UserRepository;
+import com.honey_hotel.backend.service.ValidateTokenService;
+import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 
 @RestController
 @RequestMapping("/api")
@@ -21,7 +24,6 @@ public class PasswordController {
     @Autowired
     private ValidateTokenService tokenService;
 
-    // Token-based password reset endpoint
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPasswordWithToken(@RequestBody Map<String, Object> request) {
         String token = (String) request.get("token");
@@ -52,7 +54,6 @@ public class PasswordController {
         user.setPassword(hashPassword(newPassword));
         userRepository.save(user);
 
-        // Invalidate token after successful password reset
         tokenService.invalidateToken(token);
 
         return ResponseEntity.ok("Password reset successfully");

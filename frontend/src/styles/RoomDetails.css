@@ -19,7 +19,6 @@
     transition: all 0.3s ease;
 }
 
-/* Gold outline when a box or select field is selected */
 .room-option:focus-within select,
 .room-option:focus-within input,
 .room-option:focus-within textarea {

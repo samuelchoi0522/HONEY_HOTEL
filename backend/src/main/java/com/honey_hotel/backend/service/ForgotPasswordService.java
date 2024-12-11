@@ -11,7 +11,6 @@ import com.honey_hotel.backend.model.PasswordResetToken;
 import com.honey_hotel.backend.repository.PasswordResetTokenRepository;
 import com.honey_hotel.backend.repository.UserRepository;
 
-
 @Service
 public class ForgotPasswordService {
 
@@ -29,17 +28,15 @@ public class ForgotPasswordService {
     public boolean sendResetToken(String email) {
         Optional<AppUser> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
-            return false; // Email does not exist in the database
+            return false;
         }
 
         AppUser user = userOpt.get();
         String token = UUID.randomUUID().toString();
 
-        // Save token in database with expiry time
         PasswordResetToken resetToken = new PasswordResetToken(token, user, LocalDateTime.now().plusHours(1));
         tokenRepository.save(resetToken);
 
-        // Send email with reset link
         String resetLink = "http://localhost:3000/reset-password?token=" + token;
         String subject = "Password Reset Request";
         String body = "Click the following link to reset your password: " + resetLink;

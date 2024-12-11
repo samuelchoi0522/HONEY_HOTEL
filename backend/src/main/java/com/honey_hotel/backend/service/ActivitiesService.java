@@ -15,12 +15,10 @@ public class ActivitiesService {
     @Autowired
     private ActivitiesRepository activitiesRepository;
 
-    // Add a new vacation activity
     public Activities addVacation(Activities vacation) {
         return activitiesRepository.save(vacation);
     }
 
-    // Get available vacation activities not reserved during the given dates
     public List<Activities> getAvailableVacations(LocalDate checkInDate, LocalDate checkOutDate) {
         return activitiesRepository.findAvailableActivities(checkInDate, checkOutDate);
     }

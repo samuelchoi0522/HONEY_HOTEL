@@ -114,32 +114,28 @@ public class ReservationService {
     @Transactional
     public boolean cancelRoom(AppUser user, Long roomId, String bookingId) {
         try {
-            // Fetch the reservation based on the provided criteria
             Optional<Reservation> reservationOpt = reservationRepository.findByRoomIdAndBookingIdAndUser(
                     roomId, bookingId, user.getId());
 
             if (reservationOpt.isPresent()) {
                 Reservation reservation = reservationOpt.get();
 
-                // Fetch all associated activity reservations
                 List<ActivityReservation> activityReservations = activityReservationRepository
                         .findByReservation(reservation);
 
-                // Delete all associated activity reservations
                 if (!activityReservations.isEmpty()) {
                     activityReservationRepository.deleteAll(activityReservations);
                 }
 
-                // Delete the main reservation
                 reservationRepository.delete(reservation);
 
                 return true;
             } else {
-                return false; // No reservation found
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // Handle any unexpected exceptions
+            return false;
         }
     }
 

@@ -32,14 +32,12 @@ public class ActivitiesController {
     @Autowired
     private ActivityReservationService activitiesReservationService;
 
-    // Add a new activity
     @PostMapping
     public ResponseEntity<Activities> addVacation(@RequestBody Activities vacation) {
         Activities savedVacation = activitiesService.addVacation(vacation);
         return ResponseEntity.ok(savedVacation);
     }
 
-    // Get available activities (filtered by reservation dates)
     @GetMapping("/available")
     public ResponseEntity<List<Activities>> getAvailableVacations(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,

@@ -280,7 +280,6 @@ const Modal = ({ open, handleClose }) => {
                                 />
                             </div>
 
-                            {/* date range picker */}
                             <div className="field date-range-picker">
                                 <label className="label">
                                     <img src="/icons/CALENDAR_ICON.png" alt="Calendar Icon" className="icon" />
@@ -335,13 +334,11 @@ const Modal = ({ open, handleClose }) => {
                                     </LocalizationProvider>
                                 </div>
                             </div>
-                            {/* submit button */}
                             <button className="find-hives-button" onClick={handleFindHivesClick}>
                                 FIND HIVES
                             </button>
                         </div>
 
-                        {/* occupancy and rate dialog boxes */}
                         <SetOccupancyDialog onSetOccupancy={handleSetOccupancy} />
                         <SetRateDialog
                             onSetRate={handleSetRate}

@@ -14,7 +14,6 @@ function Navbar() {
 
 
     useEffect(() => {
-        //check if the user is logged in by fetching session data
         const checkSession = async () => {
             try {
                 const response = await fetch("http://localhost:8080/auth/check-session", {

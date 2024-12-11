@@ -18,7 +18,6 @@ body {
     margin: auto;
 }
 
-/* Reservations Container */
 .account-reservations-container {
     background-color: #E5E4E4;
     padding: 20px;
@@ -154,7 +153,6 @@ body {
     margin-top: 20px;
 }
 
-/* Account Settings Styling */
 .account-settings-container {
     background-color: #E5E4E4;
     margin-top: 20px;
