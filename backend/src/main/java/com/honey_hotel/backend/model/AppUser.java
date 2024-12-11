@@ -63,7 +63,15 @@ public class AppUser implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
 
-
+    /**
+     * Gets the title of the user
+     *
+     * @return user ID
+     */
+    public String getTitle() {
+        return title;
+    }
+    
     /**
      * Sets the title of the user
      *
