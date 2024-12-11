@@ -11,8 +11,16 @@ import com.honey_hotel.backend.model.AppUser;
 import com.honey_hotel.backend.repository.UserRepository;
 import static com.honey_hotel.backend.utility.PasswordUtils.hashPassword;
 
+<<<<<<< HEAD
 import java.util.Optional;
 
+=======
+/**
+ Registration controller class to break down complicated tasks with an array of simpler function calls
+ @author Samuel Choi
+ @version 3.0 (Oct 2 2024)
+ */
+>>>>>>> fe227865f0619dbf68d39fee7e46956ba40479ff
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class RegistrationController {
@@ -20,6 +28,12 @@ public class RegistrationController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Web directory to register a new user by validating input fields and saving the user to the database
+     *
+     * @param user user containing registration details (title, first name, last name, email, and password)
+     * @return ResponseEntity indicating whether registration was successful or if a required field is missing
+     */
     @PostMapping("/api/register")
     public ResponseEntity<?> registerUser(@RequestBody AppUser user) {
         if (user.getTitle() == null || user.getFirstname() == null || user.getLastname() == null

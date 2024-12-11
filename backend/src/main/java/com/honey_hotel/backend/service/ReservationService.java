@@ -21,12 +21,24 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
+/**
+ Service class for reservations
+ @author Samuel Choi
+ @version 2.0 (Oct 26 2024)
+ */
+
 @Service
 public class ReservationService {
 
+    /**
+     * Repository of all reservations
+     */
     @Autowired
     private ReservationRepository reservationRepository;
 
+    /**
+     * Respository of all rooms
+     */
     @Autowired
     private ActivityReservationRepository activityReservationRepository;
 
