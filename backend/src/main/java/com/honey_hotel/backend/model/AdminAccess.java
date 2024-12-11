@@ -19,7 +19,6 @@ public class AdminAccess {
     @Column(nullable = false, unique = true)
     private String email;
 
-    // Getters and setters
     public Long getId() {
         return id;
     }

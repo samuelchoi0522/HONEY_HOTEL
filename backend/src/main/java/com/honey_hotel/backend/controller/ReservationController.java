@@ -52,12 +52,10 @@ public class ReservationController {
     @Autowired
     public ReservationEmailService reservationEmailService;
 
-    // Helper method to get the logged-in user from the session
     private AppUser getLoggedInUser(HttpServletRequest request) {
         return (AppUser) request.getSession().getAttribute("user");
     }
 
-    // Create a new reservation
     /**
      * Create a new reservation
      * Handles the creation of new hotel reservations
@@ -83,7 +81,6 @@ public class ReservationController {
         String promoCode = (String) reservationDetails.get("promoCode");
         String rateOption = (String) reservationDetails.get("rateOption");
 
-        // Parse roomPrice and totalPrice
         BigDecimal roomPrice = reservationDetails.get("roomPrice") != null
                 ? new BigDecimal(reservationDetails.get("roomPrice").toString())
                 : BigDecimal.ZERO;
@@ -106,7 +103,6 @@ public class ReservationController {
             LocalDate checkInDate = LocalDate.parse(startDateString);
             LocalDate checkOutDate = LocalDate.parse(endDateString);
 
-            // Pass roomPrice and totalPrice to the service layer
             Long reservationId = reservationService.createReservation(
                     user, roomId, checkInDate, checkOutDate, adults, children, promoCode, rateOption,
                     totalPrice, roomPrice, bookingId, photoPath, hotelLocation);
@@ -121,7 +117,6 @@ public class ReservationController {
         }
     }
 
-    // Fetch all reservations for the logged-in user
     /**
      * Fetch all reservations for the logged-in user
      *
@@ -172,14 +167,10 @@ public class ReservationController {
             @RequestParam("checkInDate") String checkInDateString,
             @RequestParam("checkOutDate") String checkOutDateString) {
         try {
-            // Parse the date strings
             LocalDate checkInDate = LocalDate.parse(checkInDateString);
             LocalDate checkOutDate = LocalDate.parse(checkOutDateString);
-
-            // Retrieve reservations that overlap with the given date range
             List<Reservation> reservations = reservationService.getReservationsInRange(checkInDate, checkOutDate);
 
-            // Extract room IDs from reservations
             List<Long> reservedRoomIds = reservations.stream()
                     .map(reservation -> reservation.getRoom().getId())
                     .collect(Collectors.toList());
@@ -191,7 +182,6 @@ public class ReservationController {
         }
     }
 
-    // Update an existing reservation
     /**
      * Update an existing reservation with various modifications
      *
@@ -232,7 +222,6 @@ public class ReservationController {
         }
     }
 
-    // Delete an existing reservation
     /**
      * Delete an existing reservation through its ID
      *
@@ -254,7 +243,6 @@ public class ReservationController {
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: Failed to delete reservation");
     }
 
-    // Create an activity reservation associated with a hotel reservation
     /**
      * Create an activity reservation associated with a hotel reservation
      *
@@ -278,17 +266,14 @@ public class ReservationController {
         System.out.println("Activity ID: " + activityId);
         System.out.println("Activity Date: " + activityDateString);
 
-        // Validate all required fields
         if (hotelReservationId == null || activityId == null || activityDateString == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Error: Missing hotelReservationId, activityId, or activityDate");
         }
 
         try {
-            // Parse the activity date
             LocalDate activityDate = LocalDate.parse(activityDateString);
 
-            // Call the service to create the activity reservation
             boolean activityReservationCreated = activityReservationService.createActivityReservation(
                     user, hotelReservationId, activityId, activityDate);
 
@@ -333,7 +318,6 @@ public class ReservationController {
         }
     }
 
-    // Check user session
     /**
      * Web directory used to check if a user is currently logged in
      *
@@ -354,7 +338,6 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
-    // Helper methods to extract values from request body
     private Long extractLongValue(Map<String, Object> map, String key) {
         return map.get(key) != null ? ((Number) map.get(key)).longValue() : null;
     }
@@ -367,7 +350,6 @@ public class ReservationController {
     public ResponseEntity<String> sendReservationEmail(@RequestBody Map<String, Object> request) {
         String email = (String) request.get("email");
 
-        // Validate email
         if (email == null || email.isBlank()) {
             return ResponseEntity.badRequest().body("Email address is required and cannot be empty.");
         }

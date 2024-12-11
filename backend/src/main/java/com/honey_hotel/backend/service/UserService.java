@@ -54,20 +54,16 @@ public class UserService {
             AppUser user = optionalUser.get();
             String email = user.getEmail();
 
-            // Delete admin access if it exists
             adminAccessRepository.deleteByEmail(email);
 
-            // Delete clerk access if it exists
             clerkAccessRepository.deleteByEmail(email);
 
-            // Delete reservations if they exist
             reservationRepository.deleteByUserId(id);
 
-            // Finally, delete the user
             userRepository.deleteById(id);
             return true;
         }
-        return false; // User not found
+        return false;
     }
 
     /**
@@ -81,21 +77,19 @@ public class UserService {
         if (optionalUser.isPresent()) {
             AppUser user = optionalUser.get();
 
-            // If the user is an admin, remove their admin access
             if (adminAccessRepository.existsByEmail(user.getEmail())) {
-                adminAccessRepository.deleteByEmail(user.getEmail()); // Correct deletion by email
+                adminAccessRepository.deleteByEmail(user.getEmail());
             }
 
-            // Add the user to clerk access if not already a clerk
             if (!clerkAccessRepository.existsByEmail(user.getEmail())) {
                 ClerkAccess clerkAccess = new ClerkAccess();
-                clerkAccess.setEmail(user.getEmail()); // Set email
+                clerkAccess.setEmail(user.getEmail());
                 clerkAccessRepository.save(clerkAccess);
             }
 
             return true;
         }
-        return false; // User not found
+        return false;
     }
 
     /**
@@ -109,21 +103,19 @@ public class UserService {
         if (optionalUser.isPresent()) {
             AppUser user = optionalUser.get();
 
-            // If the user is a clerk, remove their clerk access
             if (clerkAccessRepository.existsByEmail(user.getEmail())) {
-                clerkAccessRepository.deleteByEmail(user.getEmail()); // Correct deletion by email
+                clerkAccessRepository.deleteByEmail(user.getEmail());
             }
 
-            // Add the user to admin access if not already an admin
             if (!adminAccessRepository.existsByEmail(user.getEmail())) {
                 AdminAccess adminAccess = new AdminAccess();
-                adminAccess.setEmail(user.getEmail()); // Set email
+                adminAccess.setEmail(user.getEmail());
                 adminAccessRepository.save(adminAccess);
             }
 
             return true;
         }
-        return false; // User not found
+        return false;
     }
 
     /**
@@ -138,22 +130,20 @@ public class UserService {
             AppUser user = optionalUser.get();
 
             try {
-                // Remove clerk access if it exists
                 if (clerkAccessRepository.existsByEmail(user.getEmail())) {
                     clerkAccessRepository.deleteByEmail(user.getEmail());
                 }
 
-                // Remove admin access if it exists
                 if (adminAccessRepository.existsByEmail(user.getEmail())) {
                     adminAccessRepository.deleteByEmail(user.getEmail());
                 }
 
-                return true; // Successfully demoted to guest
+                return true;
             } catch (Exception e) {
                 throw new RuntimeException("Failed to demote user to guest: " + e.getMessage(), e);
             }
         }
-        return false; // User not found
+        return false;
     }
 
 }

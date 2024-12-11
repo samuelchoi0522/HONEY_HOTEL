@@ -97,7 +97,6 @@ public class Room {
     public void setId(Long id) {
         this.id = id;
     }
-    /////// room id
 
     /////// room category (Nature Retreat, etc.)
     /**
@@ -117,7 +116,6 @@ public class Room {
     public void setCategory(RoomCategory category) {
         this.category = category;
     }
-    /////// room category (Nature Retreat, etc.)
 
     /////// bed type (Single, Double, etc.)
     /**
@@ -137,7 +135,6 @@ public class Room {
     public void setBedType(String bedType) {
         this.bedType = bedType;
     }
-    /////// bed type (Single, Double, etc.)
 
     /////// smoking allowed
     /**
@@ -157,7 +154,6 @@ public class Room {
     public void setSmokingAllowed(boolean smokingAllowed) {
         this.smokingAllowed = smokingAllowed;
     }
-    /////// smoking allowed
 
     /////// price
     /**
@@ -177,7 +173,6 @@ public class Room {
     public void setPrice(double price) {
         this.price = price;
     }
-    /////// price
 
     /**
      * Gets the room type name corresponding to the room type ID
@@ -186,9 +181,9 @@ public class Room {
      */
     public String getRoomType() {
         if (roomTypeId >= 1 && roomTypeId <= ROOM_TYPE_NAMES.length) {
-            return ROOM_TYPE_NAMES[roomTypeId - 1]; // Mapping ID to String
+            return ROOM_TYPE_NAMES[roomTypeId - 1];
         } else {
-            return "Unknown"; // Default if roomTypeId is out of bounds
+            return "Unknown";
         }
     }
 
@@ -228,5 +223,9 @@ public class Room {
     public void setPriceCategory(String priceCategory) {
         this.priceCategory = priceCategory;
     }
+  
     /////// price category (economy, comfort, etc.)
+    public void setRoomType(String deluxe) {
+
+    }
 }

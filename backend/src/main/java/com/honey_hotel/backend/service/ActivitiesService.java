@@ -23,7 +23,6 @@ public class ActivitiesService {
     @Autowired
     private ActivitiesRepository activitiesRepository;
 
-
     /**
      * Add new vacation activity to the repository
      *

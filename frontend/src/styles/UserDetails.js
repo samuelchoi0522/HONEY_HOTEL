@@ -18,7 +18,6 @@ const UserDetails = () => {
     const [reservations, setReservations] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Fetch user details and reservations
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -147,7 +146,7 @@ const UserDetails = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        minHeight: "200px", // Adjust as needed
+                        minHeight: "200px",
                         textAlign: "center",
                         color: "text.secondary",
                     }}

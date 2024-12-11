@@ -175,7 +175,6 @@ const Homepage = () => {
                 )}
             </div>
 
-            {/* Explore Honey Hotel Section */}
             <div className="explore-honey-hotel">
                 <h2 className='explore-honey-hotel-title'>EXPLORE <br></br> HONEY HOTEL</h2>
                 <ThemeProvider theme={theme}>
@@ -222,7 +221,6 @@ const Homepage = () => {
                 </ThemeProvider>
             </div>
 
-            {/* Navigation Bar */}
             <div className="nav-line">
                 <div className="nav-line1"></div>
                 <div
@@ -246,10 +244,8 @@ const Homepage = () => {
                 ))}
             </div>
 
-            {/* Spacer */}
             <div className="spacer" style={{ height: '250px' }}></div>
 
-            {/* Quick Links */}
             <div className="lower-homepage-container">
                 <div className="explore-more-with-honeyhotel-container">
                     <span className="explore-more-with-hotelhotel-text">{`EXPLORE MORE WITH HONEY HOTEL`}</span>
@@ -290,13 +286,11 @@ const Homepage = () => {
 
 
 
-                {/* Youtube Video */}
                 <span className="the-story-text">{`THE STORY`}</span>
                 <div className="video-wrapper">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/NpEaa2P7qZI?si=td7dVTOVEoADBofN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/NUfCqa1Gj5w?si=FoGjjWNbsQmjQ5hn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
 
-                {/* Instagram Posts */}
                 <span className="hashtag-honeyhotel">{`#HONEYHOTEL`}</span>
                 <div className="instagram-posts">
                     <div className="instagram-post" dangerouslySetInnerHTML={{

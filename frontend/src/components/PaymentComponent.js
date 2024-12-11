@@ -4,7 +4,6 @@ import { TextField, Grid, Typography, Box } from '@mui/material';
 const PaymentComponent = () => {
     return (
         <Grid container spacing={3}>
-            {/* Payment Information Title */}
             <Grid item xs={12}>
                 <Typography
                     variant="h6"
@@ -19,7 +18,6 @@ const PaymentComponent = () => {
                 </Typography>
             </Grid>
 
-            {/* Acceptable Cards Section */}
             <Grid item xs={12}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography
@@ -28,23 +26,19 @@ const PaymentComponent = () => {
                             color: '#333',
                             marginTop: '10px',
                             marginBottom: '10px',
-                            marginRight: '10px', // Add space between text and icons
+                            marginRight: '10px',
                         }}
                     >
                         ACCEPTED CARDS |
                     </Typography>
                     <Box sx={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                        {/* Visa Icon */}
                         <img src="/icons/Visa.png" alt="Visa" style={{ width: '40px', height: 'auto' }} />
-                        {/* MasterCard Icon */}
                         <img src="/icons/Mastercard.png" alt="MasterCard" style={{ width: '40px', height: 'auto' }} />
-                        {/* Amex Icon */}
                         <img src="/icons/Amex.png" alt="American Express" style={{ width: '40px', height: 'auto' }} />
                     </Box>
                 </Box>
             </Grid>
 
-            {/* Account Holder Name and Card Number on the same line */}
             <Grid item xs={12} sm={6}>
                 <TextField
                     label="Name On Card"
@@ -53,16 +47,16 @@ const PaymentComponent = () => {
                     sx={{
                         backgroundColor: '#f9f9f9',
                         '& .MuiInputBase-root': {
-                            color: 'black',  // Text color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black',  // Label color when not focused
+                            color: 'black',
                         },
                         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'black',  // Focused border color
+                            borderColor: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',  // Label color when focused (moves up)
+                            color: 'black', 
                         },
                     }}
                 />
@@ -76,22 +70,21 @@ const PaymentComponent = () => {
                     sx={{
                         backgroundColor: '#f9f9f9',
                         '& .MuiInputBase-root': {
-                            color: 'black',  // Text color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black',  // Label color when not focused
+                            color: 'black',
                         },
                         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'black',  // Focused border color
+                            borderColor: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',  // Label color when focused (moves up)
+                            color: 'black',
                         },
                     }}
                 />
             </Grid>
 
-            {/* Expiry Date Field */}
             <Grid item xs={12} sm={6}>
                 <TextField
                     label="MM/YY"
@@ -100,22 +93,21 @@ const PaymentComponent = () => {
                     sx={{
                         backgroundColor: '#f9f9f9',
                         '& .MuiInputBase-root': {
-                            color: 'black',  // Text color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black',  // Label color when not focused
+                            color: 'black',
                         },
                         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'black',  // Focused border color
+                            borderColor: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',  // Label color when focused (moves up)
+                            color: 'black',
                         },
                     }}
                 />
             </Grid>
 
-            {/* CVV Field */}
             <Grid item xs={12} sm={6}>
                 <TextField
                     label="CVV"
@@ -124,16 +116,16 @@ const PaymentComponent = () => {
                     sx={{
                         backgroundColor: '#f9f9f9',
                         '& .MuiInputBase-root': {
-                            color: 'black',  // Text color
+                            color: 'black',
                         },
                         '& .MuiInputLabel-root': {
-                            color: 'black',  // Label color when not focused
+                            color: 'black',
                         },
                         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'black',  // Focused border color
+                            borderColor: 'black',
                         },
                         '& .MuiInputLabel-root.Mui-focused': {
-                            color: 'black',  // Label color when focused (moves up)
+                            color: 'black',
                         },
                     }}
                 />

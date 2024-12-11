@@ -26,6 +26,6 @@ public interface ActivityReservationRepository extends JpaRepository<ActivityRes
 
     ActivityReservation findByReservationId(Long reservationId);
 
-    List<ActivityReservation> findByReservation(Reservation reservation); // Updated to return a List
+    List<ActivityReservation> findByReservation(Reservation reservation);
 
 }

@@ -50,8 +50,8 @@ function Layout() {
             {showNavbarForFindHive && <CheckRatesBar />}
             <Routes>
                 <Route path="/" exact element={<Homepage />} />
-                <Route path="/login" element={<Login />} /> {/* Login page without Navbar and Footer */}
-                <Route path="/register" element={<Register />} /> {/* Register page without Navbar and Footer */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} /> 
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/find-hive" element={<FindHive />} />

@@ -41,27 +41,22 @@ public class ActivityReservationService {
     private ActivitiesRepository activitiesRepository;
 
     public boolean createActivityReservation(AppUser user, Long hotelReservationId, Integer activityId,
-                                             LocalDate activityDate) {
+            LocalDate activityDate) {
         try {
-            // Fetch the Reservation and Activities entities from the database
             Reservation reservation = reservationRepository.findById(hotelReservationId).orElse(null);
             Activities activity = activitiesRepository.findById(Long.valueOf(activityId)).orElse(null);
 
-            // Check if both reservation and activity exist
             if (reservation == null || activity == null) {
                 return false;
             }
 
-            // Create a new ActivityReservation instance
             ActivityReservation activityReservation = new ActivityReservation();
             activityReservation.setUser(user);
             activityReservation.setReservation(reservation);
             activityReservation.setActivity(activity);
 
-            // Set the reservation date to the provided activity date
             activityReservation.setReservationDate(activityDate);
 
-            // Save the activity reservation to the repository
             activityReservationRepository.save(activityReservation);
             return true;
         } catch (Exception e) {

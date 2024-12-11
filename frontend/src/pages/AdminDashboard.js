@@ -25,12 +25,12 @@ const AdminDashboard = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [confirmationDialog, setConfirmationDialog] = useState({
         open: false,
-        type: "", // "checkout" or "delete"
+        type: "",
     });
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [menuContext, setMenuContext] = useState({ type: "", data: null });
-    const [userRole, setUserRole] = useState(""); // Tracks the role (e.g., "admin" or "clerk")
+    const [userRole, setUserRole] = useState("");
 
     dayjs.extend(isSameOrAfter);
     dayjs.extend(isSameOrBefore);
@@ -67,7 +67,7 @@ const AdminDashboard = () => {
     };
 
     const handleBookingsDialogOpen = (type) => {
-        setSelectedBooking(menuContext.data); // Set the booking from the menu context
+        setSelectedBooking(menuContext.data);
         setConfirmationDialog({ open: true, type });
         handleMenuClose();
     };
@@ -130,7 +130,7 @@ const AdminDashboard = () => {
         }
 
         setConfirmationDialog({ open: false, type: "" });
-        setSelectedBooking(null); // Clear the selected booking
+        setSelectedBooking(null);
     };
 
 
@@ -162,12 +162,12 @@ const AdminDashboard = () => {
     };
 
     const handleUsersDialogOpen = (type) => {
-        console.log("Opening user dialog with type:", type); // Debugging log
+        console.log("Opening user dialog with type:", type);
         if (type === "view" && menuContext.data) {
             navigate(`/admin-dashboard/view/user/${menuContext.data.id}`);
             return;
         }
-        setSelectedUser(menuContext.data); // Set the user from the menu context
+        setSelectedUser(menuContext.data);
         setConfirmationDialog({ open: true, type });
         handleMenuClose();
     };
@@ -175,7 +175,7 @@ const AdminDashboard = () => {
 
 
     const handleUsersDialogClose = async (confirm) => {
-        console.log("Closing user dialog with type:", confirm); // Debugging log
+        console.log("Closing user dialog with type:", confirm);
         if (!selectedUser) {
             console.error("No user selected.");
             return;
@@ -213,7 +213,7 @@ const AdminDashboard = () => {
             }
         }
         setConfirmationDialog({ open: false, type: "" });
-        setSelectedUser(null); // Clear the selected user
+        setSelectedUser(null);
     };
 
     const getStatus = (booking) => {
@@ -226,21 +226,18 @@ const AdminDashboard = () => {
         const checkOutDate = dayjs(booking.checkOutDate);
 
         if (!booking.checkedIn) {
-            // Not checked in yet
             if (checkInDate.isSameOrAfter(today)) {
                 return "UPCOMING";
             } else if (checkInDate.isBefore(today)) {
                 return "CANCELLED";
             }
         } else if (booking.checkedIn) {
-            // Checked in
             if (checkInDate.isSameOrBefore(today) && checkOutDate.isSameOrAfter(today)) {
                 return "CHECKED IN";
             } else if (checkInDate.isAfter(today)) {
-                // Future check-in date but already marked as checked-in
                 return "CHECKED IN";
             } else if (today.diff(checkOutDate, "days") > 3) {
-                updateBookingStatus(booking.id); // Automatically check out the customer
+                updateBookingStatus(booking.id);
                 return "PAST CHECKOUT";
             }
         }
@@ -251,12 +248,10 @@ const AdminDashboard = () => {
     const applyFilters = () => {
         let filtered = bookings;
 
-        // Filter by status
         if (statusFilter) {
             filtered = filtered.filter((booking) => getStatus(booking) === statusFilter.toUpperCase());
         }
 
-        // Filter by date range
         if (dateRange[0] && dateRange[1]) {
             const startDate = dayjs(dateRange[0]);
             const endDate = dayjs(dateRange[1]);
@@ -293,17 +288,14 @@ const AdminDashboard = () => {
             const data = await response.json();
             console.log("API Response Data:", data);
 
-            // Set user role
             const userRole = data.role;
             setUserRole(userRole);
 
-            // Redirect if role is not admin or clerk
             if (userRole !== "admin" && userRole !== "clerk") {
                 navigate("/invalid-page");
                 return;
             }
 
-            // Access reservations array
             const bookingsData = data.reservations || [];
             setBookings(bookingsData);
             setFilteredBookings(bookingsData);
@@ -318,13 +310,12 @@ const AdminDashboard = () => {
         try {
             const response = await fetch(`http://localhost:8080/api/admin/reservations/${reservationId}/view`, {
                 method: 'GET',
-                credentials: 'include', // Include cookies if required
+                credentials: 'include',
             });
 
             if (response.ok) {
                 const reservationData = await response.json();
                 console.log('Reservation Details:', reservationData);
-                // Display the details in a modal or new page
             } else {
                 console.error('Failed to fetch reservation details');
             }
@@ -522,7 +513,7 @@ const AdminDashboard = () => {
                     (() => {
                         const checkInDate = new Date(menuContext.data.checkInDate);
                         const today = new Date();
-                        today.setHours(0, 0, 0, 0); // Normalize today's date to ignore time
+                        today.setHours(0, 0, 0, 0);
                         if (checkInDate >= today && getStatus(menuContext.data) === "UPCOMING") {
                             return (
                                 <MenuItem key="checkin" onClick={() => handleBookingsDialogOpen("checkin")}>
@@ -552,7 +543,6 @@ const AdminDashboard = () => {
                         </MenuItem>,
 
                         userRole === "admin" && selectedTab === "Administrator" && [
-                            // Option to make the user a Clerk if they are a Guest
                             (getUserStatus(menuContext.data) === "Guest" && (
                                 <MenuItem
                                     key="makeClerk"
@@ -577,7 +567,6 @@ const AdminDashboard = () => {
                                     <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Clerk
                                 </MenuItem>
                             )),
-                            // Option to make the user an Admin if they are a Clerk
                             (menuContext.data.isClerk && !menuContext.data.isAdmin && (
                                 <MenuItem
                                     key="makeAdmin"
@@ -586,7 +575,6 @@ const AdminDashboard = () => {
                                     <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Admin
                                 </MenuItem>
                             )),
-                            // Option to make the user a Guest if they are a Clerk or Admin
                             ((menuContext.data.isClerk || menuContext.data.isAdmin) && (
                                 <MenuItem
                                     key="makeGuest"
@@ -595,7 +583,6 @@ const AdminDashboard = () => {
                                     <ExitToAppIcon style={{ marginRight: "10px" }} /> Make Guest
                                 </MenuItem>
                             )),
-                            // Option to delete the user
                             <MenuItem
                                 key="delete"
                                 onClick={() => handleUsersDialogOpen("delete")}

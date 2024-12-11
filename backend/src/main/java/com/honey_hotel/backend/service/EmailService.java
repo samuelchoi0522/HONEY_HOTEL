@@ -29,7 +29,7 @@ public class EmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(body, true); // Enable HTML
+            helper.setText(body, true);
 
             mailSender.send(message);
             return true;
@@ -39,7 +39,6 @@ public class EmailService {
         }
     }
 
-    // Generates an HTML body for password reset emails
     public String generatePasswordResetHtmlBody(String resetLink) {
         return "<!DOCTYPE html>" +
                 "<html>" +

@@ -46,7 +46,7 @@ const Checkout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const methods = useForm({
-        mode: 'onChange', // Tracks real-time form validation state
+        mode: 'onChange',
         defaultValues: {
             firstName: '',
             lastName: '',
@@ -179,7 +179,6 @@ const Checkout = () => {
                 }
             }
 
-            // Send email confirmation
             const emailPayload = {
                 email: data.email,
                 bookingId,
@@ -237,7 +236,6 @@ const Checkout = () => {
                     Complete Booking
                 </Typography>
                 <Grid container spacing={3}>
-                    {/* Contact Information */}
                     <Grid item xs={12}>
                         <Typography
                             variant="h6"
@@ -413,22 +411,18 @@ const Checkout = () => {
                     </Grid>
 
 
-                    {/* Divider */}
                     <Grid item xs={12}>
                         <Divider sx={{ margin: '20px 0', backgroundColor: '#ddd' }} />
                     </Grid>
 
-                    {/* Payment Information */}
                     <Grid item xs={12}>
                         <PaymentComponent />
                     </Grid>
 
-                    {/* Divider */}
                     <Grid item xs={12}>
                         <Divider sx={{ margin: '20px 0', backgroundColor: '#ddd' }} />
                     </Grid>
 
-                    {/* Terms & Conditions */}
                     <Grid item xs={12}>
                         <FormControlLabel
                             control={
@@ -472,7 +466,6 @@ const Checkout = () => {
                         />
                     </Grid>
 
-                    {/* Submit Button */}
                     <Grid item xs={12}>
                         <Button
                             variant="contained"
