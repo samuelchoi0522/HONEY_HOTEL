@@ -14,6 +14,11 @@ import com.honey_hotel.backend.model.AppUser;
 import com.honey_hotel.backend.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ Login controller class to break down complicated tasks with an array of simpler function calls
+ @author Samuel Choi
+ @version 3.0 (Oct 11 2024)
+ */
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class LoginController {
@@ -21,6 +26,13 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    /**
+     * Login web directory that allows user to enter user credentials to log in
+     *
+     * @param user user with email and password for authentication
+     * @param request HTTP request object used to manage the session
+     * @return ResponseEntity indicating whether login was successful or not
+     */
     @PostMapping("/auth/login")
     public ResponseEntity<?> loginUser(@RequestBody AppUser user, HttpServletRequest request) {
         if (user.getEmail() == null || user.getPassword() == null) {
@@ -37,6 +49,13 @@ public class LoginController {
         return ResponseEntity.ok("Login successful!");
     }
 
+
+    /**
+     * Web directory used to check if a user is currently logged in
+     *
+     * @param request HTTP request object used to check the session state
+     * @return ResponseEntity containing the login status and user's first name if logged in
+     */
     @PostMapping("/auth/check-session")
     public ResponseEntity<?> checkSession(HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
@@ -52,11 +71,16 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
+
+    /**
+     * Web directory to log out a user by invalidating their credentials
+     *
+     * @param request HTTP request object used to invalidate the session
+     * @return ResponseEntity indicating if logout was successful
+     */
     @PostMapping("/auth/logout")
     public ResponseEntity<?> logoutUser(HttpServletRequest request) {
         loginService.invalidateSession(request);
         return ResponseEntity.ok("Logout successful.");
     }
-
-    
 }

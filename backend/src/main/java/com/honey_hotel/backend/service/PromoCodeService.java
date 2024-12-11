@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * Service class used to validate promo codes
+ *
+ * @author Samuel Choi
+ * @Version 1.0 (10/30/24)
+ */
 @Service
 public class PromoCodeService {
 

@@ -17,6 +17,12 @@ public class PromoCodeController {
     @Autowired
     private PromoCodeService promoCodeService;
 
+    /**
+     * Validates if a promo code entered by a user is within the database
+     *
+     * @param request, map of string received by the frontend from the user
+     * @return Response Map Entity with validity boolean and discount percentage
+     */
     @PostMapping("/validate")
     public ResponseEntity<Map<String, Object>> validatePromoCode(@RequestBody Map<String, String> request) {
         String code = request.get("code");

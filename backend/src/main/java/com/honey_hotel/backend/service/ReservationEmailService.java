@@ -5,6 +5,12 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for emails regarding user reservations
+ *
+ * @author Aiden Grajo
+ * @Version 1.0 (12/8/24)
+ */
 @Service
 public class ReservationEmailService {
 
